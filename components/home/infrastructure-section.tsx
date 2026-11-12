@@ -1,42 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import dynamic from "next/dynamic";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { infraNodes, modeMeta, type InfraMode } from "@/lib/content/infrastructure-3d";
-import { InfraSchematic } from "@/components/home/infra-schematic";
+import { LiveSectionDiagram } from "@/components/home/live-section-diagram";
 import { cn } from "@/lib/utils";
-
-const RailwayScene = dynamic(() => import("@/components/three/railway-scene"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-full w-full items-center justify-center bg-navy-900">
-      <div className="flex flex-col items-center gap-3">
-        <span className="flex gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-signal animate-blink" />
-          <span className="h-1.5 w-1.5 rounded-full bg-ink/20" />
-          <span className="h-1.5 w-1.5 rounded-full bg-eng" />
-        </span>
-        <span className="label-tight text-[8px] text-tech">Booting infrastructure model</span>
-      </div>
-    </div>
-  ),
-});
 
 export function InfrastructureSection() {
   const [mode, setMode] = useState<InfraMode>("signalling");
   const [selected, setSelected] = useState("signal");
   const [hovered, setHovered] = useState("");
-  const [use3d, setUse3d] = useState(false);
-  const reduced = useReducedMotion();
-
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    const check = () => setUse3d(mq.matches && !window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-    check();
-    mq.addEventListener("change", check);
-    return () => mq.removeEventListener("change", check);
-  }, []);
 
   const activeNode = useMemo(
     () => infraNodes.find((node) => node.key === (hovered || selected)) ?? infraNodes[0],
@@ -104,36 +77,24 @@ export function InfrastructureSection() {
 
         <div className="mt-10 grid gap-5 lg:grid-cols-[1fr_400px]">
           <div className="relative border border-line bg-navy-900/60">
-            <div className="relative h-[46vh] min-h-[320px] w-full lg:h-[560px]">
-              {use3d && !reduced ? (
-                <RailwayScene
-                  mode={mode}
-                  selected={selected}
-                  hovered={hovered}
-                  onHover={setHovered}
-                  onSelect={setSelected}
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center p-3 sm:p-5">
-                  <InfraSchematic mode={mode} selected={selected} onSelect={setSelected} />
-                </div>
-              )}
+            <div className="relative p-3 sm:p-4">
+              <LiveSectionDiagram
+                mode={mode}
+                selected={selected}
+                hovered={hovered}
+                onSelect={setSelected}
+                onHover={setHovered}
+              />
 
-              <div className="pointer-events-none absolute left-4 top-4 flex items-center gap-2 border border-ink/10 bg-navy-900/80 px-2.5 py-1.5 backdrop-blur">
+              <div className="pointer-events-none absolute left-5 top-5 flex items-center gap-2 border border-ink/10 bg-navy-900/80 px-2.5 py-1.5 backdrop-blur">
                 <span className={cn("h-[5px] w-[5px] rounded-full", mode === "signalling" ? "bg-signal" : "bg-eng")} />
-                <span className="label-tight text-[8px] text-ink/70">{modeMeta[mode].title} · live model</span>
+                <span className="label-tight text-[8px] text-ink/70">{modeMeta[mode].title} · live section</span>
               </div>
+            </div>
 
-              {use3d ? (
-                <div className="pointer-events-none absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2">
-                  <span className="label-tight border border-ink/10 bg-navy-900/70 px-2 py-1 text-[8px] text-tech backdrop-blur">
-                    Drag to rotate · click a component
-                  </span>
-                  <span className="label-tight hidden border border-ink/10 bg-navy-900/70 px-2 py-1 text-[8px] text-tech backdrop-blur sm:block">
-                    Scale: schematic representation
-                  </span>
-                </div>
-              ) : null}
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line px-4 py-2.5">
+              <span className="label-tight text-[8px] text-tech">Select a numbered component</span>
+              <span className="label-tight text-[8px] text-tech">Section elevation · not to scale</span>
             </div>
           </div>
 

@@ -13,7 +13,7 @@ The site is a real application, not a mock-up: every route renders, the enquiry 
 | Framework | Next.js 15 (App Router), React 19, TypeScript |
 | Styling | Tailwind CSS 3 with a custom design-token layer (`app/globals.css`) |
 | Motion | GSAP + ScrollTrigger (pinned/horizontal storytelling, scroll-linked reveals), Framer Motion (entrances, tabs, transitions), Lenis smooth scrolling |
-| 3D | Three.js via React Three Fiber + Drei (interactive infrastructure model) |
+| Drawing | Hand-built SVG engineering plate (live section, no WebGL); Three.js available for a 3D model |
 | Data | PostgreSQL (`pg`) in production; a file-backed store for local/preview. Prisma schema included as the canonical model |
 | Auth | Signed, HttpOnly session cookie (HMAC-SHA256), scrypt password hashing, role-based authorisation |
 | Email | Resend (optional) with logged fallback |
@@ -96,7 +96,7 @@ Content lives in:
 ```
 lib/content/site.ts           company, credentials, capabilities, process, clients, states, FAQs
 lib/content/projects.ts       the 19-work register with case-study narrative
-lib/content/infrastructure-3d.ts   the interactive model's component copy
+lib/content/infrastructure-3d.ts   component copy + positioning for the live section
 ```
 
 ---
@@ -105,7 +105,7 @@ lib/content/infrastructure-3d.ts   the interactive model's component copy
 
 | Route | Purpose |
 | --- | --- |
-| `/` | Cinematic scroll experience: intro → hero → identity → interactive 3D infrastructure → divisions → horizontal process → projects → India map → credentials → about → CTA |
+| `/` | Cinematic scroll experience: intro → hero → identity → interactive live-section plate → divisions → horizontal process → projects → India map → credentials → about → CTA |
 | `/signalling` | Signalling division: five capability layers, plant, signalling works |
 | `/telecommunications` | Telecom division: five layers, network stack, telecom works |
 | `/projects` | Filterable works register (all / signalling / telecom / completed / ongoing) |
@@ -137,7 +137,7 @@ API: `POST /api/contact` · `POST /api/admin/login` · `POST /api/admin/logout` 
 - Per-page metadata, canonical URLs, Open Graph/Twitter cards, JSON-LD `Organization` + `WebSite` graph, per-project `CreativeWork` schema.
 - Generated sitemap and robots (admin/API disallowed).
 - Self-hosted fonts (`@fontsource`) — no third-party font requests; `next/image` with AVIF/WebP; SVG favicon.
-- The 3D scene is dynamically imported, only mounted on desktop pointer devices, and replaced by a lightweight SVG engineering schematic on mobile or with reduced motion.
+- Section 04 is a hand-drawn SVG engineering plate (`components/home/live-section-diagram.tsx`): ten annotated components, live aspect sequence and level-crossing barriers in CSS only, no WebGL, no image assets. It is server-rendered and complete before hydration; small screens pan the plate horizontally rather than shrinking it. `components/three/railway-scene.tsx` holds the earlier R3F scene, currently unused.
 - Motion respects `prefers-reduced-motion`; Lenis is disabled, GSAP timelines are skipped and the loader is bypassed.
 - Semantic landmarks, skip link, visible focus states, keyboard-operable map markers and component selector, ARIA labels on controls.
 
@@ -152,7 +152,7 @@ app/
   admin/                   login + dashboard
   sitemap.ts, robots.ts, not-found.tsx, template.tsx
 components/
-  home/                    hero, identity, 3D/infrastructure, divisions, process, map, credentials, CTA
+  home/                    hero, identity, live-section plate, divisions, process, map, credentials, CTA
   projects/                cards + filterable showcase
   page/                    page hero, layer accordion, CTA band
   layout/                  header, overlay menu, footer
