@@ -10,36 +10,99 @@ import { projects as seedProjects } from "@/lib/content/projects";
  * same shape can be read by the Prisma models.
  */
 
+/**
+ * The primary connection plus optional failover endpoints. Pooled Postgres
+ * providers publish several reachable endpoints (direct host, session pooler,
+ * transaction pooler); listing them here means a provider-side hostname change
+ * degrades to a retry instead of taking the site down.
+ */
+function candidates(): string[] {
+  const list = [process.env.DATABASE_URL, ...(process.env.DATABASE_FALLBACK_URLS || "").split(",")]
+    .map((value) => value?.trim())
+    .filter((value): value is string => Boolean(value));
+  return Array.from(new Set(list));
+}
+
 let pool: Pool | null = null;
+let activeConnection: string | null = null;
+
+function createPool(connectionString: string): Pool {
+  const instance = new Pool({
+    connectionString,
+    ssl: process.env.DATABASE_SSL === "false" ? undefined : { rejectUnauthorized: false },
+    max: 5,
+    // Fail fast: an unreachable host must degrade to the bundled content in
+    // seconds, not hang a serverless render until the platform timeout.
+    connectionTimeoutMillis: 8000,
+    idleTimeoutMillis: 8000,
+    query_timeout: 10000,
+    statement_timeout: 10000,
+  });
+  // A pool-level error (dropped connection, DNS failure) must never surface as
+  // an unhandled event that kills the function instance.
+  instance.on("error", (error) => {
+    console.error("[store] PostgreSQL pool error", error instanceof Error ? error.message : error);
+  });
+  return instance;
+}
+
+/** Host of the connection currently in use — safe to log, never includes credentials. */
+export function activeDatabaseHost(): string | null {
+  if (!activeConnection) return null;
+  try {
+    return new URL(activeConnection).host;
+  } catch {
+    return null;
+  }
+}
 
 function db(): Pool {
-  if (!pool) {
-    pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
-      ssl: process.env.DATABASE_SSL === "false" ? undefined : { rejectUnauthorized: false },
-      max: 5,
-      // Fail fast: an unreachable host must degrade to the bundled register in
-      // seconds, not hang a serverless render until the platform timeout.
-      connectionTimeoutMillis: 8000,
-      idleTimeoutMillis: 8000,
-      query_timeout: 10000,
-      statement_timeout: 10000,
-    });
-    // A pool-level error (dropped connection, DNS failure) must never surface as
-    // an unhandled event that kills the function instance.
-    pool.on("error", (error) => {
-      console.error("[store] PostgreSQL pool error", error instanceof Error ? error.message : error);
-    });
-  }
+  // init() (awaited by every store method through run()) always establishes a
+  // pool before a query runs.
+  if (!pool) throw new Error("PostgreSQL store used before initialisation");
   return pool;
+}
+
+/** Connect, creating the schema and seeding it, falling back through the endpoint list. */
+async function connectAny(): Promise<void> {
+  const urls = candidates();
+  const errors: string[] = [];
+
+  for (const url of urls) {
+    const instance = createPool(url);
+    try {
+      await instance.query("SELECT 1");
+      await migrate(instance);
+      await seedIfEmpty(instance);
+      if (pool && pool !== instance) await pool.end().catch(() => undefined);
+      pool = instance;
+      activeConnection = url;
+      return;
+    } catch (error) {
+      errors.push(error instanceof Error ? error.message : String(error));
+      await instance.end().catch(() => undefined);
+    }
+  }
+
+  throw new Error(`No database endpoint reachable: ${errors.join(" | ") || "none configured"}`);
 }
 
 let initialised: Promise<void> | null = null;
 
 function init(): Promise<void> {
   if (!initialised) {
-    initialised = (async () => {
-      await db().query(`
+    initialised = connectAny().catch((error) => {
+      // Never cache a rejected initialisation: a transient outage must not
+      // disable the database for the lifetime of this instance.
+      initialised = null;
+      throw error;
+    });
+  }
+  return initialised;
+}
+
+async function migrate(instance: Pool): Promise<void> {
+  await instance.query(`
         CREATE TABLE IF NOT EXISTS "Project" (
           "id" TEXT PRIMARY KEY,
           "slug" TEXT UNIQUE NOT NULL,
@@ -65,27 +128,13 @@ function init(): Promise<void> {
           "createdAt" TIMESTAMPTZ NOT NULL DEFAULT now()
         );
       `);
-      await seedIfEmpty();
-    })().catch((error) => {
-      // Never cache a rejected initialisation: a transient outage must not
-      // disable the database for the lifetime of this instance.
-      initialised = null;
-      throw error;
-    });
-  }
-  return initialised;
 }
 
-/**
- * A fresh database renders an empty register. Seed it once from the published
- * works register so a first deploy is never blank and the admin dashboard has
- * something to edit.
- */
-async function seedIfEmpty(): Promise<void> {
-  const { rows } = await db().query(`SELECT EXISTS (SELECT 1 FROM "Project") AS present`);
+async function seedIfEmpty(instance: Pool): Promise<void> {
+  const { rows } = await instance.query(`SELECT EXISTS (SELECT 1 FROM "Project") AS present`);
   if (rows[0]?.present) return;
 
-  const client = await db().connect();
+  const client = await instance.connect();
   try {
     await client.query("BEGIN");
     for (const project of seedProjects) {

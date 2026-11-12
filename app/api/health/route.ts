@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStore, storeDriver } from "@/lib/db";
-import { pgStore } from "@/lib/db/pg-store";
+import { activeDatabaseHost, pgStore } from "@/lib/db/pg-store";
 
 /**
  * Deployment health probe.
@@ -15,6 +15,7 @@ export async function GET() {
   const driver = storeDriver();
   let database: "up" | "down" | "not-configured" = "not-configured";
   let projects = 0;
+  let databaseError: string | null = null;
 
   if (driver === "postgresql") {
     try {
@@ -23,7 +24,10 @@ export async function GET() {
       database = "up";
     } catch (error) {
       database = "down";
-      console.error("[health] database probe failed", error instanceof Error ? error.message : error);
+      const message = error instanceof Error ? error.message : String(error);
+      // Never echo a connection string: strip anything URL-shaped before reporting.
+      databaseError = message.replace(/postgres(?:ql)?:\/\/\S+/gi, "[redacted]").slice(0, 300);
+      console.error("[health] database probe failed", message);
     }
   }
 
@@ -40,6 +44,8 @@ export async function GET() {
       ok: database !== "down",
       driver,
       database,
+      databaseHost: activeDatabaseHost(),
+      databaseError,
       projects,
       commit: process.env.VERCEL_GIT_COMMIT_SHA ?? null,
       configured: {
