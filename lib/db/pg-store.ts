@@ -1,6 +1,7 @@
 import { Pool } from "pg";
 import type { AdminUser, Enquiry, Project } from "@/lib/types";
 import type { Store } from "./types";
+import { projects as seedProjects } from "@/lib/content/projects";
 
 /**
  * PostgreSQL store. Activated automatically when DATABASE_URL is present.
@@ -53,9 +54,44 @@ function init(): Promise<void> {
           "createdAt" TIMESTAMPTZ NOT NULL DEFAULT now()
         );
       `);
-    })();
+      await seedIfEmpty();
+    })().catch((error) => {
+      // Never cache a rejected initialisation: a transient outage must not
+      // disable the database for the lifetime of this instance.
+      initialised = null;
+      throw error;
+    });
   }
   return initialised;
+}
+
+/**
+ * A fresh database renders an empty register. Seed it once from the published
+ * works register so a first deploy is never blank and the admin dashboard has
+ * something to edit.
+ */
+async function seedIfEmpty(): Promise<void> {
+  const { rows } = await db().query(`SELECT EXISTS (SELECT 1 FROM "Project") AS present`);
+  if (rows[0]?.present) return;
+
+  const client = await db().connect();
+  try {
+    await client.query("BEGIN");
+    for (const project of seedProjects) {
+      await client.query(
+        `INSERT INTO "Project" ("id","slug","division","status","published","order","payload")
+         VALUES ($1,$2,$3,$4,$5,$6,$7)
+         ON CONFLICT ("slug") DO NOTHING`,
+        [project.id, project.slug, project.division, project.status, project.published, project.order, project],
+      );
+    }
+    await client.query("COMMIT");
+  } catch (error) {
+    await client.query("ROLLBACK").catch(() => undefined);
+    throw error;
+  } finally {
+    client.release();
+  }
 }
 
 async function run<T>(fn: () => Promise<T>): Promise<T> {

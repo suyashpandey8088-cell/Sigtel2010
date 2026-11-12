@@ -377,3 +377,31 @@ html.lenis body {
     scroll-behavior: auto !important;
   }
 }
+
+/* Visibility failsafe.
+   Scroll and entrance animations start elements at opacity:0 / offset. If the
+   client bundle never hydrates (JavaScript blocked, runtime error) the inline
+   script in the root layout adds `motion-fallback` and the content is revealed,
+   so no section is ever left blank. */
+.motion-fallback [style*="opacity"] {
+  opacity: 1 !important;
+}
+.motion-fallback .mask-line > * {
+  transform: none !important;
+}
+.motion-fallback [style*="visibility"] {
+  visibility: visible !important;
+}
+
+/* Route transition. CSS-only so content is never trapped behind hydration. */
+@keyframes page-enter {
+  from {
+    opacity: 0.001;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.page-enter {
+  animation: page-enter 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}

@@ -15,6 +15,7 @@ import { Cursor } from "@/components/ui/cursor";
 import { MobileCta } from "@/components/ui/mobile-cta";
 import { HideOnAdmin } from "@/components/layout/hide-on-admin";
 import { Analytics } from "@/components/providers/analytics";
+import { HydrationFlag } from "@/components/providers/hydration-flag";
 import { OrganizationSchema } from "@/components/seo/organization-schema";
 import { company } from "@/lib/content/site";
 
@@ -76,6 +77,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-IN" suppressHydrationWarning>
       <body className="grain bg-navy text-ink antialiased">
+        <script
+          // Failsafe: reveal animation-hidden content if the client bundle never
+          // hydrates (blocked JavaScript, runtime error, extremely slow device).
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{window.setTimeout(function(){if(!window.__sigtelHydrated){document.documentElement.classList.add('motion-fallback');}},2500);}catch(e){}})();",
+          }}
+        />
+        <noscript>
+          <style>{`[style*="opacity"]{opacity:1!important}.mask-line>*{transform:none!important}`}</style>
+        </noscript>
         <a href="#main" className="skip-link">
           Skip to content
         </a>
@@ -90,6 +102,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <MobileCta />
         <Cursor />
         <Analytics />
+        <HydrationFlag />
         <OrganizationSchema />
         <style>{`
           .skip-link{position:fixed;top:-100px;left:1rem;z-index:200;background:#24C78B;color:#04120C;padding:0.85rem 1.2rem;font-family:"IBM Plex Mono",monospace;font-size:0.75rem;letter-spacing:0.14em;text-transform:uppercase;transition:top .2s ease}

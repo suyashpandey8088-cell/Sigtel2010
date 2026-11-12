@@ -8,6 +8,12 @@ const SESSION_TTL_SECONDS = 60 * 60 * 8;
 const DEFAULT_ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@sig-tel.com";
 const DEFAULT_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "SigTel@2010";
 
+if (process.env.NODE_ENV === "production" && !process.env.AUTH_SECRET) {
+  console.warn(
+    "[auth] AUTH_SECRET is not set — admin sessions are signed with the development fallback. Set AUTH_SECRET in the deployment environment.",
+  );
+}
+
 const secret = process.env.AUTH_SECRET || "sigtel-dev-secret-change-in-production";
 
 export interface SessionPayload {
