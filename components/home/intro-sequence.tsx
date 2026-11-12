@@ -22,6 +22,10 @@ export function IntroSequence() {
     document.documentElement.style.overflow = "hidden";
     window.__lenis?.stop();
 
+    // Lenis is created by the parent provider after this effect runs.
+    const shouldStop = () => window.__lenis?.stop();
+    const stopTimer = window.setTimeout(shouldStop, 120);
+
     const started = performance.now();
     let frame = 0;
     const total = 2600;
@@ -36,6 +40,7 @@ export function IntroSequence() {
 
     return () => {
       cancelAnimationFrame(frame);
+      window.clearTimeout(stopTimer);
       timers.current.forEach(clearTimeout);
       document.documentElement.style.overflow = "";
     };
