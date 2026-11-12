@@ -39,7 +39,7 @@ Without environment variables the app runs on the local JSON store at `.data/sto
 | --- | --- |
 | URL | `/admin` (redirects to `/admin/login`) |
 | Email | `admin@sig-tel.com` (override with `ADMIN_EMAIL`) |
-| Password | `SigTel@2010` (override with `ADMIN_PASSWORD`) |
+| Password | set by `ADMIN_PASSWORD` in the deployment environment; the local fallback is `SigTel@2010` |
 
 Change these before going live, and set a strong `AUTH_SECRET` (`openssl rand -base64 48`). Login attempts are rate limited; sessions expire after 8 hours.
 
@@ -160,6 +160,18 @@ prisma/                    schema.prisma, schema.sql, seed.ts
 ```
 
 ---
+
+## Health check
+
+`GET /api/health` returns the active data layer, whether the database actually
+responds, the number of published projects and which optional services are
+configured (booleans only — no secrets). Use it after a deploy instead of
+guessing from rendered pages.
+
+```json
+{"ok":true,"driver":"postgresql","database":"up","projects":19,
+ "configured":{"databaseUrl":true,"authSecret":true,"adminLogin":true,"mail":false,"siteUrl":true}}
+```
 
 ## Deployment notes
 
