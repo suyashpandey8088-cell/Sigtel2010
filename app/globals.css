@@ -405,3 +405,105 @@ html.lenis body {
 .page-enter {
   animation: page-enter 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+
+/* ==========================================================================
+   Live section diagram (home, section 04)
+   A hand-drawn engineering plate: OHE, signals, points, LC gate, relay hut,
+   OFC duct, radio mast and control room. CSS-only motion so the drawing is
+   complete before hydration and static for reduced-motion visitors.
+   ========================================================================== */
+
+.ls-part {
+  transition: opacity 260ms ease;
+}
+
+/* Signal aspects: red → amber → green, on a 9s cycle. */
+@keyframes ls-aspect-red {
+  0%, 31% { opacity: 1; }
+  33%, 100% { opacity: 0.1; }
+}
+@keyframes ls-aspect-amber {
+  0%, 32% { opacity: 0.1; }
+  34%, 64% { opacity: 1; }
+  66%, 100% { opacity: 0.1; }
+}
+@keyframes ls-aspect-green {
+  0%, 65% { opacity: 0.1; }
+  67%, 97% { opacity: 1; }
+  100% { opacity: 0.1; }
+}
+.ls-lamp-red { animation: ls-aspect-red 9s linear infinite; }
+.ls-lamp-amber { animation: ls-aspect-amber 9s linear infinite; }
+.ls-lamp-green { animation: ls-aspect-green 9s linear infinite; }
+
+/* Readout text follows the same cycle so the words match the lamps. */
+.ls-readout-red { animation: ls-aspect-red 9s linear infinite; }
+.ls-readout-amber { animation: ls-aspect-amber 9s linear infinite; }
+.ls-readout-green { animation: ls-aspect-green 9s linear infinite; }
+
+/* Level-crossing booms: lowered, then raised to let road traffic through. */
+@keyframes ls-boom-left {
+  0%, 40% { transform: rotate(0deg); }
+  52%, 86% { transform: rotate(-72deg); }
+  98%, 100% { transform: rotate(0deg); }
+}
+@keyframes ls-boom-right {
+  0%, 40% { transform: rotate(0deg); }
+  52%, 86% { transform: rotate(72deg); }
+  98%, 100% { transform: rotate(0deg); }
+}
+.ls-boom-left {
+  transform-box: view-box;
+  transform-origin: 958px 713.5px;
+  animation: ls-boom-left 16s ease-in-out infinite;
+}
+.ls-boom-right {
+  transform-box: view-box;
+  transform-origin: 1150px 738.5px;
+  animation: ls-boom-right 16s ease-in-out infinite;
+}
+
+/* Aviation light on the radio mast. */
+@keyframes ls-aviation {
+  0%, 45% { opacity: 0.25; }
+  50%, 60% { opacity: 1; }
+  65%, 100% { opacity: 0.25; }
+}
+.ls-aviation { animation: ls-aviation 3.4s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ls-boom-left,
+  .ls-boom-right,
+  .ls-aviation {
+    animation: none !important;
+  }
+  .ls-lamp-red,
+  .ls-lamp-amber,
+  .ls-lamp-green,
+  .ls-readout-red,
+  .ls-readout-amber,
+  .ls-readout-green {
+    animation: none !important;
+  }
+  .ls-lamp-red { opacity: 1; }
+  .ls-lamp-amber,
+  .ls-lamp-green { opacity: 0.1; }
+  .ls-readout-red { opacity: 1; }
+  .ls-readout-amber,
+  .ls-readout-green { opacity: 0; }
+}
+
+.ls-chip:focus-visible .ls-chip-box {
+  stroke: #f4f5f3;
+  stroke-width: 1.8;
+}
+.ls-chip:focus-visible {
+  outline: none;
+}
+
+/* Fine annotation is only legible when the plate is shown near full width. */
+@media (max-width: 1279px) {
+  .ls-annotation {
+    display: none;
+  }
+}
