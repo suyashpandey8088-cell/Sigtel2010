@@ -37,7 +37,10 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
   const [activeProject, setActiveProject] = useState<string | null>(null);
 
   const visible = useMemo(
-    () => projects.filter((project) => (filter === "all" ? true : project.division === filter)),
+    () =>
+      projects.filter((project) =>
+        filter === "all" ? true : project.division === filter,
+      ),
     [projects, filter],
   );
 
@@ -53,7 +56,9 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
 
   const selectedProjects = state ? (states.get(state) ?? []) : [];
   const highlightedStateId = state ? stateIds[state] : null;
-  const active = activeProject ? visible.find((p) => p.id === activeProject) : null;
+  const active = activeProject
+    ? visible.find((p) => p.id === activeProject)
+    : null;
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.35fr_0.65fr] lg:gap-12">
@@ -74,7 +79,9 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
                 aria-pressed={filter === item.id}
                 className={cn(
                   "px-3 py-2 font-mono text-[9px] uppercase tracking-[0.18em] transition-colors",
-                  filter === item.id ? "bg-ink text-navy" : "border border-line text-muted hover:text-ink",
+                  filter === item.id
+                    ? "bg-ink text-navy-900"
+                    : "border border-line text-muted hover:text-ink",
                 )}
               >
                 {item.label}
@@ -83,7 +90,8 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
           </div>
           <div className="flex items-center gap-5">
             <span className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.16em] text-tech">
-              <span className="h-[5px] w-[5px] rounded-full bg-signal" /> Signalling
+              <span className="h-[5px] w-[5px] rounded-full bg-signal" />{" "}
+              Signalling
             </span>
             <span className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.16em] text-tech">
               <span className="h-[5px] w-[5px] rounded-full bg-eng" /> Telecom
@@ -92,7 +100,10 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
         </div>
 
         <div className="relative overflow-hidden border border-line bg-navy-900/60 p-2 sm:p-4">
-          <div className="pointer-events-none absolute inset-0 grid-blueprint-sm opacity-30" aria-hidden />
+          <div
+            className="pointer-events-none absolute inset-0 grid-blueprint-sm opacity-30"
+            aria-hidden
+          />
           <svg
             viewBox="0 0 612 696"
             role="img"
@@ -101,13 +112,16 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
           >
             <defs>
               <radialGradient id="mapGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#24C78B" stopOpacity="0.35" />
-                <stop offset="100%" stopColor="#24C78B" stopOpacity="0" />
+                <stop offset="0%" stopColor="var(--eng)" stopOpacity="0.35" />
+                <stop offset="100%" stopColor="var(--eng)" stopOpacity="0" />
               </radialGradient>
             </defs>
 
             {india.locations.map((location) => {
-              const hasWork = Object.prototype.hasOwnProperty.call(stateIds, location.name)
+              const hasWork = Object.prototype.hasOwnProperty.call(
+                stateIds,
+                location.name,
+              )
                 ? states.has(location.name)
                 : false;
               const isSelected = highlightedStateId === location.id;
@@ -120,18 +134,40 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
                   onMouseEnter={() => setHovered(location.id)}
                   onMouseLeave={() => setHovered(null)}
                   onClick={() => {
-                    if (Object.prototype.hasOwnProperty.call(stateIds, location.name)) {
+                    if (
+                      Object.prototype.hasOwnProperty.call(
+                        stateIds,
+                        location.name,
+                      )
+                    ) {
                       setState(location.name);
                     }
                   }}
                   className={cn(
                     "transition-all duration-300",
-                    Object.prototype.hasOwnProperty.call(stateIds, location.name)
+                    Object.prototype.hasOwnProperty.call(
+                      stateIds,
+                      location.name,
+                    )
                       ? "cursor-pointer"
                       : "cursor-default",
                   )}
-                  fill={isSelected ? "rgba(36,199,139,0.20)" : hasWork ? "rgba(36,199,139,0.09)" : isHover ? "#1b2f47" : "#142437"}
-                  stroke={isSelected ? "#24C78B" : hasWork ? "rgba(36,199,139,0.42)" : "rgba(168,180,194,0.22)"}
+                  fill={
+                    isSelected
+                      ? "color-mix(in srgb, var(--eng) 26%, transparent)"
+                      : hasWork
+                        ? "color-mix(in srgb, var(--eng) 12%, transparent)"
+                        : isHover
+                          ? "var(--navy-700)"
+                          : "var(--navy-800)"
+                  }
+                  stroke={
+                    isSelected
+                      ? "var(--eng)"
+                      : hasWork
+                        ? "color-mix(in srgb, var(--eng) 55%, transparent)"
+                        : "var(--line-strong)"
+                  }
                   strokeWidth={isSelected ? 1.2 : 0.7}
                 />
               );
@@ -139,14 +175,22 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
 
             {/* HQ */}
             <g aria-hidden>
-              <circle cx={projectX(73.0387)} cy={projectY(19.0206)} r="18" fill="url(#mapGlow)" />
+              <circle
+                cx={projectX(73.0387)}
+                cy={projectY(19.0206)}
+                r="18"
+                fill="url(#mapGlow)"
+              />
             </g>
 
             {visible.map((project) => {
               const x = projectX(project.lng);
               const y = projectY(project.lat);
               const isActive = activeProject === project.id;
-              const color = project.division === "signalling" ? "#EF4444" : "#24C78B";
+              const color =
+                project.division === "signalling"
+                  ? "var(--signal)"
+                  : "var(--eng)";
               return (
                 <g
                   key={project.id}
@@ -171,11 +215,36 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
                   className="cursor-pointer outline-none"
                 >
                   <circle cx={x} cy={y} r="9" fill="transparent" />
-                  <circle cx={x} cy={y} r={isActive ? 5 : 3} fill={color} stroke="#050C16" strokeWidth="1" />
+                  <circle
+                    cx={x}
+                    cy={y}
+                    r={isActive ? 5 : 3}
+                    fill={color}
+                    stroke="var(--navy-900)"
+                    strokeWidth="1"
+                  />
                   {isActive ? (
-                    <circle cx={x} cy={y} r="9" fill="none" stroke={color} strokeWidth="0.8" opacity="0.7">
-                      <animate attributeName="r" values="6;12" dur="1.4s" repeatCount="indefinite" />
-                      <animate attributeName="opacity" values="0.8;0" dur="1.4s" repeatCount="indefinite" />
+                    <circle
+                      cx={x}
+                      cy={y}
+                      r="9"
+                      fill="none"
+                      stroke={color}
+                      strokeWidth="0.8"
+                      opacity="0.7"
+                    >
+                      <animate
+                        attributeName="r"
+                        values="6;12"
+                        dur="1.4s"
+                        repeatCount="indefinite"
+                      />
+                      <animate
+                        attributeName="opacity"
+                        values="0.8;0"
+                        dur="1.4s"
+                        repeatCount="indefinite"
+                      />
                     </circle>
                   ) : null}
                 </g>
@@ -185,18 +254,23 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
 
           <div className="pointer-events-none absolute bottom-3 left-3 flex items-center gap-2 border border-line bg-navy-900/85 px-2.5 py-1.5">
             <span className="h-[5px] w-[5px] rounded-full bg-ink" />
-            <span className="font-mono text-[8px] uppercase tracking-[0.16em] text-muted">Head office · Navi Mumbai</span>
+            <span className="font-mono text-[8px] uppercase tracking-[0.16em] text-muted">
+              Head office · Navi Mumbai
+            </span>
           </div>
         </div>
         <p className="mt-3 font-mono text-[9px] uppercase leading-relaxed tracking-[0.16em] text-tech">
-          Boundaries: Census of India 2011 districts · Markers show published works locations
+          Boundaries: Census of India 2011 districts · Markers show published
+          works locations
         </p>
       </div>
 
       <div className="flex flex-col border border-line bg-navy-800/50">
         <div className="flex items-center justify-between border-b border-line px-5 py-4">
           <p className="label text-tech">Where we work</p>
-          <p className="font-mono text-[9px] tracking-[0.16em] text-eng">{String(visible.length).padStart(2, "0")} works</p>
+          <p className="font-mono text-[9px] tracking-[0.16em] text-eng">
+            {String(visible.length).padStart(2, "0")} works
+          </p>
         </div>
 
         <div className="flex flex-wrap gap-1 border-b border-line p-3">
@@ -208,7 +282,9 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
               aria-pressed={state === name}
               className={cn(
                 "px-2 py-1.5 font-mono text-[8.5px] uppercase tracking-[0.14em] transition-colors",
-                state === name ? "bg-eng text-navy" : "text-muted hover:text-ink",
+                state === name
+                  ? "bg-eng text-navy-900"
+                  : "text-muted hover:text-ink",
               )}
             >
               {name} · {String(states.get(name)?.length ?? 0).padStart(2, "0")}
@@ -228,38 +304,61 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
               {active ? (
                 <div>
                   <p className="label-tight mb-2 text-eng">{active.client}</p>
-                  <h3 className="font-display text-lg uppercase leading-tight text-ink">{active.shortTitle}</h3>
+                  <h3 className="font-display text-lg uppercase leading-tight text-ink">
+                    {active.shortTitle}
+                  </h3>
                   <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.16em] text-tech">
                     {active.location} · {active.state}
                   </p>
-                  <p className="mt-4 text-sm leading-relaxed text-muted">{active.summary}</p>
+                  <p className="mt-4 text-sm leading-relaxed text-muted">
+                    {active.summary}
+                  </p>
                   <Link
                     href={`/projects/${active.slug}`}
                     className="mt-5 inline-flex items-center gap-2 border-b border-eng/40 pb-1 font-mono text-[9px] uppercase tracking-[0.18em] text-eng"
                   >
                     Open case study
-                    <svg width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden>
-                      <path d="M0 4h10M7 1l3 3-3 3" stroke="currentColor" strokeWidth="1" />
+                    <svg
+                      width="12"
+                      height="8"
+                      viewBox="0 0 12 8"
+                      fill="none"
+                      aria-hidden
+                    >
+                      <path
+                        d="M0 4h10M7 1l3 3-3 3"
+                        stroke="currentColor"
+                        strokeWidth="1"
+                      />
                     </svg>
                   </Link>
                 </div>
               ) : (
                 <div>
                   <p className="label-tight mb-2 text-tech">Selected state</p>
-                  <h3 className="font-display text-lg uppercase leading-tight text-ink">{state ?? "India"}</h3>
+                  <h3 className="font-display text-lg uppercase leading-tight text-ink">
+                    {state ?? "India"}
+                  </h3>
                   {selectedProjects.length ? (
                     <ul className="mt-4 divide-y divide-line">
                       {selectedProjects.map((project) => (
                         <li key={project.id}>
-                          <Link href={`/projects/${project.slug}`} className="group block py-3">
+                          <Link
+                            href={`/projects/${project.slug}`}
+                            className="group block py-3"
+                          >
                             <p className="flex items-center gap-2 font-mono text-[8.5px] uppercase tracking-[0.16em] text-tech">
                               <span
                                 className={cn(
                                   "h-[4px] w-[4px] rounded-full",
-                                  project.division === "signalling" ? "bg-signal" : "bg-eng",
+                                  project.division === "signalling"
+                                    ? "bg-signal"
+                                    : "bg-eng",
                                 )}
                               />
-                              {project.division === "signalling" ? "Signalling" : "Telecom"}
+                              {project.division === "signalling"
+                                ? "Signalling"
+                                : "Telecom"}
                             </p>
                             <p className="mt-1 text-[0.86rem] leading-snug text-ink/85 transition-colors group-hover:text-eng">
                               {project.shortTitle}
@@ -273,7 +372,8 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
                     </ul>
                   ) : (
                     <p className="mt-4 text-sm text-muted">
-                      No published works match this filter in the selected state.
+                      No published works match this filter in the selected
+                      state.
                     </p>
                   )}
                 </div>
@@ -284,7 +384,8 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
 
         <div className="border-t border-line px-5 py-4">
           <p className="font-mono text-[9px] uppercase leading-relaxed tracking-[0.16em] text-tech">
-            States: Maharashtra · Goa · Karnataka · Madhya Pradesh · Uttar Pradesh
+            States: Maharashtra · Goa · Karnataka · Madhya Pradesh · Uttar
+            Pradesh
           </p>
         </div>
       </div>

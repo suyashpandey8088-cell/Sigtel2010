@@ -165,7 +165,7 @@ export function AdminDashboard({
             aria-pressed={tab === item.id}
             className={cn(
               "px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] transition-colors",
-              tab === item.id ? "bg-ink text-navy" : "text-muted hover:text-ink",
+              tab === item.id ? "bg-ink text-navy-900" : "text-muted hover:text-ink",
             )}
           >
             {item.label}

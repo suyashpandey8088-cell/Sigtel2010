@@ -6,7 +6,7 @@ import { Magnetic } from "@/components/ui/magnetic";
 
 export function FinalCta() {
   return (
-    <section className="relative overflow-hidden border-t border-line bg-navy-900">
+    <section className="theme-night relative overflow-hidden border-t border-line bg-navy-900">
       <Image
         src="/images/project-station.jpg"
         alt="Railway station platform at blue hour with signal lights"

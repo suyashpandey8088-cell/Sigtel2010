@@ -59,7 +59,7 @@ export function IntroSequence() {
       {visible ? (
         <motion.div
           key="intro"
-          className="fixed inset-0 z-[150] flex flex-col bg-navy-900"
+          className="theme-night fixed inset-0 z-[150] flex flex-col bg-navy-900"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, filter: "blur(6px)" }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}

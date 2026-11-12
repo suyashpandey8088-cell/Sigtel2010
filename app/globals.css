@@ -3,17 +3,98 @@
 @tailwind utilities;
 
 :root {
+  /* ---------------------------------------------------------------- palette
+     Every surface, ink and rule below is a token. Components only ever name
+     tokens, so the theme can be swapped at the root: `data-theme="light"` on
+     <html> is set by the header toggle, and the dark values are what the
+     site shipped with.
+
+     Dark (night) values first, then the light (paper) overrides.
+     ---------------------------------------------------------------------- */
+
+  /* light — warm paper, navy ink. The default theme. */
+  --paper: #f2efe8;
+  --paper-2: #f8f6f1;
+  --paper-3: #e8e3d8;
+
+  --night: #07111f;
+  --night-2: #0c1929;
+
+  /* surfaces: navy is the page, navy-900 the deepest panel */
+  --navy: #f2efe8;
+  --navy-900: #f8f6f1;
+  --navy-800: #ece8df;
+  --navy-700: #e3ded3;
+  --navy-600: #d8d2c5;
+
+  --ink: #0e2233;
+  --muted: #4a5c6b;
+  --tech: #6d7d8b;
+  --line: rgba(14, 34, 51, 0.14);
+  --line-strong: rgba(14, 34, 51, 0.3);
+
+  /* accents hold their hue on both themes, darkened slightly for paper */
+  --signal: #d13b3b;
+  --eng: #0f8f63;
+  --on-eng: #04120c;
+
+  /* legacy aliases still referenced by a few inline styles */
+  --navy-2: var(--navy-800);
+  --surface: var(--navy-800);
+
+  --header-h: 76px;
+
+  /* rgb triplets: these are what the Tailwind palette consumes, so that
+     `text-ink/70` and friends resolve to a real alpha instead of vanishing */
+  --navy-rgb: 242, 239, 232;
+  --navy-900-rgb: 248, 246, 241;
+  --navy-800-rgb: 236, 232, 223;
+  --navy-700-rgb: 227, 222, 211;
+  --navy-600-rgb: 216, 210, 197;
+  --ink-rgb: 14, 34, 51;
+  --muted-rgb: 74, 92, 107;
+  --tech-rgb: 109, 125, 139;
+  --paper-rgb: 242, 239, 232;
+  --paper-2-rgb: 248, 246, 241;
+  --night-rgb: 7, 17, 31;
+  --night-2-rgb: 12, 25, 41;
+
+  --grid: rgba(14, 34, 51, 0.075);
+  --grid-soft: rgba(14, 34, 51, 0.06);
+  --scanline: rgba(14, 34, 51, 0.045);
+}
+
+html[data-theme="dark"] {
+  --paper: #07111f00;
+  --paper-2: #0c1929;
+
   --navy: #07111f;
-  --navy-2: #0c1929;
-  --surface: #122337;
+  --navy-900: #050c16;
+  --navy-800: #0c1929;
+  --navy-700: #122337;
+  --navy-600: #182c42;
+
   --ink: #f4f5f3;
   --muted: #a8b4c2;
-  --signal: #ef4444;
-  --eng: #24c78b;
   --tech: #778596;
   --line: rgba(168, 180, 194, 0.16);
   --line-strong: rgba(168, 180, 194, 0.3);
-  --header-h: 76px;
+
+  --signal: #ef4444;
+  --eng: #24c78b;
+
+  --navy-rgb: 7, 17, 31;
+  --navy-900-rgb: 5, 12, 22;
+  --navy-800-rgb: 12, 25, 41;
+  --navy-700-rgb: 18, 35, 55;
+  --navy-600-rgb: 24, 44, 66;
+  --ink-rgb: 244, 245, 243;
+  --muted-rgb: 168, 180, 194;
+  --tech-rgb: 119, 133, 150;
+
+  --grid: rgba(168, 180, 194, 0.07);
+  --grid-soft: rgba(168, 180, 194, 0.055);
+  --scanline: rgba(168, 180, 194, 0.055);
 }
 
 @layer base {
@@ -38,7 +119,7 @@
 
   ::selection {
     background: var(--eng);
-    color: #04120c;
+    color: var(--paper-2);
   }
 
   h1, h2, h3, h4 {
@@ -65,7 +146,20 @@
   }
 
   input::placeholder, textarea::placeholder {
-    color: rgba(168, 180, 194, 0.45);
+    color: var(--tech);
+    opacity: 0.75;
+  }
+
+  /* theme swap: surfaces and type cross-fade rather than snapping */
+  body {
+    transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body {
+      transition: none;
+    }
   }
 }
 
@@ -98,15 +192,15 @@
 
   .grid-blueprint {
     background-image:
-      linear-gradient(to right, rgba(168, 180, 194, 0.07) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(168, 180, 194, 0.07) 1px, transparent 1px);
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
     background-size: 72px 72px;
   }
 
   .grid-blueprint-sm {
     background-image:
-      linear-gradient(to right, rgba(168, 180, 194, 0.055) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(168, 180, 194, 0.055) 1px, transparent 1px);
+      linear-gradient(to right, var(--grid-soft) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-soft) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
@@ -124,8 +218,8 @@
   .scanlines {
     background-image: repeating-linear-gradient(
       to bottom,
-      rgba(168, 180, 194, 0.055) 0px,
-      rgba(168, 180, 194, 0.055) 1px,
+      var(--scanline) 0px,
+      var(--scanline) 1px,
       transparent 1px,
       transparent 4px
     );
@@ -198,18 +292,30 @@
 
   .btn:hover,
   .btn:focus-visible {
-    color: #04120c;
+    color: var(--paper-2);
     border-color: var(--eng);
   }
 
   .btn-solid {
     background: var(--eng);
     border-color: var(--eng);
-    color: #04120c;
+    color: var(--paper-2);
   }
 
   .btn-solid::before {
     background: var(--ink);
+  }
+
+  /* on hover the solid button fills with ink, so the label must swap to the
+     surface colour to stay legible on both themes */
+  .btn-solid:hover,
+  .btn-solid:focus-visible {
+    color: var(--paper-2);
+  }
+
+  html[data-theme="dark"] .btn-solid:hover,
+  html[data-theme="dark"] .btn-solid:focus-visible {
+    color: #04120c;
   }
 
   .btn-ghost {
@@ -275,14 +381,16 @@
     display: block;
   }
 
+  /* Dark scrim for imagery pinned in night mode — used by the hero and the
+     closing CTA, which stay dark in both themes. */
   .hero-scrim {
     background:
       radial-gradient(120% 80% at 50% 100%, rgba(7, 17, 31, 0.4) 0%, rgba(7, 17, 31, 0.92) 78%),
-      linear-gradient(180deg, rgba(7, 17, 31, 0.78) 0%, rgba(7, 17, 31, 0.25) 35%, rgba(7, 17, 31, 0.95) 100%);
+      linear-gradient(180deg, rgba(7, 17, 31, 0.8) 0%, rgba(7, 17, 31, 0.35) 35%, rgba(7, 17, 31, 0.96) 100%);
   }
 
   .vignette {
-    box-shadow: inset 0 0 150px 60px rgba(3, 8, 15, 0.85);
+    box-shadow: inset 0 0 150px 60px rgba(3, 8, 15, 0.55);
   }
 
   .ticker {
@@ -358,13 +466,13 @@ html.lenis body {
   width: 9px;
 }
 ::-webkit-scrollbar-track {
-  background: #050c16;
+  background: var(--navy-900);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1c3149;
+  background: var(--navy-600);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2b4665;
+  background: var(--line-strong);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -494,7 +602,7 @@ html.lenis body {
 }
 
 .ls-chip:focus-visible .ls-chip-box {
-  stroke: #f4f5f3;
+  stroke: var(--ink);
   stroke-width: 1.8;
 }
 .ls-chip:focus-visible {
@@ -506,6 +614,44 @@ html.lenis body {
   .ls-annotation {
     display: none;
   }
+}
+
+/* ------------------------------------------------------- night surfaces
+   Imagery and the 3D model are lit for night. When the page is paper, the
+   panels that hold them stay night and opt back into the dark token set, so
+   text over a photograph is never navy-on-navy. */
+
+.theme-night {
+  --navy: var(--night);
+  --navy-900: #050c16;
+  --navy-800: #0c1929;
+  --navy-700: #122337;
+  --navy-600: #182c42;
+  --ink: #f4f5f3;
+  --muted: #a8b4c2;
+  --tech: #778596;
+  --line: rgba(168, 180, 194, 0.16);
+  --line-strong: rgba(168, 180, 194, 0.3);
+  --signal: #ef4444;
+  --eng: #24c78b;
+  --grid: rgba(168, 180, 194, 0.07);
+  --grid-soft: rgba(168, 180, 194, 0.055);
+  --scanline: rgba(168, 180, 194, 0.055);
+
+  /* the rgb triplets the palette utilities read, so opacity modifiers keep
+     working inside a night panel on a paper page */
+  --navy-rgb: 7, 17, 31;
+  --navy-900-rgb: 5, 12, 22;
+  --navy-800-rgb: 12, 25, 41;
+  --navy-700-rgb: 18, 35, 55;
+  --navy-600-rgb: 24, 44, 66;
+  --ink-rgb: 244, 245, 243;
+  --muted-rgb: 168, 180, 194;
+  --tech-rgb: 119, 133, 150;
+  --paper-rgb: 248, 246, 241;
+
+  color: var(--ink);
+  background-color: var(--navy);
 }
 
 /* ------------------------------------------------- 3D live section stage */

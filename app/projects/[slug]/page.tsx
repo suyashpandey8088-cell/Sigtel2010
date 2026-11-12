@@ -54,7 +54,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 
       <article>
-        <header className="relative overflow-hidden border-b border-line bg-navy-900">
+        <header className="theme-night relative overflow-hidden border-b border-line bg-navy-900">
           <Image
             src={project.images[0]}
             alt={project.shortTitle}

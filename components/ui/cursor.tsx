@@ -70,12 +70,13 @@ export function Cursor() {
         style={{
           width: variant === "default" ? 30 : label ? 82 : 56,
           height: variant === "default" ? 30 : label ? 82 : 56,
-          backgroundColor: label ? "rgba(244,245,243,0.92)" : "transparent",
-          borderColor: variant === "default" ? "rgba(244,245,243,0.35)" : "rgba(244,245,243,0.6)",
+          backgroundColor: label ? "rgba(var(--ink-rgb), 0.92)" : "transparent",
+          borderColor:
+            variant === "default" ? "rgba(var(--ink-rgb), 0.35)" : "rgba(var(--ink-rgb), 0.6)",
         }}
       >
         {label ? (
-          <span className="label-tight text-[8px] leading-tight text-navy">{label}</span>
+          <span className="label-tight text-[8px] leading-tight text-night">{label}</span>
         ) : null}
       </div>
     </div>

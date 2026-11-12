@@ -24,7 +24,7 @@ export function ProjectCard({
       href={`/projects/${project.slug}`}
       data-cursor-label="Case study"
       className={cn(
-        "group relative flex flex-col overflow-hidden border border-line bg-navy-800",
+        "theme-night group relative flex flex-col overflow-hidden border border-line bg-navy-800",
         height,
       )}
     >
@@ -77,7 +77,7 @@ export function ProjectCard({
             </p>
             <span className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.18em] text-ink/70 transition-all duration-500 group-hover:text-eng">
               <span className="hidden sm:inline">Case study</span>
-              <span className="flex h-6 w-6 items-center justify-center border border-ink/20 transition-colors duration-500 group-hover:border-eng group-hover:bg-eng group-hover:text-navy">
+              <span className="flex h-6 w-6 items-center justify-center border border-ink/20 transition-colors duration-500 group-hover:border-eng group-hover:bg-eng group-hover:text-navy-900">
                 <svg width="11" height="8" viewBox="0 0 11 8" fill="none" aria-hidden>
                   <path d="M0 4h9M6 1l3 3-3 3" stroke="currentColor" strokeWidth="1" />
                 </svg>

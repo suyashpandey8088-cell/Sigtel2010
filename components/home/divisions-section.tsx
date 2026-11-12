@@ -73,7 +73,7 @@ export function DivisionsSection() {
         <div key={division.title} className="relative border-t border-line">
           <div className={`grid lg:grid-cols-2 ${index % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""}`}>
             <Reveal className="relative h-full" y={0}>
-              <div className="group relative h-[52vw] max-h-[620px] min-h-[300px] w-full overflow-hidden lg:h-full lg:max-h-none">
+              <div className="theme-night group relative h-[52vw] max-h-[620px] min-h-[300px] w-full overflow-hidden lg:h-full lg:max-h-none">
                 <Image
                   src={division.image}
                   alt={division.alt}
