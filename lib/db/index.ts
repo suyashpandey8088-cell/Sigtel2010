@@ -4,6 +4,25 @@ import type { Store } from "./types";
 
 let store: Store | null = null;
 
+const READ_TIMEOUT_MS = 9000;
+
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(`store read timed out after ${ms}ms`)), ms);
+    timer.unref?.();
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error) => {
+        clearTimeout(timer);
+        reject(error);
+      },
+    );
+  });
+}
+
 /**
  * Wraps the PostgreSQL store so that a database outage, an unreachable host or a
  * missing table degrades to the bundled works register instead of breaking a
@@ -12,6 +31,10 @@ let store: Store | null = null;
  */
 function withFallback(primary: Store, fallback: Store): Store {
   let warned = false;
+  // Circuit breaker: after a failure, stop paying the connection timeout on
+  // every render and serve bundled content until the cooldown expires.
+  let degradedUntil = 0;
+  const COOLDOWN_MS = 60_000;
   const warn = (operation: string, error: unknown) => {
     if (warned) return;
     warned = true;
@@ -21,9 +44,13 @@ function withFallback(primary: Store, fallback: Store): Store {
     );
   };
   const read = async <T>(operation: string, run: () => Promise<T>, backup: () => Promise<T>): Promise<T> => {
+    if (Date.now() < degradedUntil) return backup();
     try {
-      return await run();
+      const value = await withTimeout(run(), READ_TIMEOUT_MS);
+      degradedUntil = 0;
+      return value;
     } catch (error) {
+      degradedUntil = Date.now() + COOLDOWN_MS;
       warn(operation, error);
       return backup();
     }
