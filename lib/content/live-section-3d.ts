@@ -113,7 +113,7 @@ export const FOCUS: Record<string, Focus> = {
   cabling: { centre: [-3.0, 0.4, 4.2], radius: 2.6, az: 0.34, el: 0.26 },
   axle: { centre: [-6.0, 0.5, 2.2], radius: 1.8, az: -0.42, el: 0.24 },
   points: { centre: [-1.4, 0.5, 1.6], radius: 2.6, az: -0.78, el: 0.26 },
-  signal: { centre: [2.55, 3.6, 3.4], radius: 2.45, az: 0.16, el: 0.15 },
+  signal: { centre: [2.4, 4.0, 3.4], radius: 2.6, az: -1.16, el: 0.13 },
   ofc: { centre: [-1.0, 0.4, 4.6], radius: 2.6, az: 0.48, el: 0.28 },
   cctv: { centre: [9.6, 2.8, 4.6], radius: 2.4, az: 0.86, el: 0.18 },
   tower: { centre: [5.4, 6.4, -10.4], radius: 6.6, az: 0.72, el: 0.12 },

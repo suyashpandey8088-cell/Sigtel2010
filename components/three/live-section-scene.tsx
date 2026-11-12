@@ -515,15 +515,22 @@ function Signal({ aspect }: { aspect: Aspect }) {
     { key: "green", y: 5.31 },
   ];
   const glow = useRef<THREE.PointLight>(null);
+  const lampY = aspect === "red" ? 6.05 : aspect === "amber" ? 5.68 : 5.31;
+  const aspectColor =
+    aspect === "red" ? C.red : aspect === "amber" ? C.amber : C.green;
+
   useFrame(({ clock }) => {
-    if (glow.current) {
-      const pulse = 1 + Math.sin(clock.getElapsedTime() * 1.8) * 0.12;
-      glow.current.intensity = 5.4 * pulse;
-    }
+    if (glow.current)
+      glow.current.intensity =
+        5.4 * (1 + Math.sin(clock.getElapsedTime() * 1.8) * 0.12);
   });
 
   return (
     <group>
+      <mesh position={[0, 0.12, 0]}>
+        <cylinderGeometry args={[0.36, 0.42, 0.24, 12]} />
+        <meshStandardMaterial color={C.concrete} roughness={0.95} />
+      </mesh>
       <mesh position={[0, 2.6, 0]} castShadow>
         <cylinderGeometry args={[0.1, 0.14, 5.2, 12]} />
         <meshStandardMaterial
@@ -532,99 +539,96 @@ function Signal({ aspect }: { aspect: Aspect }) {
           roughness={0.55}
         />
       </mesh>
-      <mesh position={[0, 0.12, 0]}>
-        <cylinderGeometry args={[0.36, 0.42, 0.24, 12]} />
-        <meshStandardMaterial color={C.concrete} roughness={0.95} />
-      </mesh>
-      {/* head + backing board */}
-      <mesh position={[0, 5.68, 0.02]}>
-        <boxGeometry args={[0.9, 2.1, 0.07]} />
-        <meshStandardMaterial
-          color="#16293c"
-          metalness={0.35}
-          roughness={0.6}
-        />
-      </mesh>
-      <mesh position={[0, 5.68, 0.12]}>
-        <boxGeometry args={[0.62, 1.72, 0.4]} />
-        <meshStandardMaterial color="#101f2d" metalness={0.3} roughness={0.6} />
-      </mesh>
-      {/* white rim / border that reads at a distance */}
-      <mesh position={[0, 5.68, -0.04]}>
-        <boxGeometry args={[0.98, 2.18, 0.04]} />
-        <meshStandardMaterial color={C.white} roughness={0.7} />
-      </mesh>
-      {lamps.map((lamp) => {
-        const on = lamp.key === aspect;
-        return (
-          <group key={lamp.key} position={[0, lamp.y, 0.3]}>
-            <mesh>
-              <sphereGeometry args={[0.115, 22, 22]} />
-              <meshStandardMaterial
-                color={
-                  on
-                    ? lamp.key === "red"
-                      ? C.red
-                      : lamp.key === "amber"
-                        ? C.amber
-                        : C.green
-                    : "#101d29"
-                }
-                emissive={
-                  lamp.key === "red"
-                    ? C.red
-                    : lamp.key === "amber"
-                      ? C.amber
-                      : C.green
-                }
-                emissiveIntensity={on ? 3.2 : 0.03}
-                toneMapped={false}
-              />
-            </mesh>
-            {/* hood */}
-            <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0, 0.1]}>
-              <cylinderGeometry args={[0.15, 0.15, 0.2, 14, 1, true]} />
-              <meshStandardMaterial
-                color="#0a1520"
-                side={THREE.DoubleSide}
-                roughness={0.8}
-              />
-            </mesh>
-          </group>
-        );
-      })}
+
+      {/* The head faces the approaching train, i.e. down the line along -X,
+          not across the track — so the lit aspect is visible from a
+          three-quarter view rather than edge-on. */}
+      <group rotation={[0, -Math.PI / 2, 0]}>
+        <mesh position={[0, 5.68, 0.02]}>
+          <boxGeometry args={[0.9, 2.1, 0.07]} />
+          <meshStandardMaterial
+            color="#16293c"
+            metalness={0.35}
+            roughness={0.6}
+          />
+        </mesh>
+        <mesh position={[0, 5.68, 0.12]}>
+          <boxGeometry args={[0.62, 1.72, 0.4]} />
+          <meshStandardMaterial
+            color="#101f2d"
+            metalness={0.3}
+            roughness={0.6}
+          />
+        </mesh>
+        {/* white rim that reads at a distance */}
+        <mesh position={[0, 5.68, -0.04]}>
+          <boxGeometry args={[0.98, 2.18, 0.04]} />
+          <meshStandardMaterial color={C.white} roughness={0.7} />
+        </mesh>
+        {/* sighting board above the head */}
+        <mesh position={[0, 6.9, 0.04]}>
+          <boxGeometry args={[0.62, 0.34, 0.035]} />
+          <meshStandardMaterial color={C.white} roughness={0.75} />
+        </mesh>
+        {lamps.map((lamp) => {
+          const on = lamp.key === aspect;
+          const color =
+            lamp.key === "red"
+              ? C.red
+              : lamp.key === "amber"
+                ? C.amber
+                : C.green;
+          return (
+            <group key={lamp.key} position={[0, lamp.y, 0.3]}>
+              <mesh>
+                <sphereGeometry args={[0.115, 22, 22]} />
+                <meshStandardMaterial
+                  color={on ? color : "#101d29"}
+                  emissive={color}
+                  emissiveIntensity={on ? 3.4 : 0.03}
+                  toneMapped={false}
+                />
+              </mesh>
+              {/* hood */}
+              <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0, 0.1]}>
+                <cylinderGeometry args={[0.15, 0.15, 0.2, 14, 1, true]} />
+                <meshStandardMaterial
+                  color="#0a1520"
+                  side={THREE.DoubleSide}
+                  roughness={0.8}
+                />
+              </mesh>
+            </group>
+          );
+        })}
+        {/* number plate + location case + ladder */}
+        <mesh position={[0, 4.42, 0.16]}>
+          <boxGeometry args={[0.34, 0.16, 0.02]} />
+          <meshStandardMaterial
+            color={C.white}
+            emissive={C.white}
+            emissiveIntensity={0.08}
+          />
+        </mesh>
+        <mesh position={[0.42, 1.1, 0.1]}>
+          <boxGeometry args={[0.42, 0.9, 0.3]} />
+          <meshStandardMaterial color="#1b3245" roughness={0.85} />
+        </mesh>
+        {[1.4, 1.9, 2.4, 2.9, 3.4].map((y) => (
+          <mesh key={y} position={[0.22, y, 0]} rotation={[0, 0, Math.PI / 2]}>
+            <cylinderGeometry args={[0.018, 0.018, 0.44, 6]} />
+            <meshStandardMaterial color={C.steel} metalness={0.5} />
+          </mesh>
+        ))}
+      </group>
+
       <pointLight
         ref={glow}
-        position={[
-          0,
-          aspect === "red" ? 6.05 : aspect === "amber" ? 5.68 : 5.31,
-          0.9,
-        ]}
-        color={
-          aspect === "red" ? C.red : aspect === "amber" ? C.amber : C.green
-        }
+        position={[-0.9, lampY, 0]}
+        color={aspectColor}
         distance={7}
         intensity={5}
       />
-      {/* number plate + location case + ladder */}
-      <mesh position={[0, 4.42, 0.16]}>
-        <boxGeometry args={[0.34, 0.16, 0.02]} />
-        <meshStandardMaterial
-          color={C.white}
-          emissive={C.white}
-          emissiveIntensity={0.08}
-        />
-      </mesh>
-      <mesh position={[0.42, 1.1, 0.1]}>
-        <boxGeometry args={[0.42, 0.9, 0.3]} />
-        <meshStandardMaterial color="#1b3245" roughness={0.85} />
-      </mesh>
-      {[1.4, 1.9, 2.4, 2.9, 3.4].map((y) => (
-        <mesh key={y} position={[0.22, y, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.018, 0.018, 0.44, 6]} />
-          <meshStandardMaterial color={C.steel} metalness={0.5} />
-        </mesh>
-      ))}
     </group>
   );
 }
@@ -1750,6 +1754,8 @@ export default function LiveSectionScene(props: SceneProps) {
     [props.selected],
   );
   const interacting = props.hovered !== "";
+  // a drag is an orbit, not an empty click: remember where the press started
+  const press = useRef<{ x: number; y: number } | null>(null);
 
   return (
     <Canvas
@@ -1768,7 +1774,19 @@ export default function LiveSectionScene(props: SceneProps) {
         scene.background = new THREE.Color("#050c16");
         scene.fog = new THREE.Fog("#060f19", 52, 128);
       }}
-      onPointerMissed={() => props.onSelect("")}
+      onPointerDown={(event) => {
+        press.current = { x: event.clientX, y: event.clientY };
+      }}
+      onPointerMissed={(event) => {
+        const start = press.current;
+        press.current = null;
+        if (
+          start &&
+          Math.hypot(event.clientX - start.x, event.clientY - start.y) > 6
+        )
+          return;
+        props.onSelect("");
+      }}
     >
       <ambientLight intensity={0.55} />
       <hemisphereLight args={["#8fb4d6", "#050c16", 0.7]} />
