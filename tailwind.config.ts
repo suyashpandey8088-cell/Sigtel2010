@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+  darkMode: ["selector", '[data-theme="dark"]'],
   content: [
     "./app/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -9,20 +10,32 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // All palette colours resolve through CSS variables (see globals.css),
+        // so the whole site can be repainted for the light theme without
+        // touching a single component. Values below are the dark defaults,
+        // kept as a fallback for tooling that reads this file directly.
+        // Colours that take an opacity modifier (`text-ink/70`, `bg-ink/[0.06]`)
+        // are declared as rgb triples so Tailwind can emit a real alpha value.
+        // Without `<alpha-value>` it silently drops every such class.
         navy: {
-          DEFAULT: "#07111F",
-          900: "#050C16",
-          800: "#0C1929",
-          700: "#122337",
-          600: "#182C42",
+          DEFAULT: "rgb(var(--navy-rgb) / <alpha-value>)",
+          900: "rgb(var(--navy-900-rgb) / <alpha-value>)",
+          800: "rgb(var(--navy-800-rgb) / <alpha-value>)",
+          700: "rgb(var(--navy-700-rgb) / <alpha-value>)",
+          600: "rgb(var(--navy-600-rgb) / <alpha-value>)",
         },
-        ink: "#F4F5F3",
-        muted: "#A8B4C2",
-        signal: "#EF4444",
-        eng: "#24C78B",
-        tech: "#778596",
-        line: "rgba(168,180,194,0.16)",
-        "line-strong": "rgba(168,180,194,0.32)",
+        ink: "rgb(var(--ink-rgb) / <alpha-value>)",
+        muted: "rgb(var(--muted-rgb) / <alpha-value>)",
+        tech: "rgb(var(--tech-rgb) / <alpha-value>)",
+        signal: "var(--signal)",
+        eng: "var(--eng)",
+        line: "var(--line)",
+        "line-strong": "var(--line-strong)",
+        paper: "rgb(var(--paper-rgb) / <alpha-value>)",
+        "paper-2": "rgb(var(--paper-2-rgb) / <alpha-value>)",
+        night: "rgb(var(--night-rgb) / <alpha-value>)",
+        "night-2": "rgb(var(--night-2-rgb) / <alpha-value>)",
+        "on-eng": "var(--on-eng)",
       },
       fontFamily: {
         display: ["Space Grotesk", "ui-sans-serif", "system-ui", "sans-serif"],

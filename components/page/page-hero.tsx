@@ -22,7 +22,7 @@ export function PageHero({
   breadcrumb: { label: string; href?: string }[];
 }) {
   return (
-    <section className="relative overflow-hidden bg-navy-900">
+    <section className="theme-night relative overflow-hidden bg-navy-900">
       <Image src={image} alt={imageAlt} fill priority sizes="100vw" className="object-cover opacity-45" />
       <div className="absolute inset-0 hero-scrim" aria-hidden />
       <div className="absolute inset-0 grid-blueprint opacity-25" aria-hidden />

@@ -8,7 +8,7 @@ export function AboutPreview() {
   return (
     <section className="relative overflow-hidden border-t border-line bg-navy-800/40">
       <div className="grid lg:grid-cols-2">
-        <div className="relative min-h-[360px] lg:min-h-[720px]">
+        <div className="theme-night relative min-h-[360px] lg:min-h-[720px]">
           <Image
             src="/images/about-team.jpg"
             alt="SIG-TEL engineers reviewing signalling drawings beside the track at dusk"

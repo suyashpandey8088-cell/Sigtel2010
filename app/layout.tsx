@@ -16,6 +16,8 @@ import { MobileCta } from "@/components/ui/mobile-cta";
 import { HideOnAdmin } from "@/components/layout/hide-on-admin";
 import { Analytics } from "@/components/providers/analytics";
 import { HydrationFlag } from "@/components/providers/hydration-flag";
+import { ThemeProvider, themeScript } from "@/components/providers/theme";
+import { NightRoute } from "@/components/providers/night-route";
 import { OrganizationSchema } from "@/components/seo/organization-schema";
 import { company } from "@/lib/content/site";
 
@@ -51,12 +53,20 @@ export const metadata: Metadata = {
     title: "SIG-TEL — Engineering the systems that keep India moving",
     description:
       "Integrated railway signalling and telecommunications engineering: Electronic Interlocking, level crossings, axle counters, IP-MPLS, SDH, OFC, CCTV and maintenance.",
-    images: [{ url: "/images/hero-railway.jpg", width: 1200, height: 630, alt: "Railway signalling infrastructure at dusk" }],
+    images: [
+      {
+        url: "/images/hero-railway.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Railway signalling infrastructure at dusk",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "SIG-TEL — Railway Signalling & Telecommunications",
-    description: "Signalling and telecom systems engineered for dependable railway infrastructure.",
+    description:
+      "Signalling and telecom systems engineered for dependable railway infrastructure.",
     images: ["/images/hero-railway.jpg"],
   },
   icons: {
@@ -67,15 +77,26 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#07111F",
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F2EFE8" },
+    { media: "(prefers-color-scheme: dark)", color: "#07111F" },
+  ],
+  colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en-IN" suppressHydrationWarning>
+    <html lang="en-IN" data-theme="light" suppressHydrationWarning>
+      <head>
+        {/* Theme is resolved before first paint: no flash, no dependence on hydration. */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="grain bg-navy text-ink antialiased">
         <script
           // Failsafe: reveal animation-hidden content if the client bundle never
@@ -91,14 +112,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <SmoothScroll>
-          <SiteHeader />
-          <main id="main">{children}</main>
-          <HideOnAdmin>
-            <div className="h-[58px] md:hidden" aria-hidden />
-            <SiteFooter />
-          </HideOnAdmin>
-        </SmoothScroll>
+        <ThemeProvider>
+          <NightRoute />
+          <SmoothScroll>
+            <SiteHeader />
+            <main id="main">{children}</main>
+            <HideOnAdmin>
+              <div className="h-[58px] md:hidden" aria-hidden />
+              <SiteFooter />
+            </HideOnAdmin>
+          </SmoothScroll>
+        </ThemeProvider>
         <MobileCta />
         <Cursor />
         <Analytics />

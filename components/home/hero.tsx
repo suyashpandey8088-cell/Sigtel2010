@@ -24,13 +24,23 @@ export function Hero() {
         yPercent: 12,
         scale: 1.12,
         ease: "none",
-        scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true },
+        scrollTrigger: {
+          trigger: root.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
       });
       gsap.to(contentRef.current, {
         y: -70,
         opacity: 0.25,
         ease: "none",
-        scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true },
+        scrollTrigger: {
+          trigger: root.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
       });
     }, root);
     return () => ctx.revert();
@@ -38,7 +48,8 @@ export function Hero() {
 
   useEffect(() => {
     const el = root.current;
-    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+      return;
     const onMove = (event: MouseEvent) => {
       const x = (event.clientX / window.innerWidth - 0.5) * 22;
       const y = (event.clientY / window.innerHeight - 0.5) * 14;
@@ -51,8 +62,14 @@ export function Hero() {
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
+  // Night at the top of the page, paper the moment you scroll: the hero keeps
+  // its photograph by staying dark, and the content below lives in the light.
   return (
-    <section ref={root} className="relative min-h-[100svh] w-full overflow-hidden bg-navy" aria-label="Introduction">
+    <section
+      ref={root}
+      className="theme-night relative min-h-[100svh] w-full overflow-hidden bg-navy"
+      aria-label="Introduction"
+    >
       <div
         ref={imageRef}
         className="absolute inset-[-6%] will-change-transform"
@@ -64,7 +81,7 @@ export function Hero() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center opacity-[0.78]"
+          className="object-cover object-center opacity-100 dark:opacity-[0.78]"
         />
       </div>
       <div className="absolute inset-0 hero-scrim" aria-hidden />
@@ -72,7 +89,10 @@ export function Hero() {
       <div className="absolute inset-0 scanlines opacity-[0.18]" aria-hidden />
 
       {/* frame */}
-      <div className="pointer-events-none absolute inset-x-4 bottom-4 top-[calc(var(--header-h)+1rem)] border border-ink/[0.08] sm:inset-x-6" aria-hidden />
+      <div
+        className="pointer-events-none absolute inset-x-4 bottom-4 top-[calc(var(--header-h)+1rem)] border border-ink/[0.08] sm:inset-x-6"
+        aria-hidden
+      />
 
       <div className="edge relative flex min-h-[100svh] flex-col justify-between pb-8 pt-[calc(var(--header-h)+3rem)]">
         <motion.div
@@ -86,7 +106,9 @@ export function Hero() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-eng opacity-60" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-eng" />
             </span>
-            <span className="label-tight text-ink/70">Systems live · Signalling &amp; telecom</span>
+            <span className="label-tight text-ink/70">
+              Systems live · Signalling &amp; telecom
+            </span>
           </div>
           <span className="label-tight hidden text-ink/50 md:block">
             19.0206° N / 73.0387° E — Navi Mumbai
@@ -113,7 +135,11 @@ export function Hero() {
                       className="block"
                       initial={{ y: "115%" }}
                       animate={{ y: "0%" }}
-                      transition={{ duration: 1.15, delay: 0.62 + index * 0.11, ease: [0.16, 1, 0.3, 1] }}
+                      transition={{
+                        duration: 1.15,
+                        delay: 0.62 + index * 0.11,
+                        ease: [0.16, 1, 0.3, 1],
+                      }}
                     >
                       {index === 2 ? (
                         <>
@@ -133,8 +159,9 @@ export function Hero() {
                 transition={{ delay: 1.2, duration: 0.9 }}
                 className="mt-7 max-w-xl text-[0.98rem] leading-relaxed text-muted"
               >
-                Integrated railway signalling and telecommunications solutions engineered for dependable
-                infrastructure, operational efficiency and a connected railway future.
+                Integrated railway signalling and telecommunications solutions
+                engineered for dependable infrastructure, operational efficiency
+                and a connected railway future.
               </motion.p>
 
               <motion.div
@@ -144,15 +171,33 @@ export function Hero() {
                 className="mt-9 flex flex-wrap items-center gap-4"
               >
                 <Magnetic>
-                  <Link href="/infrastructure" className="btn btn-solid" data-cursor-label="Explore">
+                  <Link
+                    href="/infrastructure"
+                    className="btn btn-solid"
+                    data-cursor-label="Explore"
+                  >
                     <span>Explore our capabilities</span>
-                    <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden>
-                      <path d="M0 5h13M9 1l4 4-4 4" stroke="currentColor" strokeWidth="1.2" />
+                    <svg
+                      width="16"
+                      height="10"
+                      viewBox="0 0 16 10"
+                      fill="none"
+                      aria-hidden
+                    >
+                      <path
+                        d="M0 5h13M9 1l4 4-4 4"
+                        stroke="currentColor"
+                        strokeWidth="1.2"
+                      />
                     </svg>
                   </Link>
                 </Magnetic>
                 <Magnetic>
-                  <Link href="/contact" className="btn" data-cursor-label="Enquire">
+                  <Link
+                    href="/contact"
+                    className="btn"
+                    data-cursor-label="Enquire"
+                  >
                     <span>Discuss a project</span>
                   </Link>
                 </Magnetic>
@@ -168,8 +213,10 @@ export function Hero() {
               aria-hidden
             >
               <div className="corner-ticks border border-ink/10 bg-navy-900/60 p-4 backdrop-blur-sm">
-                <p className="label-tight mb-3 text-[8px] text-tech">Signal S-23 · 4 aspect</p>
-                <div className="mx-auto flex w-[52px] flex-col gap-2 rounded-sm border border-ink/10 bg-black/60 p-2">
+                <p className="label-tight mb-3 text-[8px] text-tech">
+                  Signal S-23 · 4 aspect
+                </p>
+                <div className="mx-auto flex w-[52px] flex-col gap-2 rounded-sm border border-ink/10 bg-navy-900/80 p-2">
                   <span className="mx-auto h-[18px] w-[18px] rounded-full bg-signal shadow-[0_0_22px_rgba(239,68,68,0.85)]" />
                   <span className="mx-auto h-[18px] w-[18px] rounded-full bg-ink/[0.07]" />
                   <span className="mx-auto h-[18px] w-[18px] rounded-full bg-eng/90 shadow-[0_0_18px_rgba(36,199,139,0.55)]" />
@@ -180,10 +227,12 @@ export function Hero() {
                     <span>Route</span> <span className="text-eng">Set</span>
                   </p>
                   <p className="flex justify-between">
-                    <span>Track cct</span> <span className="text-eng">Clear</span>
+                    <span>Track cct</span>{" "}
+                    <span className="text-eng">Clear</span>
                   </p>
                   <p className="flex justify-between">
-                    <span>LC gate</span> <span className="text-signal">Closed</span>
+                    <span>LC gate</span>{" "}
+                    <span className="text-signal">Closed</span>
                   </p>
                 </div>
               </div>
@@ -202,10 +251,16 @@ export function Hero() {
               <motion.span
                 className="mt-1 h-1.5 w-1.5 rounded-full bg-eng"
                 animate={{ y: [0, 16, 0] }}
-                transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 2.4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               />
             </span>
-            <span className="label-tight text-[9px] text-ink/50">Scroll to enter the system</span>
+            <span className="label-tight text-[9px] text-ink/50">
+              Scroll to enter the system
+            </span>
           </div>
           <div className="flex flex-wrap gap-x-8 gap-y-2 font-mono text-[9px] uppercase tracking-[0.22em] text-ink/40">
             <span>EI · LC gates · Axle counters</span>

@@ -101,8 +101,8 @@ export function ProcessSection() {
 
                   {/* rail motif */}
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24" aria-hidden>
-                    <div className="absolute bottom-10 left-0 right-0 h-px bg-line-strong/70" />
-                    <div className="absolute bottom-[30px] left-0 right-0 h-px bg-line-strong/40" />
+                    <div className="absolute bottom-10 left-0 right-0 h-px bg-line-strong" />
+                    <div className="absolute bottom-[30px] left-0 right-0 h-px bg-line-strong opacity-60" />
                     {Array.from({ length: 24 }).map((_, i) => (
                       <span
                         key={i}

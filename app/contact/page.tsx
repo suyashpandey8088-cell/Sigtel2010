@@ -30,7 +30,7 @@ export default function ContactPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <section className="relative overflow-hidden border-b border-line bg-navy-900">
+      <section className="theme-night relative overflow-hidden border-b border-line bg-navy-900">
         <Image
           src="/images/project-station.jpg"
           alt="Railway station platform at blue hour"

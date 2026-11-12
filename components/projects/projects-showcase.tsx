@@ -61,11 +61,11 @@ export function ProjectsShowcase({
                 aria-pressed={active}
                 className={cn(
                   "group flex items-center gap-2 px-3 py-2 font-mono text-[9.5px] uppercase tracking-[0.18em] transition-colors",
-                  active ? "bg-ink text-navy" : "text-muted hover:text-ink",
+                  active ? "bg-ink text-navy-900" : "text-muted hover:text-ink",
                 )}
               >
                 {item.label}
-                <span className={cn("text-[8px]", active ? "text-navy/50" : "text-tech")}>{String(count).padStart(2, "0")}</span>
+                <span className={cn("text-[8px]", active ? "text-navy-900/50" : "text-tech")}>{String(count).padStart(2, "0")}</span>
               </button>
             );
           })}

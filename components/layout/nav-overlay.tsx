@@ -44,7 +44,7 @@ export function NavOverlay({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed inset-0 z-[95] overflow-y-auto bg-navy-900"
+      className="theme-night fixed inset-0 z-[95] overflow-y-auto bg-navy-900"
     >
       <div className="pointer-events-none absolute inset-0 grid-blueprint opacity-60" aria-hidden />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_60%_at_70%_20%,rgba(36,199,139,0.08),transparent_70%)]" aria-hidden />

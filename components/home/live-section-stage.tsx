@@ -106,6 +106,7 @@ export function LiveSectionStage({
           hovered={hovered}
           onSelect={onSelect}
           onHover={onHover}
+          theme="dark"
         />
       </div>
     </div>
@@ -113,7 +114,7 @@ export function LiveSectionStage({
   const showModel = model && !failed;
 
   return (
-    <div className="relative">
+    <div className="theme-night relative">
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#050c16] sm:aspect-[16/10] lg:aspect-[16/9]">
         {/* the drawing is always underneath: it is the initial paint, the
             fallback, and the keyboard-reachable set of hotspots */}
