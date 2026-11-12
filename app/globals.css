@@ -507,3 +507,53 @@ html.lenis body {
     display: none;
   }
 }
+
+/* ------------------------------------------------- 3D live section stage */
+
+.ls-chip-3d {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid currentColor;
+  background: rgba(5, 12, 22, 0.82);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: inherit;
+  backdrop-filter: blur(2px);
+  transition:
+    transform 0.22s ease,
+    background-color 0.22s ease,
+    box-shadow 0.22s ease,
+    opacity 0.22s ease;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.ls-chip-3d:hover,
+.ls-chip-3d.is-active {
+  transform: scale(1.12);
+  background: rgba(5, 12, 22, 0.95);
+  box-shadow: 0 0 0 3px rgba(5, 12, 22, 0.55), 0 0 18px -4px currentColor;
+}
+
+.ls-chip-3d.is-dim {
+  opacity: 0.38;
+}
+
+.ls-chip-3d:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ls-chip-3d {
+    transition: none;
+  }
+  .ls-chip-3d:hover,
+  .ls-chip-3d.is-active {
+    transform: none;
+  }
+}

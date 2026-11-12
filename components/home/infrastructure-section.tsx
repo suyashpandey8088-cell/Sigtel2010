@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { infraNodes, modeMeta, type InfraMode } from "@/lib/content/infrastructure-3d";
-import { LiveSectionDiagram } from "@/components/home/live-section-diagram";
+import { LiveSectionStage } from "@/components/home/live-section-stage";
 import { cn } from "@/lib/utils";
 
 export function InfrastructureSection() {
@@ -77,25 +77,13 @@ export function InfrastructureSection() {
 
         <div className="mt-10 grid gap-5 lg:grid-cols-[1fr_400px]">
           <div className="relative border border-line bg-navy-900/60">
-            <div className="relative p-3 sm:p-4">
-              <LiveSectionDiagram
-                mode={mode}
-                selected={selected}
-                hovered={hovered}
-                onSelect={setSelected}
-                onHover={setHovered}
-              />
-
-              <div className="pointer-events-none absolute left-5 top-5 flex items-center gap-2 border border-ink/10 bg-navy-900/80 px-2.5 py-1.5 backdrop-blur">
-                <span className={cn("h-[5px] w-[5px] rounded-full", mode === "signalling" ? "bg-signal" : "bg-eng")} />
-                <span className="label-tight text-[8px] text-ink/70">{modeMeta[mode].title} · live section</span>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line px-4 py-2.5">
-              <span className="label-tight text-[8px] text-tech">Select a numbered component</span>
-              <span className="label-tight text-[8px] text-tech">Section elevation · not to scale</span>
-            </div>
+            <LiveSectionStage
+              mode={mode}
+              selected={selected}
+              hovered={hovered}
+              onSelect={setSelected}
+              onHover={setHovered}
+            />
           </div>
 
           <aside className="flex flex-col border border-line bg-navy-800/50">
@@ -112,6 +100,18 @@ export function InfrastructureSection() {
                   <button
                     key={node.key}
                     type="button"
+                    data-infra-key={node.key}
+                    onKeyDown={(event) => {
+                      const step = event.key === "ArrowDown" ? 1 : event.key === "ArrowUp" ? -1 : 0;
+                      if (!step) return;
+                      event.preventDefault();
+                      const next = infraNodes[(index + step + infraNodes.length) % infraNodes.length];
+                      setSelected(next.key);
+                      const target = event.currentTarget.parentElement?.querySelector<HTMLButtonElement>(
+                        `[data-infra-key="${next.key}"]`,
+                      );
+                      target?.focus();
+                    }}
                     onMouseEnter={() => setHovered(node.key)}
                     onMouseLeave={() => setHovered("")}
                     onFocus={() => setHovered(node.key)}
