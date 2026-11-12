@@ -56,6 +56,13 @@ psql "$DATABASE_URL" -f prisma/schema.sql   # schema
 npm run db:seed                             # seed the works register
 ```
 
+If your provider exposes more than one reachable endpoint (Supabase does: the
+direct host is IPv6-only, the IPv4 pooler is a different hostname), list the rest
+in `DATABASE_FALLBACK_URLS` — the store keeps the first endpoint that answers.
+Supabase also enables row-level security on new tables; the app connects as its
+own role, so run `ALTER TABLE "Project" DISABLE ROW LEVEL SECURITY;` for each of
+the three tables (or add policies for that role).
+
 `prisma/schema.prisma` documents the same three models (`Project`, `Enquiry`, `AdminUser`) and can be used with Prisma Client for scripts or internal tooling (`npx prisma generate && npx prisma db push`). The runtime data layer uses `pg` directly so the site has no engine-binary dependency at build time.
 
 ### Without a database
