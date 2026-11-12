@@ -18,6 +18,17 @@ function db(): Pool {
       connectionString: process.env.DATABASE_URL,
       ssl: process.env.DATABASE_SSL === "false" ? undefined : { rejectUnauthorized: false },
       max: 5,
+      // Fail fast: an unreachable host must degrade to the bundled register in
+      // seconds, not hang a serverless render until the platform timeout.
+      connectionTimeoutMillis: 8000,
+      idleTimeoutMillis: 8000,
+      query_timeout: 10000,
+      statement_timeout: 10000,
+    });
+    // A pool-level error (dropped connection, DNS failure) must never surface as
+    // an unhandled event that kills the function instance.
+    pool.on("error", (error) => {
+      console.error("[store] PostgreSQL pool error", error instanceof Error ? error.message : error);
     });
   }
   return pool;
