@@ -18,7 +18,10 @@ export class SceneBoundary extends Component<
   }
 
   componentDidCatch(error: unknown) {
-    console.warn("[live-section] 3D unavailable, falling back to the drawing", error);
+    console.warn(
+      "[live-section] 3D unavailable, falling back to the drawing",
+      error,
+    );
   }
 
   render() {
