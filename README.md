@@ -58,6 +58,18 @@ npm run db:seed                             # seed the works register
 
 `prisma/schema.prisma` documents the same three models (`Project`, `Enquiry`, `AdminUser`) and can be used with Prisma Client for scripts or internal tooling (`npx prisma generate && npx prisma db push`). The runtime data layer uses `pg` directly so the site has no engine-binary dependency at build time.
 
+### Without a database
+
+`DATABASE_URL` is optional. If it is absent — or if a query fails because the
+database is unreachable — pages keep serving the published works register from
+`lib/content/projects.ts` instead of erroring. The file store never throws: on
+read-only filesystems (Vercel, containers) it keeps the snapshot in memory and
+logs a single warning. Writes (enquiries, admin edits) are only durable when a
+database is configured, so **production should always set `DATABASE_URL`**.
+
+When a PostgreSQL database is connected and the `Project` table is empty, the app
+seeds it from the published register on first use — no manual seed step needed.
+
 Enquiry attachments are written to `.data/uploads` and can be downloaded from the admin dashboard through an authenticated route. **On serverless hosting use object storage** (S3 / R2 / Cloudinary) for uploads — the bundled approach is filesystem-based.
 
 ---

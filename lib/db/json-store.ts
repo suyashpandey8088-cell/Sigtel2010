@@ -5,9 +5,17 @@ import type { Store } from "./types";
 import { projects as seedProjects } from "@/lib/content/projects";
 
 /**
- * File-backed store — used for local development and preview environments where
- * no PostgreSQL connection is configured. Mirrors the PostgreSQL schema in
- * prisma/schema.prisma. Not intended for multi-instance production hosting.
+ * File-backed store — used for local development and any environment where no
+ * PostgreSQL connection is configured. Mirrors the PostgreSQL schema in
+ * prisma/schema.prisma.
+ *
+ * Serverless safety: on hosts such as Vercel the only writable directory is
+ * /tmp and the deployment directory is read-only, so every filesystem call here
+ * is treated as best-effort. Reads fall back to an in-memory snapshot seeded
+ * from the published works register; writes update that snapshot and are
+ * persisted only when the filesystem actually allows it. This store must never
+ * throw — a public page reading the register must not 500 because a disk is
+ * read-only.
  */
 
 interface Snapshot {
@@ -19,33 +27,74 @@ interface Snapshot {
 const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), ".data");
 const FILE = path.join(DATA_DIR, "store.json");
 
-let queue: Promise<unknown> = Promise.resolve();
+let cache: Snapshot | null = null;
+let persistence: "unknown" | "on" | "off" = "unknown";
+let warned = false;
 
-function serial<T>(task: () => Promise<T>): Promise<T> {
-  const run = queue.then(task, task);
-  queue = run.catch(() => undefined);
-  return run;
+const seedSnapshot = (): Snapshot => ({
+  projects: seedProjects,
+  enquiries: [],
+  users: [],
+});
+
+function normalise(parsed: Partial<Snapshot> | null): Snapshot {
+  return {
+    projects: Array.isArray(parsed?.projects) && parsed.projects.length ? parsed.projects : seedProjects,
+    enquiries: Array.isArray(parsed?.enquiries) ? parsed.enquiries : [],
+    users: Array.isArray(parsed?.users) ? parsed.users : [],
+  };
 }
 
-async function read(): Promise<Snapshot> {
-  try {
-    const raw = await fs.readFile(FILE, "utf8");
-    const parsed = JSON.parse(raw) as Snapshot;
-    if (!parsed.projects?.length) parsed.projects = seedProjects;
-    return parsed;
-  } catch {
-    const initial: Snapshot = { projects: seedProjects, enquiries: [], users: [] };
-    await fs.mkdir(DATA_DIR, { recursive: true });
-    await fs.writeFile(FILE, JSON.stringify(initial, null, 2));
-    return initial;
+function disablePersistence(error: unknown) {
+  persistence = "off";
+  if (!warned) {
+    warned = true;
+    console.warn(
+      "[store] File store is not writable in this environment; data is held in memory for this instance. Configure DATABASE_URL for durable storage.",
+      error instanceof Error ? error.message : error,
+    );
   }
 }
 
-async function write(snapshot: Snapshot): Promise<void> {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  const tmp = `${FILE}.${process.pid}.tmp`;
-  await fs.writeFile(tmp, JSON.stringify(snapshot, null, 2));
-  await fs.rename(tmp, FILE);
+async function persist(snapshot: Snapshot): Promise<void> {
+  if (persistence === "off") return;
+  try {
+    await fs.mkdir(DATA_DIR, { recursive: true });
+    const tmp = `${FILE}.${process.pid}.tmp`;
+    await fs.writeFile(tmp, JSON.stringify(snapshot, null, 2));
+    await fs.rename(tmp, FILE);
+    persistence = "on";
+  } catch (error) {
+    disablePersistence(error);
+  }
+}
+
+async function read(): Promise<Snapshot> {
+  if (cache) return cache;
+
+  try {
+    const raw = await fs.readFile(FILE, "utf8");
+    cache = normalise(JSON.parse(raw) as Partial<Snapshot>);
+  } catch (error) {
+    cache = seedSnapshot();
+    const code = (error as NodeJS.ErrnoException)?.code;
+    if (code === "ENOENT") {
+      // Genuinely a first run — try to create the file once.
+      await persist(cache);
+    } else {
+      // EROFS / EACCES / ENOTDIR: the filesystem cannot be written at all.
+      disablePersistence(error);
+    }
+  }
+
+  return cache;
+}
+
+async function commit(mutate: (snapshot: Snapshot) => void): Promise<Snapshot> {
+  const snapshot = await read();
+  mutate(snapshot);
+  await persist(snapshot);
+  return snapshot;
 }
 
 export const jsonStore: Store = {
@@ -62,43 +111,39 @@ export const jsonStore: Store = {
   },
 
   async createProject(project) {
-    return serial(async () => {
-      const data = await read();
+    await commit((data) => {
+      data.projects = data.projects.filter((p) => p.id !== project.id);
       data.projects.push(project);
-      await write(data);
-      return project;
     });
+    return project;
   },
 
   async updateProject(id, patch) {
-    return serial(async () => {
-      const data = await read();
+    let updated: Project | null = null;
+    await commit((data) => {
       const index = data.projects.findIndex((p) => p.id === id);
-      if (index === -1) return null;
-      const next = { ...data.projects[index], ...patch, id };
-      data.projects[index] = next;
-      await write(data);
-      return next;
+      if (index === -1) return;
+      updated = { ...data.projects[index], ...patch, id };
+      data.projects[index] = updated;
     });
+    return updated;
   },
 
   async deleteProject(id) {
-    return serial(async () => {
-      const data = await read();
+    let removed = false;
+    await commit((data) => {
       const before = data.projects.length;
       data.projects = data.projects.filter((p) => p.id !== id);
-      await write(data);
-      return data.projects.length < before;
+      removed = data.projects.length < before;
     });
+    return removed;
   },
 
   async createEnquiry(enquiry) {
-    return serial(async () => {
-      const data = await read();
-      data.enquiries.unshift(enquiry);
-      await write(data);
-      return enquiry;
+    await commit((data) => {
+      data.enquiries = [enquiry, ...data.enquiries];
     });
+    return enquiry;
   },
 
   async listEnquiries() {
@@ -107,14 +152,14 @@ export const jsonStore: Store = {
   },
 
   async updateEnquiryStatus(id, status) {
-    return serial(async () => {
-      const data = await read();
+    let updated: Enquiry | null = null;
+    await commit((data) => {
       const enquiry = data.enquiries.find((e) => e.id === id);
-      if (!enquiry) return null;
+      if (!enquiry) return;
       enquiry.status = status;
-      await write(data);
-      return enquiry;
+      updated = enquiry;
     });
+    return updated;
   },
 
   async findUserByEmail(email) {
@@ -123,11 +168,9 @@ export const jsonStore: Store = {
   },
 
   async ensureAdmin(user) {
-    return serial(async () => {
-      const data = await read();
+    await commit((data) => {
       if (data.users.some((u) => u.email.toLowerCase() === user.email.toLowerCase())) return;
       data.users.push(user);
-      await write(data);
     });
   },
 };

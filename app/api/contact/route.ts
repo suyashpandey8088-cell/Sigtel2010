@@ -132,6 +132,12 @@ export async function POST(request: Request) {
     );
   }
 
+  if (!process.env.DATABASE_URL && !process.env.RESEND_API_KEY) {
+    console.warn(
+      "[contact] No DATABASE_URL and no RESEND_API_KEY configured — this enquiry exists only in this instance's memory. Configure durable storage or email delivery.",
+    );
+  }
+
   const { delivered } = await sendEnquiryNotification({
     ...enquiry,
     attachment: attachmentName,

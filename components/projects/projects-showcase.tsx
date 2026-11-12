@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Project } from "@/lib/types";
@@ -26,6 +26,11 @@ export function ProjectsShowcase({
   variant?: "home" | "page";
 }) {
   const [filter, setFilter] = useState<FilterId>("all");
+  // Entrance animation only after hydration: the server-rendered grid must be
+  // visible even if the client bundle never runs (see motion-fallback in CSS).
+  const [animateIn, setAnimateIn] = useState(false);
+
+  useEffect(() => setAnimateIn(true), []);
 
   const filtered = useMemo(() => {
     const list = projects.filter((project) => {
@@ -78,7 +83,7 @@ export function ProjectsShowcase({
               <motion.div
                 key={project.id}
                 layout
-                initial={{ opacity: 0, y: 24 }}
+                initial={animateIn ? { opacity: 0, y: 24 } : false}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.97 }}
                 transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: Math.min(index * 0.04, 0.28) }}
