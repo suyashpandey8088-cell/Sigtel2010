@@ -1,0 +1,52 @@
+// SIG-TEL 2.0 — canonical data model.
+//
+// The deployed site talks to PostgreSQL through the lightweight `pg` data layer
+// in lib/db/pg-store.ts. This Prisma schema documents the same tables and can be
+// used directly if you prefer Prisma Client for scripts or an internal tool:
+//
+//   npx prisma generate
+//   npx prisma db push
+//
+// The tables are created automatically by the application on first query, and
+// can also be created with prisma/schema.sql.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id        String   @id
+  slug      String   @unique
+  division  String
+  status    String
+  published Boolean  @default(true)
+  order     Int      @default(0)
+  payload   Json
+  updatedAt DateTime @updatedAt @default(now())
+
+  @@index([division, status])
+  @@index([published, order])
+}
+
+model Enquiry {
+  id        String   @id
+  email     String
+  status    String   @default("new")
+  payload   Json
+  createdAt DateTime @default(now())
+
+  @@index([status, createdAt])
+}
+
+model AdminUser {
+  id        String   @id
+  email     String   @unique
+  role      String   @default("ADMIN")
+  payload   Json
+  createdAt DateTime @default(now())
+}
