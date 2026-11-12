@@ -8,10 +8,13 @@ import type { Aspect } from "@/components/three/live-section-scene";
 import { modeMeta, type InfraMode } from "@/lib/content/infrastructure-3d";
 import { cn } from "@/lib/utils";
 
-const LiveSectionScene = dynamic(() => import("@/components/three/live-section-scene"), {
-  ssr: false,
-  loading: () => null,
-});
+const LiveSectionScene = dynamic(
+  () => import("@/components/three/live-section-scene"),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+);
 
 /**
  * Phase table for the live section. The signal steps red → amber → green and
@@ -36,7 +39,7 @@ function hasWebGL(): boolean {
     const canvas = document.createElement("canvas");
     return Boolean(
       window.WebGLRenderingContext &&
-        (canvas.getContext("webgl2") ?? canvas.getContext("webgl")),
+      (canvas.getContext("webgl2") ?? canvas.getContext("webgl")),
     );
   } catch {
     return false;
@@ -77,7 +80,10 @@ export function LiveSectionStage({
 
   useEffect(() => {
     if (!model || reduced) return;
-    const id = window.setInterval(() => setPhase((value) => (value + 1) % PHASES.length), 3800);
+    const id = window.setInterval(
+      () => setPhase((value) => (value + 1) % PHASES.length),
+      3800,
+    );
     return () => window.clearInterval(id);
   }, [model, reduced]);
 
@@ -92,7 +98,7 @@ export function LiveSectionStage({
   const current = PHASES[phase];
   const meta = modeMeta[mode];
   const drawing = (
-    <div className="absolute inset-0 overflow-x-auto">
+    <div className="absolute inset-0 overflow-x-auto" data-ls-drawing>
       <div className="min-w-[1180px] lg:min-w-0">
         <LiveSectionDiagram
           mode={mode}
@@ -109,44 +115,44 @@ export function LiveSectionStage({
   return (
     <div className="relative">
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#050c16] sm:aspect-[16/10] lg:aspect-[16/9]">
+        {/* the drawing is always underneath: it is the initial paint, the
+            fallback, and the keyboard-reachable set of hotspots */}
+        {drawing}
+
         {showModel ? (
           <div
             className={cn(
-              "absolute inset-0 transition-opacity duration-700",
-              ready ? "opacity-100" : "opacity-0",
+              "absolute inset-0 bg-[#050c16] transition-opacity duration-700",
+              ready ? "opacity-100" : "pointer-events-none opacity-0",
             )}
           >
-            <SceneBoundary fallback={drawing}>
+            <SceneBoundary fallback={null}>
               <LiveSectionScene
-              mode={mode}
-              selected={selected}
-              hovered={hovered}
-              aspect={current.aspect}
-              gateDown={current.gateDown}
-              reducedMotion={reduced}
-              onHover={onHover}
-              onSelect={onSelect}
+                mode={mode}
+                selected={selected}
+                hovered={hovered}
+                aspect={current.aspect}
+                gateDown={current.gateDown}
+                reducedMotion={reduced}
+                onHover={onHover}
+                onSelect={onSelect}
                 onReady={() => setReady(true)}
               />
             </SceneBoundary>
-          </div>
-        ) : (
-          drawing
-        )}
-
-        {showModel && !ready ? (
-          <div className="absolute inset-0 grid place-items-center">
-            <div className="flex flex-col items-center gap-3">
-              <span className="h-px w-24 bg-line-strong" />
-              <span className="label-tight text-[8px] text-tech">Building section</span>
-            </div>
           </div>
         ) : null}
 
         {/* status badge */}
         <div className="pointer-events-none absolute left-4 top-4 flex items-center gap-2 border border-ink/10 bg-navy-900/80 px-2.5 py-1.5 backdrop-blur">
-          <span className={cn("h-[5px] w-[5px] rounded-full", mode === "signalling" ? "bg-signal" : "bg-eng")} />
-          <span className="label-tight text-[8px] text-ink/70">{meta.title} · live section</span>
+          <span
+            className={cn(
+              "h-[5px] w-[5px] rounded-full",
+              mode === "signalling" ? "bg-signal" : "bg-eng",
+            )}
+          />
+          <span className="label-tight text-[8px] text-ink/70">
+            {meta.title} · live section
+          </span>
           {showModel ? (
             <span className="ml-1 border border-ink/15 px-1 py-px font-mono text-[7px] uppercase tracking-[0.18em] text-tech">
               3D
@@ -154,33 +160,50 @@ export function LiveSectionStage({
           ) : null}
         </div>
 
-        {/* live readout */}
-        <div className="pointer-events-none absolute bottom-4 left-4 max-w-[78%]">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border border-line bg-[#050c16]/85 px-3 py-2 backdrop-blur">
-            <span className="flex items-center gap-2">
-              <span
-                className={cn(
-                  "h-[6px] w-[6px] rounded-full",
-                  current.aspect === "red" ? "bg-signal" : current.aspect === "amber" ? "bg-[#f5b942]" : "bg-eng",
-                )}
-              />
-              <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-tech">Aspect</span>
-              <span
-                className={cn(
-                  "font-mono text-[10px] uppercase tracking-[0.12em]",
-                  current.aspect === "red" ? "text-signal" : current.aspect === "amber" ? "text-[#f5b942]" : "text-eng",
-                )}
-              >
-                {ASPECT_LABEL[current.aspect]}
+        {/* live readout — the drawing carries its own, so only show this one
+            over the model */}
+        {showModel ? (
+          <div className="pointer-events-none absolute bottom-4 left-4 max-w-[78%]">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border border-line bg-[#050c16]/85 px-3 py-2 backdrop-blur">
+              <span className="flex items-center gap-2">
+                <span
+                  className={cn(
+                    "h-[6px] w-[6px] rounded-full",
+                    current.aspect === "red"
+                      ? "bg-signal"
+                      : current.aspect === "amber"
+                        ? "bg-[#f5b942]"
+                        : "bg-eng",
+                  )}
+                />
+                <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-tech">
+                  Aspect
+                </span>
+                <span
+                  className={cn(
+                    "font-mono text-[10px] uppercase tracking-[0.12em]",
+                    current.aspect === "red"
+                      ? "text-signal"
+                      : current.aspect === "amber"
+                        ? "text-[#f5b942]"
+                        : "text-eng",
+                  )}
+                >
+                  {ASPECT_LABEL[current.aspect]}
+                </span>
               </span>
-            </span>
-            <span className="hidden h-3 w-px bg-line sm:block" />
-            <span className="flex items-center gap-2">
-              <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-tech">LC gate</span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink/80">{current.gate}</span>
-            </span>
+              <span className="hidden h-3 w-px bg-line sm:block" />
+              <span className="flex items-center gap-2">
+                <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-tech">
+                  LC gate
+                </span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink/80">
+                  {current.gate}
+                </span>
+              </span>
+            </div>
           </div>
-        </div>
+        ) : null}
 
         {showModel ? (
           <span className="pointer-events-none absolute bottom-4 right-4 hidden font-mono text-[8px] uppercase tracking-[0.18em] text-tech sm:block">
@@ -189,18 +212,34 @@ export function LiveSectionStage({
         ) : null}
 
         {/* corner ticks, matching the drawing frame */}
-        <span className="pointer-events-none absolute left-2 top-2 h-3 w-3 border-l border-t border-ink/15" aria-hidden />
-        <span className="pointer-events-none absolute right-2 top-2 h-3 w-3 border-r border-t border-ink/15" aria-hidden />
-        <span className="pointer-events-none absolute bottom-2 left-2 h-3 w-3 border-b border-l border-ink/15" aria-hidden />
-        <span className="pointer-events-none absolute bottom-2 right-2 h-3 w-3 border-b border-r border-ink/15" aria-hidden />
+        <span
+          className="pointer-events-none absolute left-2 top-2 h-3 w-3 border-l border-t border-ink/15"
+          aria-hidden
+        />
+        <span
+          className="pointer-events-none absolute right-2 top-2 h-3 w-3 border-r border-t border-ink/15"
+          aria-hidden
+        />
+        <span
+          className="pointer-events-none absolute bottom-2 left-2 h-3 w-3 border-b border-l border-ink/15"
+          aria-hidden
+        />
+        <span
+          className="pointer-events-none absolute bottom-2 right-2 h-3 w-3 border-b border-r border-ink/15"
+          aria-hidden
+        />
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line px-4 py-2.5">
         <span className="label-tight text-[8px] text-tech">
-          {showModel ? "Select a component · camera follows" : "Select a numbered component"}
+          {showModel
+            ? "Select a component · camera follows"
+            : "Select a numbered component"}
         </span>
         <span className="label-tight text-[8px] text-tech">
-          {showModel ? "Orbit · zoom · not to scale" : "Section elevation · not to scale"}
+          {showModel
+            ? "Orbit · zoom · not to scale"
+            : "Section elevation · not to scale"}
         </span>
       </div>
     </div>

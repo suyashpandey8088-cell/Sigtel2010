@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { Canvas, useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
+import {
+  Canvas,
+  useFrame,
+  useThree,
+  type ThreeEvent,
+} from "@react-three/fiber";
 import { AdaptiveDpr, Html } from "@react-three/drei";
 import * as THREE from "three";
 import { infraNodes, type InfraMode } from "@/lib/content/infrastructure-3d";
@@ -77,7 +82,11 @@ function Wire({
 }) {
   const object = useMemo(() => {
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
-    const material = new THREE.LineBasicMaterial({ color, transparent: opacity < 1, opacity });
+    const material = new THREE.LineBasicMaterial({
+      color,
+      transparent: opacity < 1,
+      opacity,
+    });
     return new THREE.Line(geometry, material);
   }, [points, color, opacity]);
   return <primitive object={object} />;
@@ -88,26 +97,42 @@ function useMaterialsOpacity(
   target: () => number,
   reducedMotion: boolean,
 ) {
+  const settled = useRef<number | null>(null);
+
   useFrame((_, delta) => {
     const g = group.current;
     if (!g) return;
     const want = target();
+    // nothing to do once every material has reached the target
+    if (settled.current !== null && Math.abs(settled.current - want) < 0.002)
+      return;
     g.traverse((child) => {
-      const mesh = child as THREE.Mesh & { material?: THREE.Material | THREE.Material[] };
+      const mesh = child as THREE.Mesh & {
+        material?: THREE.Material | THREE.Material[];
+      };
       if (!mesh.isMesh || !mesh.material) return;
-      const list = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      const list = Array.isArray(mesh.material)
+        ? mesh.material
+        : [mesh.material];
       for (const material of list) {
         const m = material as THREE.MeshStandardMaterial;
         if (!("opacity" in m)) continue;
         if (m.type === "MeshBasicMaterial") continue; // rings and beacons animate themselves
-        const next = reducedMotion ? want : THREE.MathUtils.damp(m.opacity, want, 7, delta);
-        if (Math.abs(next - m.opacity) < 0.003 && Math.abs(m.opacity - want) < 0.003) continue;
+        const next = reducedMotion
+          ? want
+          : THREE.MathUtils.damp(m.opacity, want, 7, delta);
+        if (
+          Math.abs(next - m.opacity) < 0.003 &&
+          Math.abs(m.opacity - want) < 0.003
+        )
+          continue;
         m.opacity = next;
         // only pay the transparency cost while a part is actually ghosted
         m.transparent = next < 0.995;
         m.depthWrite = next > 0.5;
       }
     });
+    settled.current = want;
   });
 }
 
@@ -148,14 +173,20 @@ function Part({
   const active = selected === nodeKey || hovered === nodeKey;
   const relevant = node.division === "both" || node.division === mode;
   const accent =
-    node.division === "telecom" ? C.green : node.division === "signalling" ? C.red : C.white;
+    node.division === "telecom"
+      ? C.green
+      : node.division === "signalling"
+        ? C.red
+        : C.white;
 
   useMaterialsOpacity(group, () => (relevant ? 1 : 0.18), reducedMotion);
 
   useFrame((_, delta) => {
     const g = group.current;
     if (!g) return;
-    g.scale.setScalar(THREE.MathUtils.damp(g.scale.x, active ? 1.03 : 1, 9, delta));
+    g.scale.setScalar(
+      THREE.MathUtils.damp(g.scale.x, active ? 1.03 : 1, 9, delta),
+    );
     if (ring.current) {
       ring.current.opacity = THREE.MathUtils.damp(
         ring.current.opacity,
@@ -166,9 +197,12 @@ function Part({
     }
   });
 
-  useEffect(() => () => {
-    if (outTimer.current) window.clearTimeout(outTimer.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (outTimer.current) window.clearTimeout(outTimer.current);
+    },
+    [],
+  );
 
   const index = infraNodes.findIndex((item) => item.key === nodeKey);
   const number = String(index + 1).padStart(2, "0");
@@ -196,7 +230,14 @@ function Part({
       {children}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.045, 0]}>
         <ringGeometry args={[radius, radius + 0.1, 64]} />
-        <meshBasicMaterial ref={ring} color={accent} transparent opacity={0.16} side={THREE.DoubleSide} depthWrite={false} />
+        <meshBasicMaterial
+          ref={ring}
+          color={accent}
+          transparent
+          opacity={0.16}
+          side={THREE.DoubleSide}
+          depthWrite={false}
+        />
       </mesh>
       <Html
         position={[0, anchorY ?? 2.4, 0]}
@@ -248,7 +289,11 @@ function SleeperField({
     m.instanceMatrix.needsUpdate = true;
   }, [count, from, spacing, z]);
   return (
-    <instancedMesh ref={mesh} args={[undefined, undefined, count]} receiveShadow>
+    <instancedMesh
+      ref={mesh}
+      args={[undefined, undefined, count]}
+      receiveShadow
+    >
       <boxGeometry args={[0.26, 0.13, 2.5]} />
       <meshStandardMaterial color={C.sleeper} roughness={0.95} />
     </instancedMesh>
@@ -260,12 +305,20 @@ function Track() {
   const ballastTop = ballast.pos[1] + ballast.size[1] / 2;
   return (
     <group>
-      <mesh position={[ballast.pos[0], ballast.pos[1], ballast.pos[2]]} receiveShadow>
-        <boxGeometry args={[ballast.size[0], ballast.size[1], ballast.size[2]]} />
+      <mesh
+        position={[ballast.pos[0], ballast.pos[1], ballast.pos[2]]}
+        receiveShadow
+      >
+        <boxGeometry
+          args={[ballast.size[0], ballast.size[1], ballast.size[2]]}
+        />
         <meshStandardMaterial color={C.ballast} roughness={1} />
       </mesh>
       {/* cess shoulder, slightly proud of the ballast */}
-      <mesh position={[0, ballastTop - 0.02, (TROUGH_Z + 3.7) / 2 + 3.8 / 2]} receiveShadow>
+      <mesh
+        position={[0, ballastTop - 0.02, (TROUGH_Z + 3.7) / 2 + 3.8 / 2]}
+        receiveShadow
+      >
         <boxGeometry args={[54, 0.08, 3.4]} />
         <meshStandardMaterial color="#101f2c" roughness={1} />
       </mesh>
@@ -286,7 +339,11 @@ function Track() {
               {/* rail head highlight */}
               <mesh position={[0, 0.372, z + offset]}>
                 <boxGeometry args={[52, 0.014, 0.085]} />
-                <meshStandardMaterial color="#cfdae4" metalness={0.9} roughness={0.2} />
+                <meshStandardMaterial
+                  color="#cfdae4"
+                  metalness={0.9}
+                  roughness={0.2}
+                />
               </mesh>
             </group>
           ))}
@@ -316,7 +373,11 @@ function Track() {
           </mesh>
           <mesh position={[0, 0.36, 0]}>
             <boxGeometry args={[0.2, 0.1, 0.2]} />
-            <meshStandardMaterial color={C.green} emissive={C.green} emissiveIntensity={0.35} />
+            <meshStandardMaterial
+              color={C.green}
+              emissive={C.green}
+              emissiveIntensity={0.35}
+            />
           </mesh>
         </group>
       ))}
@@ -337,7 +398,11 @@ function Catenary() {
   }, []);
 
   const wires = useMemo(() => {
-    const out: { messenger: THREE.Vector3[]; contact: THREE.Vector3[]; droppers: THREE.Vector3[][] }[] = [];
+    const out: {
+      messenger: THREE.Vector3[];
+      contact: THREE.Vector3[];
+      droppers: THREE.Vector3[][];
+    }[] = [];
     for (const z of [NEAR_LINE_Z, FAR_LINE_Z]) {
       for (const [x1, x2] of spans) {
         const mid = (x1 + x2) / 2;
@@ -380,24 +445,45 @@ function Catenary() {
                 </mesh>
                 <mesh position={[0, 3.9, 0]} castShadow>
                   <cylinderGeometry args={[0.085, 0.14, 7.8, 10]} />
-                  <meshStandardMaterial color={C.steel} metalness={0.55} roughness={0.55} />
+                  <meshStandardMaterial
+                    color={C.steel}
+                    metalness={0.55}
+                    roughness={0.55}
+                  />
                 </mesh>
                 {/* cantilever tube reaching over the tracks */}
-                <mesh position={[0, 7.2, inward * 1.0]} rotation={[Math.PI / 2, 0, 0]}>
+                <mesh
+                  position={[0, 7.2, inward * 1.0]}
+                  rotation={[Math.PI / 2, 0, 0]}
+                >
                   <cylinderGeometry args={[0.05, 0.05, 2.0, 8]} />
-                  <meshStandardMaterial color={C.steel} metalness={0.5} roughness={0.6} />
+                  <meshStandardMaterial
+                    color={C.steel}
+                    metalness={0.5}
+                    roughness={0.6}
+                  />
                 </mesh>
                 {/* stay tube back to the mast */}
-                <mesh position={[0, 6.55, inward * 1.05]} rotation={[Math.PI / 2 - inward * 0.35, 0, 0]}>
+                <mesh
+                  position={[0, 6.55, inward * 1.05]}
+                  rotation={[Math.PI / 2 - inward * 0.35, 0, 0]}
+                >
                   <cylinderGeometry args={[0.03, 0.03, 2.1, 6]} />
-                  <meshStandardMaterial color={C.steelDark} metalness={0.4} roughness={0.7} />
+                  <meshStandardMaterial
+                    color={C.steelDark}
+                    metalness={0.4}
+                    roughness={0.7}
+                  />
                 </mesh>
                 {/* registration arm, insulator and steady arm */}
                 <mesh position={[0, 6.16, inward * 1.78]}>
                   <cylinderGeometry args={[0.05, 0.05, 0.36, 8]} />
                   <meshStandardMaterial color={C.white} roughness={0.4} />
                 </mesh>
-                <mesh position={[0, 6.15, inward * 1.55]} rotation={[0, 0, Math.PI / 2]}>
+                <mesh
+                  position={[0, 6.15, inward * 1.55]}
+                  rotation={[0, 0, Math.PI / 2]}
+                >
                   <cylinderGeometry args={[0.022, 0.022, 0.6, 6]} />
                   <meshStandardMaterial color={C.steel} metalness={0.6} />
                 </mesh>
@@ -440,7 +526,11 @@ function Signal({ aspect }: { aspect: Aspect }) {
     <group>
       <mesh position={[0, 2.6, 0]} castShadow>
         <cylinderGeometry args={[0.1, 0.14, 5.2, 12]} />
-        <meshStandardMaterial color={C.steel} metalness={0.5} roughness={0.55} />
+        <meshStandardMaterial
+          color={C.steel}
+          metalness={0.5}
+          roughness={0.55}
+        />
       </mesh>
       <mesh position={[0, 0.12, 0]}>
         <cylinderGeometry args={[0.36, 0.42, 0.24, 12]} />
@@ -449,7 +539,11 @@ function Signal({ aspect }: { aspect: Aspect }) {
       {/* head + backing board */}
       <mesh position={[0, 5.68, 0.02]}>
         <boxGeometry args={[0.9, 2.1, 0.07]} />
-        <meshStandardMaterial color="#16293c" metalness={0.35} roughness={0.6} />
+        <meshStandardMaterial
+          color="#16293c"
+          metalness={0.35}
+          roughness={0.6}
+        />
       </mesh>
       <mesh position={[0, 5.68, 0.12]}>
         <boxGeometry args={[0.62, 1.72, 0.4]} />
@@ -467,8 +561,22 @@ function Signal({ aspect }: { aspect: Aspect }) {
             <mesh>
               <sphereGeometry args={[0.115, 22, 22]} />
               <meshStandardMaterial
-                color={on ? (lamp.key === "red" ? C.red : lamp.key === "amber" ? C.amber : C.green) : "#101d29"}
-                emissive={lamp.key === "red" ? C.red : lamp.key === "amber" ? C.amber : C.green}
+                color={
+                  on
+                    ? lamp.key === "red"
+                      ? C.red
+                      : lamp.key === "amber"
+                        ? C.amber
+                        : C.green
+                    : "#101d29"
+                }
+                emissive={
+                  lamp.key === "red"
+                    ? C.red
+                    : lamp.key === "amber"
+                      ? C.amber
+                      : C.green
+                }
                 emissiveIntensity={on ? 3.2 : 0.03}
                 toneMapped={false}
               />
@@ -476,22 +584,36 @@ function Signal({ aspect }: { aspect: Aspect }) {
             {/* hood */}
             <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0, 0.1]}>
               <cylinderGeometry args={[0.15, 0.15, 0.2, 14, 1, true]} />
-              <meshStandardMaterial color="#0a1520" side={THREE.DoubleSide} roughness={0.8} />
+              <meshStandardMaterial
+                color="#0a1520"
+                side={THREE.DoubleSide}
+                roughness={0.8}
+              />
             </mesh>
           </group>
         );
       })}
       <pointLight
         ref={glow}
-        position={[0, aspect === "red" ? 6.05 : aspect === "amber" ? 5.68 : 5.31, 0.9]}
-        color={aspect === "red" ? C.red : aspect === "amber" ? C.amber : C.green}
+        position={[
+          0,
+          aspect === "red" ? 6.05 : aspect === "amber" ? 5.68 : 5.31,
+          0.9,
+        ]}
+        color={
+          aspect === "red" ? C.red : aspect === "amber" ? C.amber : C.green
+        }
         distance={7}
         intensity={5}
       />
       {/* number plate + location case + ladder */}
       <mesh position={[0, 4.42, 0.16]}>
         <boxGeometry args={[0.34, 0.16, 0.02]} />
-        <meshStandardMaterial color={C.white} emissive={C.white} emissiveIntensity={0.08} />
+        <meshStandardMaterial
+          color={C.white}
+          emissive={C.white}
+          emissiveIntensity={0.08}
+        />
       </mesh>
       <mesh position={[0.42, 1.1, 0.1]}>
         <boxGeometry args={[0.42, 0.9, 0.3]} />
@@ -514,9 +636,17 @@ function Points() {
     <group>
       {/* switch rails diverging toward the other line */}
       {[-GAUGE / 2, GAUGE / 2].map((offset, index) => (
-        <mesh key={offset} position={[0, 0.36, offset]} rotation={[0, (index === 0 ? -1 : 1) * 0.055, 0]}>
+        <mesh
+          key={offset}
+          position={[0, 0.36, offset]}
+          rotation={[0, (index === 0 ? -1 : 1) * 0.055, 0]}
+        >
           <boxGeometry args={[4.6, 0.11, 0.1]} />
-          <meshStandardMaterial color="#b9c8d6" metalness={0.85} roughness={0.3} />
+          <meshStandardMaterial
+            color="#b9c8d6"
+            metalness={0.85}
+            roughness={0.3}
+          />
         </mesh>
       ))}
       {/* stretcher bars tying the switch rails together */}
@@ -529,16 +659,28 @@ function Points() {
       {/* point machine, drive rodding and detection box */}
       <mesh position={[0.9, 0.32, 1.5]} castShadow>
         <boxGeometry args={[0.85, 0.42, 0.5]} />
-        <meshStandardMaterial color="#b8c6d4" metalness={0.35} roughness={0.6} />
+        <meshStandardMaterial
+          color="#b8c6d4"
+          metalness={0.35}
+          roughness={0.6}
+        />
       </mesh>
       <mesh position={[0.9, 0.55, 1.5]}>
         <boxGeometry args={[0.5, 0.06, 0.24]} />
-        <meshStandardMaterial color={C.amber} emissive={C.amber} emissiveIntensity={0.35} />
+        <meshStandardMaterial
+          color={C.amber}
+          emissive={C.amber}
+          emissiveIntensity={0.35}
+        />
       </mesh>
       {[0.2, -0.5, -1.2, -1.9].map((x) => (
         <mesh key={x} position={[x, 0.24, 1.28]} rotation={[0, 0, Math.PI / 2]}>
           <cylinderGeometry args={[0.035, 0.035, 0.8, 6]} />
-          <meshStandardMaterial color={C.steel} metalness={0.7} roughness={0.4} />
+          <meshStandardMaterial
+            color={C.steel}
+            metalness={0.7}
+            roughness={0.4}
+          />
         </mesh>
       ))}
       <mesh position={[-2.4, 0.2, 1.5]}>
@@ -554,7 +696,9 @@ function Points() {
 function Detection() {
   const led = useRef<THREE.MeshStandardMaterial>(null);
   useFrame(({ clock }) => {
-    if (led.current) led.current.emissiveIntensity = 0.4 + Math.abs(Math.sin(clock.getElapsedTime() * 2.4)) * 2.2;
+    if (led.current)
+      led.current.emissiveIntensity =
+        0.4 + Math.abs(Math.sin(clock.getElapsedTime() * 2.4)) * 2.2;
   });
   return (
     <group>
@@ -563,7 +707,11 @@ function Detection() {
         <group key={offset} position={[index * 0.2, 0, offset]}>
           <mesh position={[0, 0.42, 0]}>
             <boxGeometry args={[0.26, 0.22, 0.18]} />
-            <meshStandardMaterial color="#d8b04a" emissive="#8a6a19" emissiveIntensity={0.18} />
+            <meshStandardMaterial
+              color="#d8b04a"
+              emissive="#8a6a19"
+              emissiveIntensity={0.18}
+            />
           </mesh>
           <mesh position={[0, 0.26, 0]}>
             <boxGeometry args={[0.05, 0.2, 0.05]} />
@@ -578,7 +726,13 @@ function Detection() {
       </mesh>
       <mesh position={[0.3, 0.55, 1.73]}>
         <boxGeometry args={[0.14, 0.1, 0.03]} />
-        <meshStandardMaterial ref={led} color={C.green} emissive={C.green} emissiveIntensity={2} toneMapped={false} />
+        <meshStandardMaterial
+          ref={led}
+          color={C.green}
+          emissive={C.green}
+          emissiveIntensity={2}
+          toneMapped={false}
+        />
       </mesh>
       <mesh position={[0.3, 0.2, 1.55]}>
         <cylinderGeometry args={[0.1, 0.12, 0.4, 8]} />
@@ -628,7 +782,11 @@ function Hut() {
       {/* earthing strip to the pit */}
       <mesh position={[-2.1, 0.1, 0.7]} rotation={[0, 0, 0]}>
         <boxGeometry args={[1.1, 0.05, 0.06]} />
-        <meshStandardMaterial color={C.copper} metalness={0.6} roughness={0.5} />
+        <meshStandardMaterial
+          color={C.copper}
+          metalness={0.6}
+          roughness={0.5}
+        />
       </mesh>
       <mesh position={[-2.7, 0.14, 0.7]}>
         <boxGeometry args={[0.34, 0.28, 0.34]} />
@@ -661,7 +819,12 @@ function ControlRoom() {
       {/* lit window band */}
       <mesh position={[0, 1.9, 1.62]}>
         <boxGeometry args={[3.6, 1.0, 0.06]} />
-        <meshStandardMaterial color={C.glass} emissive="#3fd6a5" emissiveIntensity={0.9} toneMapped={false} />
+        <meshStandardMaterial
+          color={C.glass}
+          emissive="#3fd6a5"
+          emissiveIntensity={0.9}
+          toneMapped={false}
+        />
       </mesh>
       {[-1.2, 0, 1.2].map((x) => (
         <mesh key={x} position={[x, 1.9, 1.66]}>
@@ -688,11 +851,20 @@ function ControlRoom() {
       </mesh>
       <mesh position={[1.6, 3.78, 0.4]} rotation={[0.5, 0.5, 0]}>
         <boxGeometry args={[0.5, 0.06, 0.22]} />
-        <meshStandardMaterial color={C.white} emissive={C.white} emissiveIntensity={0.2} />
+        <meshStandardMaterial
+          color={C.white}
+          emissive={C.white}
+          emissiveIntensity={0.2}
+        />
       </mesh>
       <mesh position={[0, 1.9, 1.9]}>
         <sphereGeometry args={[0.06, 10, 10]} />
-        <meshStandardMaterial color={C.red} emissive={C.red} emissiveIntensity={1.4} toneMapped={false} />
+        <meshStandardMaterial
+          color={C.red}
+          emissive={C.red}
+          emissiveIntensity={1.4}
+          toneMapped={false}
+        />
       </mesh>
     </group>
   );
@@ -712,13 +884,22 @@ function Platform() {
       {/* yellow edge line on the track side */}
       <mesh position={[0, 0.955, 1.32]}>
         <boxGeometry args={[9.3, 0.02, 0.16]} />
-        <meshStandardMaterial color={C.amber} emissive={C.amber} emissiveIntensity={0.35} toneMapped={false} />
+        <meshStandardMaterial
+          color={C.amber}
+          emissive={C.amber}
+          emissiveIntensity={0.35}
+          toneMapped={false}
+        />
       </mesh>
       {/* canopy */}
       {[-3.4, 0, 3.4].map((x) => (
         <mesh key={x} position={[x, 2.2, -0.5]}>
           <cylinderGeometry args={[0.06, 0.06, 2.6, 8]} />
-          <meshStandardMaterial color={C.steel} metalness={0.5} roughness={0.5} />
+          <meshStandardMaterial
+            color={C.steel}
+            metalness={0.5}
+            roughness={0.5}
+          />
         </mesh>
       ))}
       <mesh position={[0, 3.56, -0.6]} rotation={[0.05, 0, 0]} castShadow>
@@ -728,11 +909,22 @@ function Platform() {
       {[-3, 0, 3].map((x) => (
         <mesh key={`lamp-${x}`} position={[x, 3.38, -0.2]}>
           <boxGeometry args={[0.5, 0.06, 0.14]} />
-          <meshStandardMaterial color="#ffe6b8" emissive="#ffd9a0" emissiveIntensity={1.6} toneMapped={false} />
+          <meshStandardMaterial
+            color="#ffe6b8"
+            emissive="#ffd9a0"
+            emissiveIntensity={1.6}
+            toneMapped={false}
+          />
         </mesh>
       ))}
       {[-3, 0, 3].map((x) => (
-        <pointLight key={`pl-${x}`} position={[x, 3.2, 0.2]} color="#ffd9a0" intensity={3.4} distance={5} />
+        <pointLight
+          key={`pl-${x}`}
+          position={[x, 3.2, 0.2]}
+          color="#ffd9a0"
+          intensity={3.4}
+          distance={5}
+        />
       ))}
       {/* bench, name board, PA speaker */}
       <mesh position={[1.6, 1.16, -0.8]}>
@@ -751,7 +943,11 @@ function Platform() {
       ))}
       <mesh position={[-3.9, 1.35, -0.2]}>
         <boxGeometry args={[1.7, 0.5, 0.06]} />
-        <meshStandardMaterial color={C.white} emissive={C.white} emissiveIntensity={0.14} />
+        <meshStandardMaterial
+          color={C.white}
+          emissive={C.white}
+          emissiveIntensity={0.14}
+        />
       </mesh>
       <mesh position={[-3.9, 1.8, -0.2]} rotation={[0, 0, 0.1]}>
         <cylinderGeometry args={[0.12, 0.12, 0.2, 12]} />
@@ -816,17 +1012,25 @@ function Tower() {
           rotation={[z * 0.028, 0, -x * 0.028]}
         >
           <cylinderGeometry args={[0.045, 0.075, height, 6]} />
-          <meshStandardMaterial color={C.steel} metalness={0.6} roughness={0.5} />
+          <meshStandardMaterial
+            color={C.steel}
+            metalness={0.6}
+            roughness={0.5}
+          />
         </mesh>
       ))}
       {braceYs.map((y) => (
         <group key={y} position={[0, y, 0]}>
           <mesh rotation={[0, 0, Math.PI / 2]}>
-            <cylinderGeometry args={[0.016, 0.016, 0.95 * taper(y) * 1.75, 4]} />
+            <cylinderGeometry
+              args={[0.016, 0.016, 0.95 * taper(y) * 1.75, 4]}
+            />
             <meshStandardMaterial color={C.steelDark} />
           </mesh>
           <mesh rotation={[Math.PI / 2, 0, 0]}>
-            <cylinderGeometry args={[0.016, 0.016, 0.95 * taper(y) * 1.75, 4]} />
+            <cylinderGeometry
+              args={[0.016, 0.016, 0.95 * taper(y) * 1.75, 4]}
+            />
             <meshStandardMaterial color={C.steelDark} />
           </mesh>
           <mesh rotation={[0, Math.PI / 4, 0]} position={[0, 0.42, 0]}>
@@ -842,17 +1046,31 @@ function Tower() {
       </mesh>
       <mesh position={[0, height - 0.9, 0.85]} rotation={[Math.PI / 2.1, 0, 0]}>
         <cylinderGeometry args={[0.75, 0.06, 0.3, 20, 1, true]} />
-        <meshStandardMaterial color="#e6eef6" side={THREE.DoubleSide} metalness={0.15} roughness={0.45} />
+        <meshStandardMaterial
+          color="#e6eef6"
+          side={THREE.DoubleSide}
+          metalness={0.15}
+          roughness={0.45}
+        />
       </mesh>
       <mesh position={[0, height - 0.9, 0.72]}>
         <cylinderGeometry args={[0.04, 0.04, 0.5, 8]} />
         <meshStandardMaterial color={C.steel} />
       </mesh>
       {[0, (Math.PI * 2) / 3, (Math.PI * 4) / 3].map((angle, index) => (
-        <group key={index} rotation={[0, angle, 0]} position={[0, height - 2.6, 0]}>
+        <group
+          key={index}
+          rotation={[0, angle, 0]}
+          position={[0, height - 2.6, 0]}
+        >
           <mesh position={[0, 0, 0.7]}>
             <boxGeometry args={[0.14, 0.72, 0.22]} />
-            <meshStandardMaterial color={C.white} emissive={C.white} emissiveIntensity={0.12} roughness={0.55} />
+            <meshStandardMaterial
+              color={C.white}
+              emissive={C.white}
+              emissiveIntensity={0.12}
+              roughness={0.55}
+            />
           </mesh>
           <mesh position={[0, 0, 0.56]}>
             <boxGeometry args={[0.06, 0.5, 0.06]} />
@@ -866,9 +1084,20 @@ function Tower() {
       </mesh>
       <mesh position={[0, height + 0.78, 0]}>
         <sphereGeometry args={[0.09, 14, 14]} />
-        <meshStandardMaterial ref={beacon} color={C.red} emissive={C.red} emissiveIntensity={2.4} toneMapped={false} />
+        <meshStandardMaterial
+          ref={beacon}
+          color={C.red}
+          emissive={C.red}
+          emissiveIntensity={2.4}
+          toneMapped={false}
+        />
       </mesh>
-      <pointLight position={[0, height + 0.8, 0]} color={C.red} intensity={1.6} distance={7} />
+      <pointLight
+        position={[0, height + 0.8, 0]}
+        color={C.red}
+        intensity={1.6}
+        distance={7}
+      />
       {/* guy wires */}
       <GuyWires height={height} />
       {/* shelter at the base */}
@@ -922,7 +1151,9 @@ function FibreRoute() {
 function Cctv({ aspectOn }: { aspectOn: boolean }) {
   const led = useRef<THREE.MeshStandardMaterial>(null);
   useFrame(({ clock }) => {
-    if (led.current) led.current.emissiveIntensity = 1 + Math.abs(Math.sin(clock.getElapsedTime() * 3)) * 2;
+    if (led.current)
+      led.current.emissiveIntensity =
+        1 + Math.abs(Math.sin(clock.getElapsedTime() * 3)) * 2;
   });
   return (
     <group>
@@ -932,7 +1163,11 @@ function Cctv({ aspectOn }: { aspectOn: boolean }) {
       </mesh>
       <mesh position={[0, 2.2, 0]} castShadow>
         <cylinderGeometry args={[0.07, 0.1, 4.2, 10]} />
-        <meshStandardMaterial color={C.steel} metalness={0.55} roughness={0.5} />
+        <meshStandardMaterial
+          color={C.steel}
+          metalness={0.55}
+          roughness={0.5}
+        />
       </mesh>
       <mesh position={[0.3, 4.28, 0.1]} rotation={[0, 0, -0.32]}>
         <boxGeometry args={[0.72, 0.24, 0.26]} />
@@ -944,16 +1179,31 @@ function Cctv({ aspectOn }: { aspectOn: boolean }) {
       </mesh>
       <mesh position={[0.72, 4.15, 0.1]}>
         <sphereGeometry args={[0.035, 8, 8]} />
-        <meshStandardMaterial color={C.red} emissive={C.red} emissiveIntensity={aspectOn ? 1.6 : 0.9} toneMapped={false} />
+        <meshStandardMaterial
+          color={C.red}
+          emissive={C.red}
+          emissiveIntensity={aspectOn ? 1.6 : 0.9}
+          toneMapped={false}
+        />
       </mesh>
       {/* NVR cabinet at the base */}
       <mesh position={[-0.5, 0.55, 0.35]}>
         <boxGeometry args={[0.6, 1.1, 0.45]} />
-        <meshStandardMaterial color="#16324a" roughness={0.6} metalness={0.25} />
+        <meshStandardMaterial
+          color="#16324a"
+          roughness={0.6}
+          metalness={0.25}
+        />
       </mesh>
       <mesh position={[-0.5, 0.68, 0.58]}>
         <boxGeometry args={[0.06, 0.06, 0.02]} />
-        <meshStandardMaterial ref={led} color={C.green} emissive={C.green} emissiveIntensity={2} toneMapped={false} />
+        <meshStandardMaterial
+          ref={led}
+          color={C.green}
+          emissive={C.green}
+          emissiveIntensity={2}
+          toneMapped={false}
+        />
       </mesh>
     </group>
   );
@@ -961,18 +1211,36 @@ function Cctv({ aspectOn }: { aspectOn: boolean }) {
 
 /* ----------------------------------------------------------- level crossing */
 
-function LevelCrossing({ gateDown, reducedMotion }: { gateDown: boolean; reducedMotion: boolean }) {
+function LevelCrossing({
+  gateDown,
+  reducedMotion,
+}: {
+  gateDown: boolean;
+  reducedMotion: boolean;
+}) {
   const near = useRef<THREE.Group>(null);
   const far = useRef<THREE.Group>(null);
 
   // one shared material per flashing lamp pair: every crossbuck alternates
   // between A and B, exactly as the real installation does
   const lampA = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: C.red, emissive: C.red, emissiveIntensity: 2, toneMapped: false }),
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: C.red,
+        emissive: C.red,
+        emissiveIntensity: 2,
+        toneMapped: false,
+      }),
     [],
   );
   const lampB = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: C.red, emissive: C.red, emissiveIntensity: 0.1, toneMapped: false }),
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: C.red,
+        emissive: C.red,
+        emissiveIntensity: 0.1,
+        toneMapped: false,
+      }),
     [],
   );
 
@@ -982,7 +1250,9 @@ function LevelCrossing({ gateDown, reducedMotion }: { gateDown: boolean; reduced
     for (const ref of [near, far]) {
       const g = ref.current;
       if (!g) continue;
-      g.rotation.y = reducedMotion ? target : THREE.MathUtils.damp(g.rotation.y, target, 2.2, delta);
+      g.rotation.y = reducedMotion
+        ? target
+        : THREE.MathUtils.damp(g.rotation.y, target, 2.2, delta);
     }
     const flashOn = !gateDown && Math.sin(clock.getElapsedTime() * 6) > 0;
     lampA.emissiveIntensity = flashOn ? 4.2 : 0.12;
@@ -995,7 +1265,11 @@ function LevelCrossing({ gateDown, reducedMotion }: { gateDown: boolean; reduced
     z: number,
     flip: number,
   ) => (
-    <group ref={ref} position={[x, 0, z]} rotation={[0, gateDown ? 0 : -Math.PI / 2, 0]}>
+    <group
+      ref={ref}
+      position={[x, 0, z]}
+      rotation={[0, gateDown ? 0 : -Math.PI / 2, 0]}
+    >
       {/* mast, pivot housing and counterweight */}
       <mesh position={[0, 1.05, 0]}>
         <cylinderGeometry args={[0.11, 0.14, 1.1, 10]} />
@@ -1013,7 +1287,11 @@ function LevelCrossing({ gateDown, reducedMotion }: { gateDown: boolean; reduced
       {[0.45, 1.35, 2.25, 3.15, 4.05, 4.95].map((offset) => (
         <mesh key={offset} position={[flip * offset, 1.55, 0]}>
           <boxGeometry args={[0.4, 0.105, 0.09]} />
-          <meshStandardMaterial color={C.red} emissive={C.red} emissiveIntensity={0.22} />
+          <meshStandardMaterial
+            color={C.red}
+            emissive={C.red}
+            emissiveIntensity={0.22}
+          />
         </mesh>
       ))}
     </group>
@@ -1027,7 +1305,11 @@ function LevelCrossing({ gateDown, reducedMotion }: { gateDown: boolean; reduced
         <meshStandardMaterial color="#0f1c28" roughness={1} />
       </mesh>
       {Array.from({ length: 11 }, (_, i) => -11 + i * 2.4).map((z) => (
-        <mesh key={z} position={[CROSSING_X, 0.335, z]} rotation={[-Math.PI / 2, 0, 0]}>
+        <mesh
+          key={z}
+          position={[CROSSING_X, 0.335, z]}
+          rotation={[-Math.PI / 2, 0, 0]}
+        >
           <planeGeometry args={[0.16, 1.2]} />
           <meshStandardMaterial color="#c8d4de" transparent opacity={0.45} />
         </mesh>
@@ -1065,12 +1347,19 @@ function LevelCrossing({ gateDown, reducedMotion }: { gateDown: boolean; reduced
             <group key={offset} position={[signal.mirror * offset, 2.18, 0.12]}>
               <mesh>
                 <sphereGeometry args={[0.11, 14, 14]} />
-                <primitive object={lampIndex === 0 ? lampA : lampB} attach="material" />
+                <primitive
+                  object={lampIndex === 0 ? lampA : lampB}
+                  attach="material"
+                />
               </mesh>
               {/* hood */}
               <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0, 0.09]}>
                 <cylinderGeometry args={[0.14, 0.14, 0.16, 12, 1, true]} />
-                <meshStandardMaterial color="#12212e" side={THREE.DoubleSide} roughness={0.8} />
+                <meshStandardMaterial
+                  color="#12212e"
+                  side={THREE.DoubleSide}
+                  roughness={0.8}
+                />
               </mesh>
             </group>
           ))}
@@ -1170,12 +1459,21 @@ function CameraRig({
     };
     const up = (event: PointerEvent) => {
       s.dragging = false;
-      if (dom.hasPointerCapture(event.pointerId)) dom.releasePointerCapture(event.pointerId);
+      if (dom.hasPointerCapture(event.pointerId))
+        dom.releasePointerCapture(event.pointerId);
     };
     const wheel = (event: WheelEvent) => {
       event.preventDefault();
-      s.dDistance = THREE.MathUtils.clamp(s.dDistance + event.deltaY * 0.02, CAMERA_MIN_DISTANCE, CAMERA_MAX_DISTANCE);
-      s.distance = THREE.MathUtils.clamp(s.distance + event.deltaY * 0.02, CAMERA_MIN_DISTANCE, CAMERA_MAX_DISTANCE);
+      s.dDistance = THREE.MathUtils.clamp(
+        s.dDistance + event.deltaY * 0.02,
+        CAMERA_MIN_DISTANCE,
+        CAMERA_MAX_DISTANCE,
+      );
+      s.distance = THREE.MathUtils.clamp(
+        s.distance + event.deltaY * 0.02,
+        CAMERA_MIN_DISTANCE,
+        CAMERA_MAX_DISTANCE,
+      );
       s.lastInput = performance.now();
     };
 
@@ -1200,20 +1498,27 @@ function CameraRig({
 
     // the wide shot is the resting pose: no selection means no component focus
     // idle orbit once the visitor has left it alone
-    const idle = performance.now() - s.lastInput > 7000 && !s.dragging && !interacting;
+    const idle =
+      performance.now() - s.lastInput > 7000 && !s.dragging && !interacting;
     if (idle && !reducedMotion) {
       s.dAzimuth += dt * 0.055;
     }
 
     s.azimuth = ease(s.azimuth, s.dAzimuth, lambda, dt);
-    s.polar = THREE.MathUtils.clamp(ease(s.polar, s.dPolar, lambda, dt), 0.1, 1.36);
+    s.polar = THREE.MathUtils.clamp(
+      ease(s.polar, s.dPolar, lambda, dt),
+      0.1,
+      1.36,
+    );
     s.distance = ease(s.distance, s.dDistance, lambda, dt);
     s.target.x = ease(s.target.x, s.dTarget.x, lambda, dt);
     s.target.y = ease(s.target.y, s.dTarget.y, lambda, dt);
     s.target.z = ease(s.target.z, s.dTarget.z, lambda, dt);
 
     const spherical = new THREE.Spherical(s.distance, s.polar, s.azimuth);
-    const position = new THREE.Vector3().setFromSpherical(spherical).add(s.target);
+    const position = new THREE.Vector3()
+      .setFromSpherical(spherical)
+      .add(s.target);
     camera.position.copy(position);
     camera.lookAt(s.target);
     camera.updateMatrixWorld();
@@ -1222,16 +1527,42 @@ function CameraRig({
   return null;
 }
 
+/**
+ * Reports readiness from the render loop rather than from context creation:
+ * the stage only reveals the canvas once something has actually been drawn,
+ * so a scene that fails to render still falls back to the drawing.
+ */
+function FirstFrame({ onReady }: { onReady: () => void }) {
+  const frames = useRef(0);
+  const done = useRef(false);
+  useFrame(() => {
+    if (done.current) return;
+    frames.current += 1;
+    if (frames.current >= 2) {
+      done.current = true;
+      onReady();
+    }
+  });
+  return null;
+}
+
 /* --------------------------------------------------------------------- world */
 
 function Ground() {
   return (
     <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.14, 0]} receiveShadow>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -0.14, 0]}
+        receiveShadow
+      >
         <circleGeometry args={[90, 64]} />
         <meshStandardMaterial color="#070f19" roughness={1} />
       </mesh>
-      <gridHelper args={[120, 60, "#132434", "#0d1a26"]} position={[0, -0.13, 0]} />
+      <gridHelper
+        args={[120, 60, "#132434", "#0d1a26"]}
+        position={[0, -0.13, 0]}
+      />
       {/* distant yard lights on the horizon */}
       {[-34, -22, -12, 14, 24, 35].map((x, index) => (
         <group key={x} position={[x, 0, -22 - (index % 3) * 3]}>
@@ -1241,7 +1572,12 @@ function Ground() {
           </mesh>
           <mesh position={[0, 7.3, 0]}>
             <sphereGeometry args={[0.2, 10, 10]} />
-            <meshBasicMaterial color={C.amber} transparent opacity={0.55} toneMapped={false} />
+            <meshBasicMaterial
+              color={C.amber}
+              transparent
+              opacity={0.55}
+              toneMapped={false}
+            />
           </mesh>
         </group>
       ))}
@@ -1250,7 +1586,16 @@ function Ground() {
 }
 
 function SceneBody(props: SceneProps) {
-  const { mode, selected, hovered, aspect, gateDown, reducedMotion, onHover, onSelect } = props;
+  const {
+    mode,
+    selected,
+    hovered,
+    aspect,
+    gateDown,
+    reducedMotion,
+    onHover,
+    onSelect,
+  } = props;
   const common = { mode, selected, hovered, reducedMotion, onHover, onSelect };
 
   return (
@@ -1259,34 +1604,76 @@ function SceneBody(props: SceneProps) {
       <Track />
       <Catenary />
 
-      <Part nodeKey="platform" at={[-17.6, 0, -6.7]} radius={4.6} anchorY={4.3} {...common}>
+      <Part
+        nodeKey="platform"
+        at={[-17.6, 0, -6.7]}
+        radius={4.6}
+        anchorY={4.3}
+        {...common}
+      >
         <Platform />
       </Part>
 
-      <Part nodeKey="hut" at={[-8.9, 0, -7.3]} radius={2.5} anchorY={4.0} {...common}>
+      <Part
+        nodeKey="hut"
+        at={[-8.9, 0, -7.3]}
+        radius={2.5}
+        anchorY={4.0}
+        {...common}
+      >
         <Hut />
       </Part>
 
-      <Part nodeKey="axle" at={[-6.2, 0, NEAR_LINE_Z]} radius={1.5} anchorY={1.9} {...common}>
+      <Part
+        nodeKey="axle"
+        at={[-6.2, 0, NEAR_LINE_Z]}
+        radius={1.5}
+        anchorY={1.9}
+        {...common}
+      >
         <Detection />
       </Part>
 
-      <Part nodeKey="points" at={[-1.6, 0, NEAR_LINE_Z]} radius={2.1} anchorY={1.7} {...common}>
+      <Part
+        nodeKey="points"
+        at={[-1.6, 0, NEAR_LINE_Z]}
+        radius={2.1}
+        anchorY={1.7}
+        {...common}
+      >
         <Points />
       </Part>
 
-      <Part nodeKey="signal" at={[2.6, 0, 3.4]} radius={1.5} anchorY={7.6} {...common}>
+      <Part
+        nodeKey="signal"
+        at={[2.6, 0, 3.4]}
+        radius={1.5}
+        anchorY={7.6}
+        {...common}
+      >
         <Signal aspect={aspect} />
       </Part>
 
       {/* crossing is context rather than a hotspot */}
       <LevelCrossing gateDown={gateDown} reducedMotion={reducedMotion} />
 
-      <Part nodeKey="cctv" at={[9.6, 0, 4.6]} radius={1.3} anchorY={5.6} {...common}>
+      <Part
+        nodeKey="cctv"
+        at={[9.6, 0, 4.6]}
+        radius={1.3}
+        anchorY={5.6}
+        {...common}
+      >
         <Cctv aspectOn={mode === "telecom"} />
       </Part>
 
-      <Part nodeKey="cabling" at={[-3.4, 0, 3.9]} radius={1.9} anchorY={1.6} {...common}>
+      <Part
+        nodeKey="cabling"
+        at={[-3.4, 0, 3.9]}
+        radius={1.9}
+        anchorY={1.6}
+        {...common}
+      >
         <group>
           <mesh position={[0, 0.2, 0.25]}>
             <boxGeometry args={[3.2, 0.3, 0.55]} />
@@ -1299,7 +1686,11 @@ function SceneBody(props: SceneProps) {
           </mesh>
           <mesh position={[1.3, 0.62, 1.32]}>
             <boxGeometry args={[0.18, 0.18, 0.02]} />
-            <meshStandardMaterial color={C.amber} emissive={C.amber} emissiveIntensity={0.5} />
+            <meshStandardMaterial
+              color={C.amber}
+              emissive={C.amber}
+              emissiveIntensity={0.5}
+            />
           </mesh>
           {/* earth pit with riser */}
           <mesh position={[-1.1, 0.12, 1.3]}>
@@ -1308,20 +1699,42 @@ function SceneBody(props: SceneProps) {
           </mesh>
           <mesh position={[-1.1, 0.3, 1.3]}>
             <cylinderGeometry args={[0.03, 0.03, 0.3, 6]} />
-            <meshStandardMaterial color={C.copper} metalness={0.7} roughness={0.4} />
+            <meshStandardMaterial
+              color={C.copper}
+              metalness={0.7}
+              roughness={0.4}
+            />
           </mesh>
         </group>
       </Part>
 
-      <Part nodeKey="ofc" at={[-1.0, 0, DUCT_Z]} radius={1.7} anchorY={1.3} {...common}>
+      <Part
+        nodeKey="ofc"
+        at={[-1.0, 0, DUCT_Z]}
+        radius={1.7}
+        anchorY={1.3}
+        {...common}
+      >
         <FibreRoute />
       </Part>
 
-      <Part nodeKey="tower" at={[5.4, 0, -10.4]} radius={2.6} anchorY={14.4} {...common}>
+      <Part
+        nodeKey="tower"
+        at={[5.4, 0, -10.4]}
+        radius={2.6}
+        anchorY={14.4}
+        {...common}
+      >
         <Tower />
       </Part>
 
-      <Part nodeKey="control" at={[12.0, 0, -8.0]} radius={3.4} anchorY={4.6} {...common}>
+      <Part
+        nodeKey="control"
+        at={[12.0, 0, -8.0]}
+        radius={3.4}
+        anchorY={4.6}
+        {...common}
+      >
         <ControlRoom />
       </Part>
     </group>
@@ -1330,7 +1743,10 @@ function SceneBody(props: SceneProps) {
 
 export default function LiveSectionScene(props: SceneProps) {
   const pose = useMemo(
-    () => poseFor(props.selected) ?? NODE_CAMERAS[props.selected] ?? OVERVIEW_CAMERA,
+    () =>
+      poseFor(props.selected) ??
+      NODE_CAMERAS[props.selected] ??
+      OVERVIEW_CAMERA,
     [props.selected],
   );
   const interacting = props.hovered !== "";
@@ -1340,23 +1756,44 @@ export default function LiveSectionScene(props: SceneProps) {
       dpr={[1, 1.8]}
       shadows={false}
       gl={{ antialias: true, powerPreference: "high-performance" }}
-      camera={{ position: OVERVIEW_CAMERA.position, fov: CAMERA_FOV, near: 0.1, far: 260 }}
+      camera={{
+        position: OVERVIEW_CAMERA.position,
+        fov: CAMERA_FOV,
+        near: 0.1,
+        far: 260,
+      }}
       onCreated={({ gl, scene }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping;
         gl.toneMappingExposure = 1.08;
         scene.background = new THREE.Color("#050c16");
         scene.fog = new THREE.Fog("#060f19", 52, 128);
-        props.onReady();
       }}
       onPointerMissed={() => props.onSelect("")}
     >
       <ambientLight intensity={0.55} />
       <hemisphereLight args={["#8fb4d6", "#050c16", 0.7]} />
-      <directionalLight position={[16, 22, 18]} intensity={2.4} color="#dbe8f5" />
-      <directionalLight position={[-18, 10, -14]} intensity={0.9} color="#2b6f96" />
-      <directionalLight position={[0, 6, -26]} intensity={0.5} color="#8f6b3a" />
+      <directionalLight
+        position={[16, 22, 18]}
+        intensity={2.4}
+        color="#dbe8f5"
+      />
+      <directionalLight
+        position={[-18, 10, -14]}
+        intensity={0.9}
+        color="#2b6f96"
+      />
+      <directionalLight
+        position={[0, 6, -26]}
+        intensity={0.5}
+        color="#8f6b3a"
+      />
       <SceneBody {...props} />
-      <CameraRig pose={pose} reducedMotion={props.reducedMotion} interacting={interacting} />
+      <FirstFrame onReady={props.onReady} />
+      <CameraRig
+        pose={pose}
+        reducedMotion={props.reducedMotion}
+        interacting={interacting}
+      />
       <AdaptiveDpr pixelated />
     </Canvas>
   );
