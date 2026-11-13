@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Contact SIG-TEL",
     description: "Send a tender, drawings or route details. We usually respond the same working day.",
-    images: ["/images/project-station.jpg"],
+    images: ["/images/station-daylight.jpg"],
   },
 };
 
@@ -30,56 +30,54 @@ export default function ContactPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <section className="theme-night relative overflow-hidden border-b border-line bg-navy-900">
-        <Image
-          src="/images/project-station.jpg"
-          alt="Railway station platform at blue hour"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover opacity-35"
-        />
-        <div className="absolute inset-0 hero-scrim" aria-hidden />
-        <div className="absolute inset-0 grid-blueprint opacity-25" aria-hidden />
-        <div className="edge relative pb-14 pt-[calc(var(--header-h)+4.5rem)]">
+      <section className="relative overflow-hidden border-b border-line bg-white">
+        <div className="pointer-events-none absolute inset-0 grid-blueprint opacity-50" aria-hidden />
+        <div className="edge relative pb-12 pt-[calc(var(--header-h)+2.6rem)]">
           <div className="flex items-center gap-4">
-            <span className="label-tight text-eng">06</span>
-            <span className="h-px w-8 bg-line-strong" />
-            <span className="label text-ink/70">Contact</span>
+            <span className="label-index">06</span>
+            <span className="h-px w-10 bg-line-strong" />
+            <span className="label text-muted">Contact</span>
           </div>
-          <h1 className="mt-6 max-w-4xl font-display text-[clamp(2.4rem,6vw,5.6rem)] uppercase leading-[0.92] tracking-[-0.045em] text-ink">
+          <h1 className="mt-6 max-w-5xl font-display text-[clamp(2.4rem,6.2vw,5.6rem)] uppercase leading-[0.92] tracking-[-0.045em] text-eng">
             <RevealLines lines={["TALK TO", "ENGINEERS."]} />
           </h1>
-          <p className="mt-6 max-w-xl text-[0.98rem] leading-relaxed text-muted">
-            A tender, a siding, a network design or a system that needs maintaining — send the details and our
-            engineering team will respond, usually the same working day.
-          </p>
-
-          <div className="mt-10 grid gap-6 border-t border-ink/15 pt-6 sm:grid-cols-3">
-            {[
-              { label: "Call", value: company.phone.primary, href: company.phone.primaryHref, note: company.hours },
-              { label: "Email", value: company.email, href: `mailto:${company.email}`, note: "Enquiries and RFQs" },
-              { label: "WhatsApp", value: "Send drawings or tender PDFs", href: company.whatsapp, note: "Fastest for site photos" },
-            ].map((item) => (
-              <a key={item.label} href={item.href} className="group" target={item.href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">
-                <p className="label-tight text-tech">{item.label}</p>
-                <p className="mt-2 text-[0.95rem] text-ink transition-colors group-hover:text-eng">{item.value}</p>
-                <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.14em] text-tech">{item.note}</p>
-              </a>
-            ))}
+          <div className="mt-7 grid gap-8 border-t border-line pt-6 lg:grid-cols-[1.3fr_0.7fr]">
+            <p className="max-w-xl text-[0.98rem] leading-relaxed text-muted">
+              A tender, a siding, a network design or a system that needs maintaining — send the details and
+              our engineering team will respond, usually the same working day.
+            </p>
+            <div className="grid gap-5 sm:grid-cols-3 lg:grid-cols-1 lg:gap-4">
+              {[
+                { label: "Call", value: company.phone.primary, href: company.phone.primaryHref, note: company.hours },
+                { label: "Email", value: company.email, href: `mailto:${company.email}`, note: "Enquiries and RFQs" },
+                { label: "WhatsApp", value: "Send drawings or tender PDFs", href: company.whatsapp, note: "Fastest for site photos" },
+              ].map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="group border-b border-line pb-3"
+                  target={item.href.startsWith("http") ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                >
+                  <p className="label-tight text-tech">{item.label}</p>
+                  <p className="mt-1.5 text-[0.92rem] text-eng transition-colors group-hover:text-signal">{item.value}</p>
+                  <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.13em] text-tech">{item.note}</p>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="relative border-t border-line bg-navy py-16 md:py-24" id="enquiry">
+      <section className="relative border-t border-line bg-navy section-tight" id="enquiry">
         <div className="edge grid gap-12 lg:grid-cols-[1.35fr_0.65fr] lg:gap-16">
           <div>
             <div className="flex items-center gap-4">
-              <span className="label-tight text-eng">Enquiry</span>
+              <span className="label-tight text-signal">Enquiry</span>
               <span className="h-px w-8 bg-line-strong" />
-              <span className="label text-tech">Tell us about the work</span>
+              <span className="label text-muted">Tell us about the work</span>
             </div>
-            <h2 className="mt-5 font-display text-[clamp(1.8rem,3.2vw,2.8rem)] uppercase leading-[0.98] tracking-[-0.03em] text-ink">
+            <h2 className="mt-5 font-display text-[clamp(1.8rem,3.2vw,2.8rem)] uppercase leading-[0.98] tracking-[-0.03em] text-eng">
               Project enquiry form
             </h2>
             <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted">
@@ -92,9 +90,9 @@ export default function ContactPage() {
           </div>
 
           <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start" id="details">
-            <div className="border border-line bg-navy-800/50">
+            <div className="border border-line bg-white">
               <div className="border-b border-line px-5 py-3">
-                <p className="label text-tech">Office</p>
+                <p className="label text-muted">Office</p>
               </div>
               <div className="p-5">
                 <p className="text-sm leading-relaxed text-muted">{company.address.office}</p>
@@ -113,9 +111,9 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="border border-line bg-navy-800/50">
+            <div className="border border-line bg-white">
               <div className="border-b border-line px-5 py-3">
-                <p className="label text-tech">Direct</p>
+                <p className="label text-muted">Direct</p>
               </div>
               <dl className="divide-y divide-line">
                 {[
@@ -133,16 +131,15 @@ export default function ContactPage() {
               </dl>
             </div>
 
-            <div className="relative aspect-[4/3] overflow-hidden border border-line">
+            <div className="relative aspect-[4/3] overflow-hidden border border-line bg-navy-800">
               <Image
-                src="/images/level-crossing.jpg"
-                alt="Automated level crossing gate at night"
+                src="/images/cctv-daylight.jpg"
+                alt="IP CCTV cameras mounted on a galvanised pole beside a station platform"
                 fill
                 sizes="(min-width: 1024px) 30vw, 100vw"
-                className="object-cover opacity-70"
+                className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy-900/90 to-transparent" />
-              <p className="absolute inset-x-0 bottom-0 p-4 font-mono text-[9px] uppercase leading-relaxed tracking-[0.14em] text-ink/70">
+              <p className="plate absolute inset-x-3 bottom-3 px-2.5 py-1.5 font-mono text-[8.5px] uppercase leading-relaxed tracking-[0.13em] text-eng/80">
                 Site visits by appointment · Navi Mumbai
               </p>
             </div>
@@ -150,11 +147,11 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="relative border-t border-line bg-navy-800/40 py-16 md:py-24">
+      <section className="relative border-t border-line bg-navy-800/60 section-tight">
         <div className="edge grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
             <span className="label text-eng">Before you write</span>
-            <h2 className="mt-5 font-display text-[clamp(1.7rem,3vw,2.6rem)] uppercase leading-[0.98] tracking-[-0.03em] text-ink">
+            <h2 className="mt-5 font-display text-[clamp(1.7rem,3vw,2.6rem)] uppercase leading-[0.98] tracking-[-0.03em] text-eng">
               Questions we are asked.
             </h2>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">
@@ -166,7 +163,7 @@ export default function ContactPage() {
               <details key={faq.q} className="group border-b border-line">
                 <summary className="flex cursor-pointer list-none items-start gap-4 py-5 [&::-webkit-details-marker]:hidden">
                   <span className="font-mono text-[9px] tracking-[0.18em] text-tech">{String(index + 1).padStart(2, "0")}</span>
-                  <span className="flex-1 font-display text-lg uppercase leading-snug tracking-[-0.01em] text-ink/85 group-open:text-ink">
+                  <span className="flex-1 font-display text-lg uppercase leading-snug tracking-[-0.01em] text-ink/80 transition-colors group-open:text-eng">
                     {faq.q}
                   </span>
                   <span className="relative mt-2 flex h-4 w-4 shrink-0 items-center justify-center">

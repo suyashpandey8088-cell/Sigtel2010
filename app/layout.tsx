@@ -16,15 +16,13 @@ import { MobileCta } from "@/components/ui/mobile-cta";
 import { HideOnAdmin } from "@/components/layout/hide-on-admin";
 import { Analytics } from "@/components/providers/analytics";
 import { HydrationFlag } from "@/components/providers/hydration-flag";
-import { ThemeProvider, themeScript } from "@/components/providers/theme";
-import { NightRoute } from "@/components/providers/night-route";
 import { OrganizationSchema } from "@/components/seo/organization-schema";
 import { company } from "@/lib/content/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(company.siteUrl),
   title: {
-    default: "SIG-TEL — Railway Signalling & Telecommunications Engineering",
+    default: "SIG-TEL — Railway signalling & telecommunications engineering",
     template: "%s · SIG-TEL",
   },
   description:
@@ -50,24 +48,24 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: company.siteUrl,
     siteName: company.name,
-    title: "SIG-TEL — Engineering the systems that keep India moving",
+    title: "SIG-TEL — Engineering the networks that keep railways moving",
     description:
       "Integrated railway signalling and telecommunications engineering: Electronic Interlocking, level crossings, axle counters, IP-MPLS, SDH, OFC, CCTV and maintenance.",
     images: [
       {
-        url: "/images/hero-railway.jpg",
+        url: "/images/hero-daylight.jpg",
         width: 1200,
         height: 630,
-        alt: "Railway signalling infrastructure at dusk",
+        alt: "Electrified railway tracks and signalling in daylight",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SIG-TEL — Railway Signalling & Telecommunications",
+    title: "SIG-TEL — Railway signalling & telecommunications",
     description:
       "Signalling and telecom systems engineered for dependable railway infrastructure.",
-    images: ["/images/hero-railway.jpg"],
+    images: ["/images/hero-daylight.jpg"],
   },
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
@@ -77,11 +75,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F2EFE8" },
-    { media: "(prefers-color-scheme: dark)", color: "#07111F" },
-  ],
-  colorScheme: "light dark",
+  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#F7F7F4" }],
+  colorScheme: "light",
   width: "device-width",
   initialScale: 1,
 };
@@ -92,12 +87,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-IN" data-theme="light" suppressHydrationWarning>
-      <head>
-        {/* Theme is resolved before first paint: no flash, no dependence on hydration. */}
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
-      <body className="grain bg-navy text-ink antialiased">
+    <html lang="en-IN">
+      <body className="bg-navy text-ink antialiased">
         <script
           // Failsafe: reveal animation-hidden content if the client bundle never
           // hydrates (blocked JavaScript, runtime error, extremely slow device).
@@ -112,24 +103,21 @@ export default function RootLayout({
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <ThemeProvider>
-          <NightRoute />
-          <SmoothScroll>
-            <SiteHeader />
-            <main id="main">{children}</main>
-            <HideOnAdmin>
-              <div className="h-[58px] md:hidden" aria-hidden />
-              <SiteFooter />
-            </HideOnAdmin>
-          </SmoothScroll>
-        </ThemeProvider>
+        <SmoothScroll>
+          <SiteHeader />
+          <main id="main">{children}</main>
+          <HideOnAdmin>
+            <div className="h-[58px] md:hidden" aria-hidden />
+            <SiteFooter />
+          </HideOnAdmin>
+        </SmoothScroll>
         <MobileCta />
         <Cursor />
         <Analytics />
         <HydrationFlag />
         <OrganizationSchema />
         <style>{`
-          .skip-link{position:fixed;top:-100px;left:1rem;z-index:200;background:#24C78B;color:#04120C;padding:0.85rem 1.2rem;font-family:"IBM Plex Mono",monospace;font-size:0.75rem;letter-spacing:0.14em;text-transform:uppercase;transition:top .2s ease}
+          .skip-link{position:fixed;top:-100px;left:1rem;z-index:200;background:#183B56;color:#FFFFFF;padding:0.85rem 1.2rem;font-family:"IBM Plex Mono",monospace;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;transition:top .2s ease}
           .skip-link:focus{top:0.75rem}
         `}</style>
       </body>

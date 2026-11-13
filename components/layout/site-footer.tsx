@@ -23,20 +23,19 @@ const columns = [
 
 export function SiteFooter() {
   return (
-    <footer className="relative overflow-hidden border-t border-line bg-navy-900">
-      <div className="pointer-events-none absolute inset-0 grid-blueprint opacity-40" aria-hidden />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-eng/40 to-transparent" aria-hidden />
+    <footer className="relative overflow-hidden border-t border-line bg-navy-800">
+      <div className="pointer-events-none absolute inset-0 grid-blueprint opacity-50" aria-hidden />
 
       <div className="edge relative">
-        <div className="grid gap-12 py-16 lg:grid-cols-[1.3fr_0.7fr_0.7fr_0.9fr]">
+        <div className="grid gap-12 py-16 lg:grid-cols-[1.3fr_0.6fr_0.6fr_1fr]">
           <div>
             <Logo />
             <p className="mt-6 max-w-sm text-sm leading-relaxed text-muted">{company.positioning}</p>
             <div className="mt-6 flex items-center gap-3">
-              <span className="flex h-2 w-2 items-center justify-center">
-                <span className="h-2 w-2 rounded-full bg-eng shadow-[0_0_12px_rgba(36,199,139,0.9)]" />
+              <span className="h-[6px] w-[6px] rounded-full bg-clear" />
+              <span className="label-tight text-tech">
+                Registered since {company.founded} · GSTIN {company.gstin}
               </span>
-              <span className="label-tight text-tech">Registered since {company.founded} · GSTIN {company.gstin}</span>
             </div>
           </div>
 
@@ -46,7 +45,7 @@ export function SiteFooter() {
               <ul className="space-y-3">
                 {column.links.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="link-underline text-sm text-muted hover:text-ink">
+                    <Link href={link.href} className="link-underline text-sm text-muted hover:text-eng">
                       {link.label}
                     </Link>
                   </li>
@@ -61,13 +60,13 @@ export function SiteFooter() {
               {company.address.office}
             </address>
             <div className="mt-5 space-y-2 text-sm">
-              <a href={company.phone.primaryHref} className="block text-ink hover:text-eng">
+              <a href={company.phone.primaryHref} className="block text-eng hover:text-signal">
                 {company.phone.primary}
               </a>
-              <a href={company.phone.landlineHref} className="block text-muted hover:text-ink">
+              <a href={company.phone.landlineHref} className="block text-muted hover:text-eng">
                 {company.phone.landline}
               </a>
-              <a href={`mailto:${company.email}`} className="block text-muted hover:text-ink">
+              <a href={`mailto:${company.email}`} className="block text-muted hover:text-eng">
                 {company.email}
               </a>
             </div>
@@ -79,14 +78,14 @@ export function SiteFooter() {
             © {new Date().getFullYear()} {company.legalName}. All rights reserved.
           </p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <a href={company.linkedin} target="_blank" rel="noopener noreferrer" className="label-tight text-muted hover:text-ink">
+            <a href={company.linkedin} target="_blank" rel="noopener noreferrer" className="label-tight text-muted hover:text-eng">
               LinkedIn ↗
             </a>
-            <a href={company.whatsapp} target="_blank" rel="noopener noreferrer" className="label-tight text-muted hover:text-ink">
+            <a href={company.whatsapp} target="_blank" rel="noopener noreferrer" className="label-tight text-muted hover:text-eng">
               WhatsApp ↗
             </a>
-            <Link href="/privacy" className="label-tight text-muted hover:text-ink">
-              Privacy Policy
+            <Link href="/privacy" className="label-tight text-muted hover:text-eng">
+              Privacy policy
             </Link>
             <Link href="/admin" className="label-tight text-tech hover:text-muted">
               Admin
@@ -95,9 +94,9 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <div className="relative select-none overflow-hidden pb-4" aria-hidden>
-        <p className="edge whitespace-nowrap font-display text-[clamp(3.5rem,14vw,13rem)] leading-[0.8] tracking-[-0.05em] text-ink/[0.045]">
-          ENGINEERED TO CLEAR
+      <div className="relative select-none overflow-hidden" aria-hidden>
+        <p className="edge whitespace-nowrap pb-3 font-display text-[clamp(3rem,12.5vw,12rem)] leading-[0.78] tracking-[-0.05em] text-eng/[0.055]">
+          SIGNALS THAT CLEAR
         </p>
       </div>
     </footer>

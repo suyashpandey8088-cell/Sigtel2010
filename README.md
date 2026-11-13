@@ -2,7 +2,45 @@
 
 A complete, production-oriented website for **Sigtel Signal & Telecommunication Pvt Ltd** (Navi Mumbai, incorporated 2010): a cinematic, scroll-driven experience built around the company's two disciplines — railway signalling and telecom networks.
 
+The visual identity is a **premium light industrial system**: Swiss editorial composition, warm off-white paper, engineering-blue type, signal-red accents and bright daylight photography. There is no dark theme — see the design system notes below.
+
 The site is a real application, not a mock-up: every route renders, the enquiry form stores and notifies, and enquiries + the project register are managed from a session-protected admin area.
+
+---
+
+## Design system (light industrial)
+
+| Token | Value | Role |
+| --- | --- | --- |
+| `--navy` | `#F7F7F4` | page — warm off-white |
+| `--navy-900` | `#FFFFFF` | plates and photographic bands |
+| `--navy-800` | `#EEF1F3` | alternate sections |
+| `--navy-700` | `#E6EEF3` | soft blue fields |
+| `--ink` | `#182B3A` | primary typography |
+| `--muted` | `#71808A` | secondary typography |
+| `--eng` | `#183B56` | engineering blue — headings and UI |
+| `--signal` | `#E44D43` | signal red — the one accent, used sparingly |
+| `--clear` | `#43866B` | technical green — telecom references |
+| `--line` / `--line-strong` | `#DDE2E5` / ink at 26% | hairlines and rules |
+
+Type: **Space Grotesk** headings, **Inter** body, **IBM Plex Mono** technical
+labels. All three are self-hosted through `@fontsource`.
+
+Home page chapters (all on one scroll, GSAP ScrollTrigger + Lenis):
+
+1. Hero — sticky, full-viewport, with a scroll-driven camera push into a daylight railway photograph and technical annotations around the frame.
+2. Company statement — centred editorial spread with scroll-lit copy and a hairline facts table.
+3. One live section — a hand-drawn engineering plate of a double line carrying both disciplines; component index and signalling/telecom modes.
+4. Railway signalling / Telecommunications — asymmetric plates with five-layer capability stacks.
+5. Engineering process — pinned horizontal sequence of six stages (vertical on small screens and for reduced motion).
+6. Works register — editorial gallery: one lead plate plus an asymmetric grid, filterable.
+7. Presence — light map of India with engineering-blue markers.
+8. Company — timeline, operating principles, typographic client roster.
+9. Closing plate — bright station photograph, white scrim, oversized sign-off.
+
+Photography in `public/images/` is generated daylight industrial imagery with a
+neutral grade; it illustrates the discipline and is never presented as a record
+of a specific site.
 
 ---
 
@@ -13,11 +51,11 @@ The site is a real application, not a mock-up: every route renders, the enquiry 
 | Framework | Next.js 15 (App Router), React 19, TypeScript |
 | Styling | Tailwind CSS 3 with a custom design-token layer (`app/globals.css`) |
 | Motion | GSAP + ScrollTrigger (pinned/horizontal storytelling, scroll-linked reveals), Framer Motion (entrances, tabs, transitions), Lenis smooth scrolling |
-| Drawing | Hand-built SVG engineering plate (live section, no WebGL); Three.js available for a 3D model |
+| Drawing | Hand-built SVG engineering plate (live section, no WebGL) + animated network diagrams |
 | Data | PostgreSQL (`pg`) in production; a file-backed store for local/preview. Prisma schema included as the canonical model |
 | Auth | Signed, HttpOnly session cookie (HMAC-SHA256), scrypt password hashing, role-based authorisation |
 | Email | Resend (optional) with logged fallback |
-| Media | Local optimised images via `next/image` + `sharp`; Cloudinary host is allow-listed if you migrate media |
+| Media | Local optimised daylight photography in `public/images/` via `next/image` + `sharp`; Cloudinary host allow-listed if you migrate media |
 | Deployment | Vercel (or any Node host) + managed PostgreSQL (Neon / Supabase / RDS) |
 
 ---
@@ -137,8 +175,8 @@ API: `POST /api/contact` · `POST /api/admin/login` · `POST /api/admin/logout` 
 - Per-page metadata, canonical URLs, Open Graph/Twitter cards, JSON-LD `Organization` + `WebSite` graph, per-project `CreativeWork` schema.
 - Generated sitemap and robots (admin/API disallowed).
 - Self-hosted fonts (`@fontsource`) — no third-party font requests; `next/image` with AVIF/WebP; SVG favicon.
-- Section 04 is a hand-drawn SVG engineering plate (`components/home/live-section-diagram.tsx`): ten annotated components, live aspect sequence and level-crossing barriers in CSS only, no WebGL, no image assets. It is server-rendered and complete before hydration; small screens pan the plate horizontally rather than shrinking it. `components/three/railway-scene.tsx` holds the earlier R3F scene, currently unused.
-- Motion respects `prefers-reduced-motion`; Lenis is disabled, GSAP timelines are skipped and the loader is bypassed.
+- The live-section plate (`components/home/live-section-diagram.tsx`) is a hand-drawn SVG of ten annotated components: live aspect sequence and level-crossing barriers in CSS only, no WebGL, no image assets. It is server-rendered and complete before hydration; small screens pan the plate horizontally rather than shrinking it.
+- Motion respects `prefers-reduced-motion`; Lenis is disabled, GSAP timelines are skipped and every entrance falls back to plain, visible content.
 - Semantic landmarks, skip link, visible focus states, keyboard-operable map markers and component selector, ARIA labels on controls.
 
 ---
@@ -152,12 +190,11 @@ app/
   admin/                   login + dashboard
   sitemap.ts, robots.ts, not-found.tsx, template.tsx
 components/
-  home/                    hero, identity, live-section plate, divisions, process, map, credentials, CTA
-  projects/                cards + filterable showcase
+  home/                    hero, chapters (intro, plate, disciplines, process, presence, company), map, CTA
+  projects/                editorial gallery + project card
   page/                    page hero, layer accordion, CTA band
   layout/                  header, overlay menu, footer
-  three/                   R3F railway scene
-  ui/                      reveal, counter, magnetic button, cursor, ticker, mobile CTA
+  ui/                      reveal, scroll-words, section heading, counter, magnetic button, cursor, ticker, mobile CTA
   admin/                   dashboard + project editor
 lib/
   content/                 verified content

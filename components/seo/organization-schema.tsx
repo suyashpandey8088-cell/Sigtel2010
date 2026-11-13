@@ -12,7 +12,7 @@ export function OrganizationSchema() {
         alternateName: "SIG-TEL",
         url: company.siteUrl,
         logo: `${company.siteUrl}/favicon.svg`,
-        image: `${company.siteUrl}/images/hero-railway.jpg`,
+        image: `${company.siteUrl}/images/hero-daylight.jpg`,
         description:
           "Railway signalling and telecommunications engineering company incorporated in 2010 in Navi Mumbai, India. Electronic Interlocking, level crossings, axle counters, earthing, IP-MPLS, SDH, OFC, CCTV and maintenance.",
         foundingDate: "2010",

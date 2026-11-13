@@ -39,17 +39,17 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-navy-900 px-4 py-24">
+    <div className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-navy px-4 py-24">
       <div className="pointer-events-none absolute inset-0 grid-blueprint opacity-40" aria-hidden />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_50%_30%,rgba(36,199,139,0.08),transparent_70%)]" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_50%_30%,rgba(24,59,86,0.05),transparent_70%)]" aria-hidden />
 
-      <div className="relative w-full max-w-md border border-line bg-navy-800/60 p-8 backdrop-blur">
+      <div className="relative w-full max-w-md border border-line bg-white p-8 shadow-[0_30px_80px_-60px_rgba(24,43,58,0.6)]">
         <Logo />
         <div className="mt-8 flex items-center gap-3">
-          <span className="h-2 w-2 rounded-full bg-eng shadow-[0_0_10px_rgba(36,199,139,0.9)]" />
+          <span className="h-2 w-2 rounded-full bg-clear" />
           <p className="label text-tech">Control room access</p>
         </div>
-        <h1 className="mt-4 font-display text-3xl uppercase leading-none tracking-[-0.03em] text-ink">
+        <h1 className="mt-4 font-display text-3xl uppercase leading-none tracking-[-0.03em] text-eng">
           Admin sign in
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-muted">
@@ -75,7 +75,7 @@ export default function AdminLoginPage() {
           </label>
 
           {error ? (
-            <p className="border border-signal/40 bg-signal/[0.06] px-3 py-2 text-sm text-signal/90">{error}</p>
+            <p className="border-l-2 border-signal bg-signal/[0.06] px-3 py-2 text-sm text-signal">{error}</p>
           ) : null}
 
           <button type="submit" disabled={loading} className="btn btn-solid w-full disabled:opacity-60">

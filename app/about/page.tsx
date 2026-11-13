@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "About SIG-TEL",
     description: "Signalling and telecom specialists since 2010 — one accountable engineering team.",
-    images: ["/images/about-team.jpg"],
+    images: ["/images/engineering-survey.jpg"],
   },
 };
 
@@ -27,8 +27,8 @@ export default function AboutPage() {
         eyebrow="About SIG-TEL"
         title={["SMALL ENOUGH", "TO ANSWER THE", "PHONE."]}
         description="Incorporated in 2010, operating from inside the Belapur Railway Station building in Navi Mumbai. Two disciplines with equal depth, one team accountable for what it builds."
-        image="/images/about-team.jpg"
-        imageAlt="Engineers reviewing signalling drawings beside a railway track at dusk"
+        image="/images/engineering-survey.jpg"
+        imageAlt="Engineers reviewing signalling drawings beside a railway track in daylight"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "About" }]}
         meta={[
           { label: "Incorporated", value: "2010" },
@@ -38,15 +38,15 @@ export default function AboutPage() {
         ]}
       />
 
-      <section className="relative border-t border-line bg-navy py-20 md:py-28">
+      <section className="relative border-t border-line bg-navy section">
         <div className="edge grid gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
           <div>
-            <span className="label text-eng">The company</span>
-            <h2 className="mt-6 font-display text-[clamp(2rem,4vw,3.6rem)] uppercase leading-[0.94] tracking-[-0.035em] text-ink">
+            <span className="label text-muted">The company</span>
+            <h2 className="mt-6 font-display text-[clamp(2rem,4vw,3.6rem)] uppercase leading-[0.94] tracking-[-0.035em] text-eng">
               <RevealLines
                 lines={["Built on two", "critical systems", "and one habit:"]}
               />
-              <span className="mt-2 block text-eng">we stay.</span>
+              <span className="mt-2 block text-signal">we stay.</span>
             </h2>
 
             <div className="mt-8 space-y-5 text-[0.97rem] leading-relaxed text-muted">
@@ -75,10 +75,10 @@ export default function AboutPage() {
               </Reveal>
             </div>
 
-            <div className="mt-10 grid gap-px border border-line bg-line sm:grid-cols-3">
+            <div className="mt-10 grid border-t border-line sm:grid-cols-3">
               {credentials.slice(0, 3).map((item) => (
-                <div key={item.label} className="bg-navy p-5">
-                  <p className="font-display text-3xl leading-none text-ink">{item.value}</p>
+                <div key={item.label} className="border-b border-line py-5 pr-4 sm:border-b-0">
+                  <p className="font-display text-3xl leading-none text-eng">{item.value}</p>
                   <p className="mt-3 label-tight text-tech">{item.label}</p>
                   <p className="mt-1 text-[0.72rem] leading-relaxed text-tech">{item.detail}</p>
                 </div>
@@ -87,26 +87,25 @@ export default function AboutPage() {
           </div>
 
           <div className="flex flex-col gap-5">
-            <div className="relative aspect-[4/5] w-full overflow-hidden border border-line">
+            <div className="relative aspect-[4/5] w-full overflow-hidden border border-line bg-navy-800">
               <Image
-                src="/images/signalling-hero.jpg"
-                alt="Interlocking equipment racks inside a relay room"
+                src="/images/control-room.jpg"
+                alt="A bright signalling control room with a track diagram panel and daylight through tall windows"
                 fill
                 sizes="(min-width: 1024px) 40vw, 100vw"
-                className="object-cover opacity-80"
+                className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy-900/85 via-transparent to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-6">
-                <p className="label-tight text-eng">Field note</p>
-                <p className="mt-2 font-display text-lg leading-snug text-ink">
-                  “A signalling change is only finished when the controller can work the station without
-                  thinking about it.”
-                </p>
-              </div>
+            </div>
+            <div className="border-t border-line pt-5">
+              <p className="label-tight text-signal">Field note</p>
+              <p className="mt-2 font-display text-xl uppercase leading-[1.15] tracking-[-0.02em] text-eng">
+                “A signalling change is only finished when the controller can work the station without
+                thinking about it.”
+              </p>
             </div>
 
-            <div className="border border-line bg-navy-800/50 p-6">
-              <p className="label mb-4 text-tech">Office &amp; registered office</p>
+            <div className="border border-line bg-white p-6">
+              <p className="label mb-4 text-muted">Office &amp; registered office</p>
               <p className="text-sm leading-relaxed text-muted">{company.address.office}</p>
               <p className="mt-4 label-tight text-tech">Regd. office</p>
               <p className="mt-1 text-sm leading-relaxed text-muted">{company.address.regd}</p>
@@ -121,20 +120,20 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="relative border-t border-line bg-navy-800/40 py-20 md:py-28">
+      <section className="relative border-t border-line bg-navy-800/60 section">
         <div className="edge">
           <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
             <div>
               <span className="label text-eng">How we work</span>
-              <h2 className="mt-5 font-display text-[clamp(1.9rem,3.4vw,3rem)] uppercase leading-[0.96] tracking-[-0.03em] text-ink">
+              <h2 className="mt-5 font-display text-[clamp(1.9rem,3.4vw,3rem)] uppercase leading-[0.96] tracking-[-0.03em] text-eng">
                 Engineering discipline is the product.
               </h2>
             </div>
-            <div className="grid gap-px border border-line bg-line sm:grid-cols-2">
+            <div className="grid border-t border-line sm:grid-cols-2">
               {whySigtel.map((item, index) => (
-                <Reveal key={item.title} className="bg-navy p-6">
-                  <span className="font-mono text-[9px] tracking-[0.2em] text-eng">{String(index + 1).padStart(2, "0")}</span>
-                  <h3 className="mt-3 font-display text-lg uppercase leading-tight text-ink">{item.title}</h3>
+                <Reveal key={item.title} className="border-b border-line py-6 pr-6">
+                  <span className="font-mono text-[9px] tracking-[0.2em] text-signal">{String(index + 1).padStart(2, "0")}</span>
+                  <h3 className="mt-3 font-display text-lg uppercase leading-tight text-eng">{item.title}</h3>
                   <p className="mt-2 text-[0.85rem] leading-relaxed text-muted">{item.body}</p>
                 </Reveal>
               ))}
@@ -143,12 +142,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="relative border-t border-line bg-navy py-20 md:py-28">
+      <section className="relative border-t border-line bg-navy section">
         <div className="edge">
           <div className="flex flex-col gap-6 pb-12 md:flex-row md:items-end md:justify-between">
             <div>
               <span className="label text-eng">Industries we serve</span>
-              <h2 className="mt-5 font-display text-[clamp(1.9rem,3.4vw,3rem)] uppercase leading-[0.96] tracking-[-0.03em] text-ink">
+              <h2 className="mt-5 font-display text-[clamp(1.9rem,3.4vw,3rem)] uppercase leading-[0.96] tracking-[-0.03em] text-eng">
                 Where our systems keep things moving.
               </h2>
             </div>
@@ -158,15 +157,15 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid gap-px border border-line bg-line md:grid-cols-2 lg:grid-cols-5">
+          <div className="grid border-t border-line md:grid-cols-2 lg:grid-cols-5">
             {clientGroups.map((group) => (
-              <div key={group.title} className="group flex flex-col justify-between bg-navy p-5 transition-colors hover:bg-navy-800/70">
+              <div key={group.title} className="group flex flex-col justify-between border-b border-line py-6 pr-5 transition-colors">
                 <div>
-                  <p className="label-tight text-eng">{group.tag}</p>
-                  <h3 className="mt-4 font-display text-lg uppercase leading-tight text-ink">{group.title}</h3>
+                  <p className="label-tight text-signal">{group.tag}</p>
+                  <h3 className="mt-4 font-display text-lg uppercase leading-tight text-eng">{group.title}</h3>
                   <p className="mt-2 text-[0.8rem] leading-relaxed text-muted">{group.body}</p>
                 </div>
-                <p className="mt-6 border-t border-line pt-3 font-mono text-[9px] uppercase leading-relaxed tracking-[0.12em] text-tech">
+                <p className="mt-6 font-mono text-[9px] uppercase leading-relaxed tracking-[0.12em] text-tech">
                   {group.names}
                 </p>
               </div>
@@ -176,7 +175,7 @@ export default function AboutPage() {
           <div className="mt-10 grid gap-6 border-t border-line pt-8 sm:grid-cols-2 lg:grid-cols-4">
             {states.map((state) => (
               <div key={state.name}>
-                <p className="font-display text-base uppercase text-ink">{state.name}</p>
+                <p className="font-display text-base uppercase text-eng">{state.name}</p>
                 <p className="mt-1 text-[0.78rem] leading-relaxed text-tech">{state.sites}</p>
               </div>
             ))}
@@ -184,7 +183,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="relative border-t border-line bg-navy-800/40 py-16">
+      <section className="relative border-t border-line bg-navy-800/60 py-16">
         <div className="edge flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div className="max-w-2xl">
             <p className="label text-tech">A note on this website</p>

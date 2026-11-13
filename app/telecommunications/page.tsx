@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Telecommunications · SIG-TEL",
     description: "OFC, IP-MPLS, SDH, CCTV, EPABX, radio and NMS — built and maintained along the route.",
-    images: ["/images/telecom-hero.jpg"],
+    images: ["/images/telecom-fibre.jpg"],
   },
 };
 
@@ -43,8 +43,8 @@ export default async function TelecomPage() {
         eyebrow="Division 02 — Telecommunications"
         title={["NETWORKS THAT", "STAY UP WHEN", "IT MATTERS."]}
         description="Optical fibre, transmission, surveillance and voice for railways, oil & gas pipelines and industry — installed link by link, proven with OTDR traces and network tests, then maintained under long-term CAMC."
-        image="/images/telecom-hero.jpg"
-        imageAlt="Telecom tower and equipment cabinet beside a railway line at dusk"
+        image="/images/telecom-fibre.jpg"
+        imageAlt="Fibre-optic splicing and testing in a light telecom enclosure"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Telecommunications" }]}
         meta={[
           { label: "Discipline", value: "Telecom networks" },
@@ -54,11 +54,11 @@ export default async function TelecomPage() {
         ]}
       />
 
-      <section className="relative border-t border-line bg-navy py-20 md:py-28">
+      <section className="relative border-t border-line bg-navy section">
         <div className="edge grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
           <div>
             <span className="label text-eng">The discipline</span>
-            <h2 className="mt-6 font-display text-[clamp(1.9rem,3.6vw,3.2rem)] uppercase leading-[0.96] tracking-[-0.03em] text-ink">
+            <h2 className="mt-6 font-display text-[clamp(1.9rem,3.6vw,3.2rem)] uppercase leading-[0.96] tracking-[-0.03em] text-eng">
               The network behind the railway — and the pipeline.
             </h2>
             <div className="mt-6 space-y-4 text-[0.95rem] leading-relaxed text-muted">
@@ -73,7 +73,7 @@ export default async function TelecomPage() {
               </p>
             </div>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <div className="mt-8 grid border-t border-line sm:grid-cols-2">
               {[
                 { title: "Railway-grade discipline", body: "Work planned around traffic blocks and pipeline operations." },
                 { title: "Single accountable team", body: "Fibre, transmission, security and voice under one contract." },
@@ -81,8 +81,8 @@ export default async function TelecomPage() {
                 { title: "Proof at handover", body: "OTDR, link tests, as-builts and configuration records." },
               ].map((item) => (
                 <Reveal key={item.title}>
-                  <div className="h-full border border-line p-4">
-                    <p className="font-display text-sm uppercase leading-tight text-ink">{item.title}</p>
+                  <div className="h-full border-b border-line py-4 pr-4">
+                    <p className="font-display text-sm uppercase leading-tight text-eng">{item.title}</p>
                     <p className="mt-2 text-[0.8rem] leading-relaxed text-tech">{item.body}</p>
                   </div>
                 </Reveal>
@@ -93,20 +93,19 @@ export default async function TelecomPage() {
           <div>
             <div className="relative aspect-[4/3] w-full overflow-hidden border border-line">
               <Image
-                src="/images/project-fibre.jpg"
-                alt="Fibre optic splicing in an outdoor enclosure at night"
+                src="/images/radio-mast.jpg"
+                alt="Telecom lattice tower with microwave dish antennae in daylight"
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover opacity-85"
+                className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy-900/70 to-transparent" />
             </div>
-            <div className="mt-4 border border-line">
-              <p className="label border-b border-line px-4 py-3 text-tech">Network stack</p>
-              <div className="divide-y divide-line">
+            <div className="mt-4 border-t border-line">
+              <p className="label py-3 text-tech">Network stack</p>
+              <div className="divide-y divide-line border-t border-line">
                 {stack.map((row) => (
-                  <div key={row.label} className="flex flex-wrap items-baseline gap-x-4 gap-y-1 px-4 py-3">
-                    <span className="w-16 shrink-0 font-mono text-[8.5px] uppercase tracking-[0.16em] text-eng">
+                  <div key={row.label} className="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3">
+                    <span className="w-16 shrink-0 font-mono text-[8.5px] uppercase tracking-[0.16em] text-signal">
                       {row.label}
                     </span>
                     <span className="flex-1 text-[0.8rem] leading-relaxed text-ink/75">{row.items.join(" · ")}</span>
@@ -118,7 +117,7 @@ export default async function TelecomPage() {
         </div>
       </section>
 
-      <section className="relative border-t border-line bg-navy-800/40 py-20 md:py-28">
+      <section className="relative border-t border-line bg-navy-800/60 section">
         <div className="edge">
           <SectionHeading
             index="02.1"
@@ -131,7 +130,7 @@ export default async function TelecomPage() {
         </div>
       </section>
 
-      <section className="relative border-t border-line bg-navy-800/40 py-20 md:py-28">
+      <section className="relative border-t border-line bg-navy-800/60 section">
         <div className="edge">
           <div className="flex flex-col gap-6 pb-10 md:flex-row md:items-end md:justify-between">
             <SectionHeading index="02.3" label="Telecom works" title={["Networks in service."]} />
@@ -141,7 +140,7 @@ export default async function TelecomPage() {
               </Link>
             </Magnetic>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
             {projects.slice(0, 6).map((project, index) => (
               <ProjectCard key={project.id} project={project} index={index} />
             ))}

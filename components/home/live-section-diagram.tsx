@@ -1,12 +1,7 @@
 "use client";
 
 import { infraNodes, type InfraMode } from "@/lib/content/infrastructure-3d";
-import { useTheme } from "@/components/providers/theme";
-import {
-  LIGHT_PALETTE,
-  NIGHT_PALETTE,
-  type PlatePalette,
-} from "@/lib/plate-palette";
+import { PLATE_PALETTE } from "@/lib/plate-palette";
 
 /**
  * The live section — a measured engineering plate of a double-track section
@@ -32,36 +27,11 @@ const CONTACT_Y = 560;
 const SAG = 46;
 const MASTS = [300, 760, 1210, 1560];
 
-const RED = "#EF4444";
-const GREEN = "#24C78B";
-const AMBER = "#F5B84B";
+/* Signal aspects and the one warm accent, tuned for daylight paper. */
+const RED = "#E44D43";
+const GREEN = "#43866B";
+const AMBER = "#E8A33D";
 
-const STARS: [number, number, number, number][] = [
-  [64, 78, 1.1, 0.5],
-  [138, 42, 0.9, 0.35],
-  [212, 108, 1, 0.45],
-  [286, 56, 1.3, 0.6],
-  [352, 132, 0.8, 0.3],
-  [428, 74, 1, 0.4],
-  [498, 148, 1.2, 0.5],
-  [566, 48, 0.9, 0.35],
-  [642, 118, 1.1, 0.45],
-  [712, 62, 1, 0.4],
-  [788, 96, 1.4, 0.55],
-  [858, 38, 0.9, 0.3],
-  [928, 126, 1, 0.4],
-  [1004, 70, 1.2, 0.45],
-  [1074, 140, 0.8, 0.3],
-  [1148, 52, 1.1, 0.5],
-  [1218, 104, 1, 0.35],
-  [1288, 44, 1.3, 0.55],
-  [1352, 122, 0.9, 0.3],
-  [1428, 66, 1.1, 0.45],
-  [1498, 136, 1, 0.35],
-  [1564, 58, 1.2, 0.5],
-  [176, 168, 0.8, 0.25],
-  [1104, 190, 0.9, 0.25],
-];
 
 /** Chip anchor, leader point and label position for each component. */
 const HOTSPOTS: Record<
@@ -121,29 +91,24 @@ export function LiveSectionDiagram({
   hovered = "",
   onSelect,
   onHover,
-  theme: forcedTheme,
 }: {
   mode: InfraMode;
   selected: string;
   hovered?: string;
   onSelect: (key: string) => void;
   onHover?: (key: string) => void;
-  /** Overrides the page theme — the stage is a night panel in both themes. */
-  theme?: "light" | "dark";
 }) {
-  const { theme: pageTheme } = useTheme();
-  const theme = forcedTheme ?? pageTheme;
-  const P = theme === "dark" ? NIGHT_PALETTE : LIGHT_PALETTE;
+  const P = PLATE_PALETTE;
 
-  // Structural colours come from the palette; the accents stay constant so the
-  // lamps read the same on paper as at night.
+  // Structural colours come from the palette; only the signal lamps carry
+  // saturated colour, so the drawing reads as a printed engineering plate.
   const LINE = P.line;
   const LINE_SOFT = P.lineSoft;
   const BUILD = P.build;
   const BUILD_DARK = P.buildDark;
   const METAL = P.metal;
   const RAIL = P.rail;
-  const INK = theme === "dark" ? "#F4F5F3" : "#0E2233";
+  const INK = "#182B3A";
 
   const focusKey = hovered || selected;
   const nodeOf = (key: string) => infraNodes.find((node) => node.key === key);
@@ -273,20 +238,6 @@ export function LiveSectionDiagram({
             {/* ---------------------------------------------------------------- sky */}
             <rect width={WIDTH} height={HEIGHT} fill="url(#ls-sky)" rx="0" />
             <rect width={WIDTH} height={HEIGHT} fill="url(#ls-horizon)" />
-            {theme === "dark" ? (
-              <g aria-hidden pointerEvents="none">
-                {STARS.map(([x, y, r, o], index) => (
-                  <circle
-                    key={index}
-                    cx={x}
-                    cy={y}
-                    r={r}
-                    fill={INK}
-                    opacity={o}
-                  />
-                ))}
-              </g>
-            ) : null}
 
             {/* ------------------------------------------------------------ ridgeline */}
             <g aria-hidden pointerEvents="none">
