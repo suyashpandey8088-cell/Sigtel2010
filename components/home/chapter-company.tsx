@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { clientGroups, clients, company, whySigtel } from "@/lib/content/site";
-import { SectionHeading } from "@/components/ui/section-heading";
+import { EditorialHead } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/ui/reveal";
 import { ParallaxPlate } from "@/components/home/chapter-gallery";
 
@@ -41,31 +41,29 @@ export function ChapterCompany() {
   return (
     <section id="chapter-06" className="relative border-t border-line bg-white">
       <div className="edge section">
-        <SectionHeading
-          index="Chapter 06"
-          label="Company information"
-          title={["SMALL ENOUGH TO", "ANSWER THE PHONE."]}
-          description="Incorporated in 2010 and operating from inside the Belapur Railway Station building in Navi Mumbai. Two disciplines with equal depth, one team accountable for what it builds."
+        <EditorialHead
+          mark="06 — The company"
+          title={["Small enough to", "answer the phone."]}
+          deck="Incorporated in 2010 and working from inside the Belapur Railway Station building in Navi Mumbai. Two disciplines with equal depth, and one team accountable for what it builds."
+          className="pb-16"
         />
 
         {/* asymmetric spread: timeline + photograph */}
         <div className="mt-16 grid gap-12 lg:grid-cols-[1fr_0.85fr] lg:gap-16">
           <div>
-            <p className="label mb-8 text-tech">Company history</p>
+            <p className="mb-8 text-[0.86rem] text-tech">History</p>
             <ol className="relative">
               {timeline.map((item, index) => (
                 <Reveal key={item.title} delay={index * 0.05}>
                   <li className="group grid grid-cols-[auto_1fr] gap-5 border-t border-line py-6 last:border-b sm:gap-8">
                     <div className="w-[4.5rem] shrink-0">
-                      <span className="font-display text-[0.95rem] uppercase tracking-[0.02em] text-signal">
-                        {item.year}
-                      </span>
+                      <span className="text-[0.86rem] text-signal tabular">{item.year}</span>
                     </div>
                     <div>
-                      <h3 className="font-display text-[clamp(1.1rem,1.9vw,1.45rem)] uppercase leading-tight tracking-[-0.02em] text-eng">
+                      <h3 className="text-[clamp(1.1rem,1.7vw,1.34rem)] leading-snug text-eng">
                         {item.title}
                       </h3>
-                      <p className="mt-2 max-w-md text-[0.88rem] leading-relaxed text-muted">{item.body}</p>
+                      <p className="mt-2 max-w-[46ch] text-[0.9rem] leading-[1.65] text-muted">{item.body}</p>
                     </div>
                   </li>
                 </Reveal>
@@ -84,9 +82,9 @@ export function ChapterCompany() {
             />
             <Reveal>
               <div className="border-t border-line pt-5">
-                <p className="label-tight mb-3 text-tech">Office</p>
-                <p className="text-sm leading-relaxed text-muted">{company.address.office}</p>
-                <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 font-mono text-[10px] uppercase tracking-[0.1em]">
+                <p className="mb-3 text-[0.8rem] text-tech">Office</p>
+                <p className="text-[0.9rem] leading-relaxed text-muted">{company.address.office}</p>
+                <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-[0.88rem]">
                   <a href={company.phone.primaryHref} className="text-eng hover:text-signal">
                     {company.phone.primary}
                   </a>
@@ -102,7 +100,7 @@ export function ChapterCompany() {
 
         {/* operating principles — numbered, hairline-separated */}
         <div className="mt-20">
-          <p className="label mb-8 text-tech">How we work</p>
+          <p className="mb-8 text-[0.86rem] text-tech">How we work</p>
           <div className="grid border-t border-line md:grid-cols-2 xl:grid-cols-4">
             {whySigtel.map((item, index) => (
               <Reveal
@@ -112,13 +110,11 @@ export function ChapterCompany() {
                   index === 2 ? "md:border-t md:border-line xl:border-t-0" : ""
                 }`}
               >
-                <span className="font-mono text-[9px] tracking-[0.16em] text-signal">
+                <span className="text-[0.78rem] text-signal tabular">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <h3 className="mt-3 font-display text-[1.05rem] uppercase leading-tight tracking-[-0.01em] text-eng">
-                  {item.title}
-                </h3>
-                <p className="mt-2 text-[0.83rem] leading-relaxed text-muted">{item.body}</p>
+                <h3 className="mt-3 text-[1.05rem] leading-snug text-eng">{item.title}</h3>
+                <p className="mt-2 text-[0.86rem] leading-relaxed text-muted">{item.body}</p>
               </Reveal>
             ))}
           </div>
@@ -130,11 +126,11 @@ export function ChapterCompany() {
         <div className="edge py-14">
           <div className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
             <div>
-              <p className="label text-tech">Clients &amp; partners</p>
-              <p className="mt-4 max-w-xs font-display text-[clamp(1.35rem,2.2vw,1.85rem)] uppercase leading-[1.1] tracking-[-0.02em] text-eng">
+              <p className="text-[0.86rem] text-tech">Clients &amp; partners</p>
+              <p className="mt-4 max-w-[22ch] text-[clamp(1.45rem,2.2vw,1.9rem)] leading-[1.12] text-eng">
                 Eleven organisations, one standard of proof.
               </p>
-              <p className="mt-4 font-mono text-[9px] uppercase leading-relaxed tracking-[0.12em] text-tech">
+              <p className="mt-4 text-[0.82rem] leading-relaxed text-tech">
                 Client relationships as published by SIG-TEL. No logos are reproduced without permission.
               </p>
             </div>
@@ -142,12 +138,12 @@ export function ChapterCompany() {
               {clients.map((client, index) => (
                 <li key={client} className="group flex items-center justify-between gap-3 border-b border-line py-3.5 pr-3">
                   <span className="flex items-center gap-3">
-                    <span className="font-mono text-[8.5px] tracking-[0.14em] text-tech">
+                    <span className="text-[0.76rem] text-tech tabular">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <span className="text-[0.9rem] text-ink/85 transition-colors group-hover:text-eng">{client}</span>
                   </span>
-                  <span className="h-px w-3 bg-line-strong transition-all duration-500 group-hover:w-6 group-hover:bg-signal" />
+                  <span className="h-px w-3 bg-line-strong transition-all duration-500 group-hover:w-6 group-hover:bg-eng" />
                 </li>
               ))}
             </ul>
@@ -156,9 +152,9 @@ export function ChapterCompany() {
           <div className="mt-12 grid gap-px border-t border-line pt-8 sm:grid-cols-2 lg:grid-cols-5">
             {clientGroups.map((group) => (
               <div key={group.title} className="py-4 pr-4">
-                <p className="label-tight text-signal">{group.tag}</p>
-                <h4 className="mt-3 font-display text-[0.98rem] uppercase leading-tight text-eng">{group.title}</h4>
-                <p className="mt-2 text-[0.78rem] leading-relaxed text-muted">{group.body}</p>
+                <p className="text-[0.78rem] text-signal">{group.tag}</p>
+                <h4 className="mt-3 text-[1rem] leading-snug text-eng">{group.title}</h4>
+                <p className="mt-2 text-[0.82rem] leading-relaxed text-muted">{group.body}</p>
               </div>
             ))}
           </div>
@@ -174,11 +170,10 @@ export function ChapterCompany() {
           </p>
           <Link
             href="/about"
-            className="group inline-flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.18em] text-eng"
+            className="link-underline text-[0.9rem] text-eng"
             data-cursor-label="About"
           >
-            <span className="link-underline">Read the company profile</span>
-            <span className="h-px w-8 bg-signal transition-all duration-500 group-hover:w-12" />
+            Read the company profile
           </Link>
         </div>
       </div>

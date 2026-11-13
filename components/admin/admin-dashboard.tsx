@@ -131,9 +131,11 @@ export function AdminDashboard({
         <div>
           <div className="flex items-center gap-3">
             <span className="h-2 w-2 rounded-full bg-eng " />
-            <span className="label text-tech">Control room · {driver === "postgresql" ? "PostgreSQL" : "local store"}</span>
+            <span className="text-[0.84rem] text-tech">
+              Control room — {driver === "postgresql" ? "PostgreSQL" : "local store"}
+            </span>
           </div>
-          <h1 className="mt-3 font-display text-[clamp(1.8rem,3.4vw,2.8rem)] uppercase leading-none tracking-[-0.03em] text-ink">
+          <h1 className="mt-3 text-[clamp(1.9rem,3.4vw,2.7rem)] leading-[1.02] tracking-[-0.016em] text-ink">
             Admin dashboard
           </h1>
           <p className="mt-2 text-sm text-muted">
@@ -144,7 +146,7 @@ export function AdminDashboard({
           <Link href="/projects" className="btn !py-2.5 !px-4 text-[9px]">
             <span>View site</span>
           </Link>
-          <button type="button" onClick={logout} className="btn !py-2.5 !px-4 text-[9px]">
+          <button type="button" onClick={logout} className="btn !py-2 !px-4 !text-[0.82rem]">
             <span>Sign out</span>
           </button>
         </div>
@@ -164,42 +166,42 @@ export function AdminDashboard({
             onClick={() => setTab(item.id)}
             aria-pressed={tab === item.id}
             className={cn(
-              "px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] transition-colors",
+ "px-4 py-3 text-[0.86rem] transition-colors",
               tab === item.id ? "bg-eng text-white" : "text-muted hover:text-eng",
             )}
           >
             {item.label}
           </button>
         ))}
-        {notice ? <p className="ml-auto self-center font-mono text-[9px] uppercase tracking-[0.14em] text-eng">{notice}</p> : null}
+ {notice ? <p className="ml-auto self-center text-[0.8rem] text-eng">{notice}</p> : null}
       </div>
 
       {tab === "overview" ? (
         <div className="mt-8 grid gap-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat) => (
-              <div key={stat.label} className="border border-line bg-navy-800/40 p-5">
-                <p className="font-display text-4xl leading-none text-ink">{stat.value}</p>
-                <p className="mt-3 label-tight text-tech">{stat.label}</p>
+              <div key={stat.label} className="border-t border-line pt-4">
+                <p className="text-[2.1rem] leading-none text-ink tabular">{stat.value}</p>
+                <p className="mt-3 text-[0.84rem] text-tech">{stat.label}</p>
               </div>
             ))}
           </div>
 
-          <div className="border border-line">
+          <div className="border-t border-line">
             <div className="flex items-center justify-between border-b border-line px-5 py-3">
-              <p className="label text-tech">Latest enquiries</p>
-              <button type="button" onClick={() => setTab("enquiries")} className="label-tight text-eng hover:text-ink">
+              <p className="text-[0.86rem] text-tech">Latest enquiries</p>
+              <button type="button" onClick={() => setTab("enquiries")} className="text-[0.86rem] text-eng hover:text-ink">
                 All enquiries →
               </button>
             </div>
             {enquiries.slice(0, 5).map((enquiry) => (
               <div key={enquiry.id} className="flex flex-wrap items-center gap-4 border-b border-line px-5 py-3 last:border-0">
-                <span className={cn("border px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.16em]", statusStyle[enquiry.status])}>
+ <span className={cn("border px-2 py-0.5 text-[0.78rem] ", statusStyle[enquiry.status])}>
                   {enquiry.status}
                 </span>
                 <span className="text-sm text-ink/85">{enquiry.name}</span>
                 <span className="text-xs text-tech">{enquiry.category}</span>
-                <span className="ml-auto font-mono text-[9px] uppercase tracking-[0.12em] text-tech">
+ <span className="ml-auto text-[0.8rem] text-tech">
                   {formatDateTime(enquiry.createdAt)}
                 </span>
               </div>
@@ -214,7 +216,7 @@ export function AdminDashboard({
               { href: "/privacy", label: "Privacy policy", body: "How enquiry data is handled and retained." },
             ].map((item) => (
               <Link key={item.href} href={item.href} className="group border border-line p-5 transition-colors hover:border-ink/30">
-                <p className="label-tight text-eng">{item.label}</p>
+                <p className="text-[0.86rem] text-eng">{item.label}</p>
                 <p className="mt-2 text-sm leading-relaxed text-muted">{item.body}</p>
               </Link>
             ))}
@@ -223,10 +225,10 @@ export function AdminDashboard({
       ) : null}
 
       {tab === "enquiries" ? (
-        <div className="mt-8 border border-line">
+        <div className="mt-8 border-t border-line">
           <div className="hidden grid-cols-[2fr_1.4fr_1fr_0.8fr_0.9fr] gap-4 border-b border-line px-5 py-3 lg:grid">
             {["Contact", "Category", "Received", "Status", "Actions"].map((header) => (
-              <span key={header} className="label-tight text-tech">
+              <span key={header} className="text-[0.84rem] text-tech">
                 {header}
               </span>
             ))}
@@ -246,8 +248,8 @@ export function AdminDashboard({
                   <p className="text-xs text-ink/80">{enquiry.category}</p>
                   <p className="text-xs text-tech">{enquiry.location || "Location not given"}</p>
                 </div>
-                <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-tech">{formatDateTime(enquiry.createdAt)}</p>
-                <span className={cn("w-fit border px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.16em]", statusStyle[enquiry.status])}>
+ <p className="text-[0.8rem] text-tech">{formatDateTime(enquiry.createdAt)}</p>
+ <span className={cn("w-fit border px-2 py-0.5 text-[0.78rem] ", statusStyle[enquiry.status])}>
                   {enquiry.status}
                 </span>
                 <div className="flex flex-wrap gap-2">
@@ -255,7 +257,7 @@ export function AdminDashboard({
                     value={enquiry.status}
                     disabled={busy}
                     onChange={(event) => updateEnquiry(enquiry.id, event.target.value as Enquiry["status"])}
-                    className="border border-eng bg-eng px-2 py-1 font-mono text-[9px] uppercase tracking-[0.1em] text-white"
+ className="border border-eng bg-eng px-2 py-1 text-[0.8rem] text-white"
                     aria-label={`Status for ${enquiry.name}`}
                   >
                     {(["new", "read", "responded", "archived"] as const).map((status) => (
@@ -267,7 +269,7 @@ export function AdminDashboard({
                   <button
                     type="button"
                     onClick={() => setOpenEnquiry(openEnquiry === enquiry.id ? null : enquiry.id)}
-                    className="border border-line px-2 py-1 font-mono text-[9px] uppercase tracking-[0.1em] text-muted hover:text-ink"
+ className="border border-line px-2 py-1 text-[0.8rem] text-muted hover:text-ink"
                   >
                     {openEnquiry === enquiry.id ? "Hide" : "Read"}
                   </button>
@@ -279,14 +281,14 @@ export function AdminDashboard({
                   {enquiry.attachment ? (
                     <a
                       href={`/api/admin/enquiries/${enquiry.id}/attachment`}
-                      className="mt-3 inline-block border-b border-eng/40 pb-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-eng"
+ className="mt-3 inline-block border-b border-eng/40 pb-0.5 text-[0.8rem] text-eng"
                     >
                       Download attachment
                     </a>
                   ) : null}
                   <a
                     href={`mailto:${enquiry.email}?subject=Your%20SIG-TEL%20enquiry`}
-                    className="ml-4 mt-3 inline-block border-b border-line-strong pb-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted hover:text-ink"
+ className="ml-4 mt-3 inline-block border-b border-line-strong pb-0.5 text-[0.8rem] text-muted hover:text-ink"
                   >
                     Reply by email
                   </a>
@@ -305,7 +307,7 @@ export function AdminDashboard({
               {canEdit ? "Create, edit, publish or remove works in the register." : "Your role can view but not edit projects."}
             </p>
             {canEdit ? (
-              <button type="button" onClick={() => setEditing("new")} className="btn btn-solid !py-2.5 !px-4 text-[9px]">
+              <button type="button" onClick={() => setEditing("new")} className="btn btn-solid !py-2 !px-4 !text-[0.82rem]">
                 <span>New project</span>
               </button>
             ) : null}
@@ -320,10 +322,10 @@ export function AdminDashboard({
               onSubmit={saveProject}
             />
           ) : (
-            <div className="border border-line">
+            <div className="border-t border-line">
               <div className="hidden grid-cols-[2.4fr_1fr_0.8fr_0.7fr_1fr] gap-4 border-b border-line px-5 py-3 lg:grid">
                 {["Project", "Division", "Status", "Published", "Actions"].map((header) => (
-                  <span key={header} className="label-tight text-tech">
+                  <span key={header} className="text-[0.84rem] text-tech">
                     {header}
                   </span>
                 ))}
@@ -339,14 +341,14 @@ export function AdminDashboard({
                       {project.client} · {project.location}
                     </p>
                   </div>
-                  <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-muted">{project.division}</p>
-                  <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-muted">{project.status}</p>
+ <p className="text-[0.8rem] text-muted">{project.division}</p>
+ <p className="text-[0.8rem] text-muted">{project.status}</p>
                   <button
                     type="button"
                     onClick={() => canEdit && togglePublished(project)}
                     disabled={!canEdit || busy}
                     className={cn(
-                      "w-fit border px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.14em]",
+ "w-fit border px-2 py-0.5 text-[0.78rem] ",
                       project.published ? "border-eng/50 text-eng" : "border-line text-tech",
                     )}
                   >
@@ -355,7 +357,7 @@ export function AdminDashboard({
                   <div className="flex flex-wrap gap-2">
                     <Link
                       href={`/projects/${project.slug}`}
-                      className="border border-line px-2 py-1 font-mono text-[9px] uppercase tracking-[0.1em] text-muted hover:text-ink"
+ className="border border-line px-2 py-1 text-[0.8rem] text-muted hover:text-ink"
                     >
                       View
                     </Link>
@@ -364,14 +366,14 @@ export function AdminDashboard({
                         <button
                           type="button"
                           onClick={() => setEditing(project)}
-                          className="border border-line px-2 py-1 font-mono text-[9px] uppercase tracking-[0.1em] text-muted hover:text-ink"
+ className="border border-line px-2 py-1 text-[0.8rem] text-muted hover:text-ink"
                         >
                           Edit
                         </button>
                         <button
                           type="button"
                           onClick={() => deleteProject(project.id)}
-                          className="border border-signal/40 px-2 py-1 font-mono text-[9px] uppercase tracking-[0.1em] text-signal/80 hover:text-signal"
+ className="border border-signal/40 px-2 py-1 text-[0.8rem] text-signal/80 hover:text-signal"
                         >
                           Delete
                         </button>
@@ -418,8 +420,8 @@ function ProjectForm({
   return (
     <form onSubmit={handleSubmit} className="border border-line bg-navy-800/40 p-5">
       <div className="flex items-center justify-between border-b border-line pb-3">
-        <p className="label text-tech">{project ? `Editing · ${project.shortTitle}` : "New project"}</p>
-        <button type="button" onClick={onCancel} className="label-tight text-muted hover:text-ink">
+        <p className="text-[0.84rem] text-tech">{project ? `Editing · ${project.shortTitle}` : "New project"}</p>
+        <button type="button" onClick={onCancel} className="text-[0.86rem] text-muted hover:text-ink">
           Cancel
         </button>
       </div>
@@ -491,7 +493,7 @@ function ProjectForm({
           <button type="button" onClick={onCancel} className="btn !py-2.5 !px-4 text-[9px]">
             <span>Cancel</span>
           </button>
-          <button type="submit" disabled={busy} className="btn btn-solid !py-2.5 !px-4 text-[9px] disabled:opacity-60">
+          <button type="submit" disabled={busy} className="btn btn-solid !py-2 !px-4 !text-[0.82rem] disabled:opacity-60">
             <span>{busy ? "Saving…" : project ? "Save changes" : "Create project"}</span>
           </button>
         </div>
@@ -517,9 +519,9 @@ function Input({
 }) {
   return (
     <label className={cn("block", className)}>
-      <span className="field-label mb-1 block">{label}</span>
+      <span className="field-caption mb-1 block">{label}</span>
       <input className="field !py-2" name={name} defaultValue={defaultValue} required={required} />
-      {error ? <span className="mt-1 block font-mono text-[8px] uppercase tracking-[0.1em] text-signal">{error}</span> : null}
+ {error ? <span className="mt-1 block text-[0.78rem] text-signal">{error}</span> : null}
     </label>
   );
 }
@@ -537,7 +539,7 @@ function Select({
 }) {
   return (
     <label className="block">
-      <span className="field-label mb-1 block">{label}</span>
+      <span className="field-caption mb-1 block">{label}</span>
       <select className="field !py-2 bg-navy" name={name} defaultValue={defaultValue}>
         {options.map(([value, text]) => (
           <option key={value} value={value}>
@@ -566,9 +568,9 @@ function Textarea({
 }) {
   return (
     <label className={cn("block", className)}>
-      <span className="field-label mb-1 block">{label}</span>
+      <span className="field-caption mb-1 block">{label}</span>
       <textarea className="field !py-2 resize-y text-[0.85rem]" name={name} defaultValue={defaultValue} rows={rows} />
-      {error ? <span className="mt-1 block font-mono text-[8px] uppercase tracking-[0.1em] text-signal">{error}</span> : null}
+ {error ? <span className="mt-1 block text-[0.78rem] text-signal">{error}</span> : null}
     </label>
   );
 }

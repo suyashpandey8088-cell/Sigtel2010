@@ -6,7 +6,7 @@ import { PageHero } from "@/components/page/page-hero";
 import { LayerAccordion } from "@/components/page/layer-accordion";
 import { CtaBand } from "@/components/page/cta-band";
 import { ProjectCard } from "@/components/projects/project-card";
-import { SectionHeading } from "@/components/ui/section-heading";
+import { EditorialHead, LedgerHead } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/ui/reveal";
 import { Magnetic } from "@/components/ui/magnetic";
 import { telecomLayers } from "@/lib/content/site";
@@ -39,8 +39,6 @@ export default async function TelecomPage() {
   return (
     <>
       <PageHero
-        index="02.2"
-        eyebrow="Division 02 — Telecommunications"
         title={["NETWORKS THAT", "STAY UP WHEN", "IT MATTERS."]}
         description="Optical fibre, transmission, surveillance and voice for railways, oil & gas pipelines and industry — installed link by link, proven with OTDR traces and network tests, then maintained under long-term CAMC."
         image="/images/telecom-fibre.jpg"
@@ -57,8 +55,8 @@ export default async function TelecomPage() {
       <section className="relative border-t border-line bg-navy section">
         <div className="edge grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
           <div>
-            <span className="label text-eng">The discipline</span>
-            <h2 className="mt-6 font-display text-[clamp(1.9rem,3.6vw,3.2rem)] uppercase leading-[0.96] tracking-[-0.03em] text-eng">
+            <span className="text-[0.86rem] text-eng">The discipline</span>
+ <h2 className="mt-6 font-display text-[clamp(1.9rem,3.6vw,3.2rem)] leading-[1.0] tracking-[-0.016em] text-eng">
               The network behind the railway — and the pipeline.
             </h2>
             <div className="mt-6 space-y-4 text-[0.95rem] leading-relaxed text-muted">
@@ -82,7 +80,7 @@ export default async function TelecomPage() {
               ].map((item) => (
                 <Reveal key={item.title}>
                   <div className="h-full border-b border-line py-4 pr-4">
-                    <p className="font-display text-sm uppercase leading-tight text-eng">{item.title}</p>
+ <p className="text-sm leading-tight text-eng">{item.title}</p>
                     <p className="mt-2 text-[0.8rem] leading-relaxed text-tech">{item.body}</p>
                   </div>
                 </Reveal>
@@ -91,7 +89,7 @@ export default async function TelecomPage() {
           </div>
 
           <div>
-            <div className="relative aspect-[4/3] w-full overflow-hidden border border-line">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-navy-800">
               <Image
                 src="/images/radio-mast.jpg"
                 alt="Telecom lattice tower with microwave dish antennae in daylight"
@@ -101,11 +99,11 @@ export default async function TelecomPage() {
               />
             </div>
             <div className="mt-4 border-t border-line">
-              <p className="label py-3 text-tech">Network stack</p>
+              <p className="py-3 text-[0.84rem] text-tech">Network stack</p>
               <div className="divide-y divide-line border-t border-line">
                 {stack.map((row) => (
                   <div key={row.label} className="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3">
-                    <span className="w-16 shrink-0 font-mono text-[8.5px] uppercase tracking-[0.16em] text-signal">
+ <span className="w-16 shrink-0 text-[0.78rem] text-signal">
                       {row.label}
                     </span>
                     <span className="flex-1 text-[0.8rem] leading-relaxed text-ink/75">{row.items.join(" · ")}</span>
@@ -119,11 +117,10 @@ export default async function TelecomPage() {
 
       <section className="relative border-t border-line bg-navy-800/60 section">
         <div className="edge">
-          <SectionHeading
-            index="02.1"
-            label="Layer by layer"
+          <EditorialHead
+            mark="Layer by layer"
             title={["The telecom stack."]}
-            description="From the duct in the ground to the monitoring platform in the control room. Select a layer to see the scope and the evidence we hand over."
+            deck="From the duct in the ground to the monitoring platform in the control room. Select a layer to see the scope and the evidence we hand over."
             className="pb-10"
           />
           <LayerAccordion layers={telecomLayers} accent="telecom" />
@@ -133,7 +130,11 @@ export default async function TelecomPage() {
       <section className="relative border-t border-line bg-navy-800/60 section">
         <div className="edge">
           <div className="flex flex-col gap-6 pb-10 md:flex-row md:items-end md:justify-between">
-            <SectionHeading index="02.3" label="Telecom works" title={["Networks in service."]} />
+            <LedgerHead
+              title="Networks in service"
+              meta="Selected from the register"
+              className="w-full md:w-auto md:flex-1"
+            />
             <Magnetic>
               <Link href="/projects" className="btn" data-cursor-label="All work">
                 <span>All projects</span>
@@ -149,7 +150,6 @@ export default async function TelecomPage() {
       </section>
 
       <CtaBand
-        eyebrow="Telecom enquiry"
         title="A route to connect, a network to maintain?"
         body="Share the route, the stations or the pipeline section. We'll come back with the survey questions and the documentation we would hand over."
       />

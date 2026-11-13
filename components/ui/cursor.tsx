@@ -79,7 +79,7 @@ export function Cursor() {
         }}
       >
         {label ? (
-          <span className="label-tight px-2 text-center text-[7.5px] leading-tight text-eng">{label}</span>
+          <span className="px-2 text-center text-[0.7rem] leading-tight text-eng">{label}</span>
         ) : null}
       </div>
     </div>

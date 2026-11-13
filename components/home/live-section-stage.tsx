@@ -22,16 +22,16 @@ const LiveSectionScene = dynamic(
  * flashers and booms down once the section is being cleared.
  */
 const PHASES: { aspect: Aspect; gateDown: boolean; gate: string }[] = [
-  { aspect: "red", gateDown: false, gate: "Open to road · booms up" },
-  { aspect: "amber", gateDown: true, gate: "Warning · flashers on" },
-  { aspect: "green", gateDown: true, gate: "Closed to road · booms down" },
-  { aspect: "amber", gateDown: true, gate: "Warning · flashers on" },
+  { aspect: "red", gateDown: false, gate: "Open to road, booms up" },
+  { aspect: "amber", gateDown: true, gate: "Warning, flashers on" },
+  { aspect: "green", gateDown: true, gate: "Closed to road, booms down" },
+  { aspect: "amber", gateDown: true, gate: "Warning, flashers on" },
 ];
 
 const ASPECT_LABEL: Record<Aspect, string> = {
-  red: "Red · stop",
-  amber: "Amber · caution",
-  green: "Green · clear",
+  red: "Red, stop",
+  amber: "Amber, caution",
+  green: "Green, clear",
 };
 
 function hasWebGL(): boolean {
@@ -168,23 +168,19 @@ export function LiveSectionStage({
               mode === "signalling" ? "bg-signal" : "bg-clear",
             )}
           />
-          <span className="label-tight text-[8px] text-eng/80">
-            {meta.title} · live section
-          </span>
+          <span className="text-[0.78rem] text-eng/80">{meta.title} · live section</span>
           {showModel ? (
-            <span className="ml-1 border border-line px-1 py-px font-mono text-[7px] uppercase tracking-[0.18em] text-muted">
-              3D
-            </span>
+            <span className="ml-1 border border-line px-1.5 py-px text-[0.7rem] text-muted">3D</span>
           ) : null}
         </div>
 
         {showModel ? (
-          <span className="pointer-events-none absolute right-4 top-4 hidden font-mono text-[8px] uppercase tracking-[0.18em] text-muted sm:block">
-            Drag to orbit · scroll to zoom
+          <span className="pointer-events-none absolute right-4 top-4 hidden text-[0.78rem] text-muted sm:block">
+            Drag to orbit, scroll to zoom
           </span>
         ) : (
-          <span className="pointer-events-none absolute right-4 top-4 hidden font-mono text-[8px] uppercase tracking-[0.18em] text-muted sm:block">
-            Section elevation · not to scale
+          <span className="pointer-events-none absolute right-4 top-4 hidden text-[0.78rem] text-muted sm:block">
+            Section elevation, not to scale
           </span>
         )}
 
@@ -204,12 +200,10 @@ export function LiveSectionStage({
                         : "bg-clear",
                   )}
                 />
-                <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted">
-                  Aspect
-                </span>
+                <span className="text-[0.78rem] text-muted">Aspect</span>
                 <span
                   className={cn(
-                    "font-mono text-[10px] uppercase tracking-[0.12em]",
+                    "text-[0.82rem]",
                     current.aspect === "red"
                       ? "text-signal"
                       : current.aspect === "amber"
@@ -222,32 +216,28 @@ export function LiveSectionStage({
               </span>
               <span className="hidden h-3 w-px bg-line sm:block" />
               <span className="flex items-center gap-2">
-                <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted">
-                  LC gate
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink/80">
-                  {current.gate}
-                </span>
+                <span className="text-[0.78rem] text-muted">Level crossing</span>
+                <span className="text-[0.82rem] text-ink/80">{current.gate}</span>
               </span>
             </div>
           </div>
         ) : null}
 
         {showModel ? (
-          <span className="pointer-events-none absolute bottom-4 right-4 hidden font-mono text-[8px] uppercase tracking-[0.18em] text-muted sm:block">
-            Model · not to scale
+          <span className="pointer-events-none absolute bottom-4 right-4 hidden text-[0.78rem] text-muted sm:block">
+            Model, not to scale
           </span>
         ) : null}
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line px-4 py-2.5">
-        <span className="label-tight text-[8px] text-muted">
+        <span className="text-[0.8rem] text-muted">
           {showModel
-            ? "Select a component · camera follows"
-            : "Select a numbered component · or use the index"}
+            ? "Select a component — the camera follows"
+            : "Select a numbered component, or use the index"}
         </span>
-        <span className="label-tight text-[8px] text-tech">
-          {showModel ? "Orbit · zoom · not to scale" : "Drawing · not to scale"}
+        <span className="text-[0.8rem] text-tech">
+          {showModel ? "Orbit, zoom, not to scale" : "Drawing, not to scale"}
         </span>
       </div>
     </div>

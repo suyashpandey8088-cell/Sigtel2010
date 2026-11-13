@@ -61,7 +61,7 @@ export function SiteHeader() {
         className={cn(
           "fixed inset-x-0 top-0 z-[100] transition-all duration-500 ease-engineering",
           scrolled
-            ? "border-b border-line bg-white/90 backdrop-blur-xl"
+            ? "border-b border-line bg-navy/85 backdrop-blur-xl"
             : "border-b border-transparent",
         )}
       >
@@ -78,7 +78,7 @@ export function SiteHeader() {
                   href={item.href}
                   data-active={active}
                   className={cn(
-                    "link-underline font-mono text-[10.5px] uppercase tracking-[0.16em] transition-colors duration-300",
+                    "link-underline text-[0.92rem] transition-colors duration-300",
                     active ? "text-eng" : "text-muted hover:text-eng",
                   )}
                 >
@@ -92,13 +92,13 @@ export function SiteHeader() {
             <HideOnAdmin>
               <a
                 href="tel:+919320001996"
-                className="hidden font-mono text-[10.5px] uppercase tracking-[0.14em] text-eng transition-colors hover:text-signal xl:block"
+                className="link-underline hidden text-[0.9rem] text-eng xl:block"
               >
                 +91 93200 01996
               </a>
               <Link
                 href="/contact"
-                className="btn hidden !px-5 !py-[0.78rem] md:inline-flex"
+                className="btn hidden !px-5 !py-[0.7rem] md:inline-flex"
                 data-cursor-label="Enquire"
               >
                 <span>Discuss a project</span>
@@ -114,7 +114,7 @@ export function SiteHeader() {
               aria-expanded={open}
               aria-controls="site-menu"
               aria-label={open ? "Close menu" : "Open menu"}
-              className="group relative flex h-11 w-11 items-center justify-center border border-line-strong transition-colors hover:border-eng"
+              className="group relative flex h-10 w-10 items-center justify-center"
               data-cursor-label={open ? "Close" : "Menu"}
             >
               <span className="relative block h-[9px] w-[18px]">

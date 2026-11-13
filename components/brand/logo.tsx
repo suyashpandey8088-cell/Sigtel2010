@@ -2,8 +2,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 /**
- * Wordmark. A three-lamp signal is drawn as a vertical stack of hairlines —
- * read as a signal head and as a technical mark, without a glow.
+ * Wordmark. A single signal lamp inside a hairline ring — the one piece of
+ * drawing left in the chrome. Everything else about the identity is type.
  */
 export function Logo({
   className,
@@ -21,28 +21,22 @@ export function Logo({
       className={cn("group flex items-center gap-3", className)}
     >
       <span
-        className="relative flex h-[34px] w-[17px] flex-col items-center justify-between py-[3px]"
+        className="relative flex h-[17px] w-[17px] items-center justify-center"
         aria-hidden
       >
-        <span className="h-[6px] w-[6px] rounded-full bg-signal" />
+        {/* one lamp, held in a hairline ring — the mark, not an illustration */}
         <span
           className={cn(
-            "h-[6px] w-[6px] rounded-full",
-            tone === "paper" ? "bg-white/30" : "bg-ink/15",
+            "absolute inset-0 rounded-full border",
+            tone === "paper" ? "border-white/40" : "border-eng/45",
           )}
         />
-        <span className="h-[6px] w-[6px] rounded-full bg-clear" />
-        <span
-          className={cn(
-            "absolute -left-[7px] top-0 h-full w-px",
-            tone === "paper" ? "bg-white/30" : "bg-line-strong",
-          )}
-        />
+        <span className="h-[5px] w-[5px] rounded-full bg-signal" />
       </span>
       <span className="flex flex-col leading-none">
         <span
           className={cn(
-            "font-display text-[1.22rem] font-semibold tracking-[0.01em]",
+            "text-[1.16rem] font-medium tracking-[-0.01em]",
             tone === "paper" ? "text-white" : "text-eng",
           )}
         >
@@ -51,11 +45,11 @@ export function Logo({
         {!compact ? (
           <span
             className={cn(
-              "mt-[7px] font-mono text-[8px] uppercase tracking-[0.26em]",
+                "mt-[5px] text-[0.74rem]",
               tone === "paper" ? "text-white/60" : "text-muted",
             )}
           >
-            Signals &amp; Telecom
+            Signalling &amp; telecom
           </span>
         ) : null}
       </span>

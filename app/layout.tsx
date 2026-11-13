@@ -1,13 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import "@fontsource/space-grotesk/400.css";
-import "@fontsource/space-grotesk/500.css";
-import "@fontsource/space-grotesk/600.css";
-import "@fontsource/inter/300.css";
-import "@fontsource/inter/400.css";
-import "@fontsource/inter/500.css";
+import "@fontsource/instrument-serif/400.css";
+import "@fontsource/instrument-serif/400-italic.css";
+import "@fontsource/inter-tight/300.css";
+import "@fontsource/inter-tight/400.css";
+import "@fontsource/inter-tight/500.css";
+import "@fontsource/inter-tight/600.css";
 import "@fontsource/ibm-plex-mono/400.css";
-import "@fontsource/ibm-plex-mono/500.css";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
@@ -117,7 +116,7 @@ export default function RootLayout({
         <HydrationFlag />
         <OrganizationSchema />
         <style>{`
-          .skip-link{position:fixed;top:-100px;left:1rem;z-index:200;background:#183B56;color:#FFFFFF;padding:0.85rem 1.2rem;font-family:"IBM Plex Mono",monospace;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;transition:top .2s ease}
+ .skip-link{position:fixed;top:-100px;left:1rem;z-index:200;background:#183B56;color:#FFFFFF;padding:0.85rem 1.2rem;font-family:"IBM Plex Mono",monospace;font-size:0.72rem;letter-spacing:0.14em;text-transform:;transition:top .2s ease}
           .skip-link:focus{top:0.75rem}
         `}</style>
       </body>
