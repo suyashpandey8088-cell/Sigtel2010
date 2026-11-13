@@ -7,52 +7,60 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, useReducedMotion } from "framer-motion";
 import { Magnetic } from "@/components/ui/magnetic";
+import { cn } from "@/lib/utils";
 
-const headline = ["ENGINEERING", "THE SYSTEMS THAT", "KEEP INDIA", "MOVING."];
+const headline = [
+  { text: "ENGINEERING THE", className: "" },
+  { text: "NETWORKS THAT KEEP", className: "" },
+  { text: "RAILWAYS MOVING.", className: "" },
+];
+
+/* Camera annotations printed around the photograph — technical labels, not
+   marketing. Each is tied to something visible in the frame. */
+const annotations = [
+  { id: "01", label: "OHE portal · 25 kV", className: "left-4 top-4", align: "left" as const },
+  { id: "02", label: "4-aspect colour-light signal", className: "right-4 top-4", align: "right" as const },
+  { id: "03", label: "Track formation · ballast shoulder", className: "bottom-16 left-4", align: "left" as const },
+  { id: "04", label: "Cable route · duct in cess", className: "bottom-16 right-4", align: "right" as const },
+];
 
 export function Hero() {
   const root = useRef<HTMLDivElement>(null);
+  const frame = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const captionRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
   useEffect(() => {
     if (reduced) return;
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
-      gsap.to(imageRef.current, {
-        yPercent: 12,
-        scale: 1.12,
-        ease: "none",
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: root.current,
           start: "top top",
-          end: "bottom top",
-          scrub: true,
+          end: "bottom bottom",
+          scrub: 0.6,
         },
       });
-      gsap.to(contentRef.current, {
-        y: -70,
-        opacity: 0.25,
-        ease: "none",
-        scrollTrigger: {
-          trigger: root.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
+
+      // the camera pushes in on the infrastructure while the headline steps back
+      tl.to(imageRef.current, { scale: 1.24, ease: "none" }, 0);
+      tl.to(captionRef.current, { yPercent: -18, opacity: 0.35, ease: "none" }, 0);
+      tl.to(contentRef.current, { yPercent: -7, opacity: 0.15, ease: "none" }, 0);
+      tl.to(frame.current, { inset: 0, ease: "none" }, 0);
     }, root);
     return () => ctx.revert();
   }, [reduced]);
 
+  // a very small pointer parallax on the photograph keeps the hero alive
   useEffect(() => {
     const el = root.current;
-    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
-      return;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const onMove = (event: MouseEvent) => {
-      const x = (event.clientX / window.innerWidth - 0.5) * 22;
-      const y = (event.clientY / window.innerHeight - 0.5) * 14;
+      const x = (event.clientX / window.innerWidth - 0.5) * 14;
+      const y = (event.clientY / window.innerHeight - 0.5) * 10;
       if (imageRef.current) {
         imageRef.current.style.setProperty("--px", `${x}px`);
         imageRef.current.style.setProperty("--py", `${y}px`);
@@ -62,211 +70,173 @@ export function Hero() {
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
-  // Night at the top of the page, paper the moment you scroll: the hero keeps
-  // its photograph by staying dark, and the content below lives in the light.
   return (
     <section
       ref={root}
-      className="theme-night relative min-h-[100svh] w-full overflow-hidden bg-navy"
+      className="relative w-full bg-navy"
       aria-label="Introduction"
+      style={{ height: "168svh" }}
     >
-      <div
-        ref={imageRef}
-        className="absolute inset-[-6%] will-change-transform"
-        style={{ translate: "var(--px, 0) var(--py, 0)" }}
-      >
-        <Image
-          src="/images/hero-railway.jpg"
-          alt="Railway tracks, signals and overhead electrification at dusk in India"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center opacity-100 dark:opacity-[0.78]"
-        />
-      </div>
-      <div className="absolute inset-0 hero-scrim" aria-hidden />
-      <div className="absolute inset-0 grid-blueprint opacity-30" aria-hidden />
-      <div className="absolute inset-0 scanlines opacity-[0.18]" aria-hidden />
+      <div className="sticky top-0 flex h-[100svh] w-full flex-col overflow-hidden">
+        {/* faint engineering grid behind the composition */}
+        <div className="pointer-events-none absolute inset-0 grid-blueprint opacity-60" aria-hidden />
 
-      {/* frame */}
-      <div
-        className="pointer-events-none absolute inset-x-4 bottom-4 top-[calc(var(--header-h)+1rem)] border border-ink/[0.08] sm:inset-x-6"
-        aria-hidden
-      />
-
-      <div className="edge relative flex min-h-[100svh] flex-col justify-between pb-8 pt-[calc(var(--header-h)+3rem)]">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.8 }}
-          className="flex flex-wrap items-center justify-between gap-4"
-        >
-          <div className="flex items-center gap-3">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-eng opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-eng" />
+        <div className="edge relative flex h-full flex-col pt-[calc(var(--header-h)+1.9rem)]">
+          {/* meta rule */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.25, duration: 0.9 }}
+            className="flex items-center justify-between gap-4 border-b border-line pb-3"
+          >
+            <span className="label-tight flex items-center gap-2.5 text-muted">
+              <span className="h-[5px] w-[5px] rounded-full bg-signal" />
+              Railway signalling · Telecommunications · Est. 2010
             </span>
-            <span className="label-tight text-ink/70">
-              Systems live · Signalling &amp; telecom
+            <span className="label-tight hidden text-tech md:block">
+              19.0206° N / 73.0387° E — Navi Mumbai
             </span>
-          </div>
-          <span className="label-tight hidden text-ink/50 md:block">
-            19.0206° N / 73.0387° E — Navi Mumbai
-          </span>
-        </motion.div>
+          </motion.div>
 
-        <div ref={contentRef} className="relative">
-          <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div>
+          {/* headline */}
+          <div ref={contentRef} className="pt-[clamp(1.4rem,3.4vh,3rem)] will-change-transform">
+            <h1 className="font-display text-[clamp(2.2rem,min(6.6vw,9.2vh),7rem)] uppercase leading-[0.92] tracking-[-0.045em] text-eng">
+              {headline.map((line, index) => (
+                <span key={line.text} className="mask-line">
+                  <motion.span
+                    className="block"
+                    initial={{ y: "112%" }}
+                    animate={{ y: "0%" }}
+                    transition={{
+                      duration: 1.25,
+                      delay: 0.15 + index * 0.09,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                  >
+                    {index === 2 ? (
+                      <>
+                        RAILWAYS <span className="text-ink">MOVING.</span>
+                      </>
+                    ) : (
+                      line.text
+                    )}
+                  </motion.span>
+                </span>
+              ))}
+            </h1>
+
+            <div className="mt-6 flex flex-col gap-5 border-t border-line pt-5 md:flex-row md:items-center md:justify-between md:gap-10">
               <motion.p
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                className="label mb-6 flex items-center gap-3 text-eng"
+                transition={{ delay: 0.55, duration: 0.9 }}
+                className="max-w-[26rem] text-[0.95rem] leading-relaxed text-muted"
               >
-                <span className="h-px w-10 bg-eng/60" />
-                Railway signalling · Telecommunications · Est. 2010
-              </motion.p>
-
-              <h1 className="font-display text-display-xl uppercase text-ink">
-                {headline.map((line, index) => (
-                  <span key={line} className="mask-line">
-                    <motion.span
-                      className="block"
-                      initial={{ y: "115%" }}
-                      animate={{ y: "0%" }}
-                      transition={{
-                        duration: 1.15,
-                        delay: 0.62 + index * 0.11,
-                        ease: [0.16, 1, 0.3, 1],
-                      }}
-                    >
-                      {index === 2 ? (
-                        <>
-                          KEEP <span className="text-eng">INDIA</span>
-                        </>
-                      ) : (
-                        line
-                      )}
-                    </motion.span>
-                  </span>
-                ))}
-              </h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2, duration: 0.9 }}
-                className="mt-7 max-w-xl text-[0.98rem] leading-relaxed text-muted"
-              >
-                Integrated railway signalling and telecommunications solutions
-                engineered for dependable infrastructure, operational efficiency
-                and a connected railway future.
+                Specialists in railway signalling, telecommunications and
+                infrastructure engineering.
               </motion.p>
 
               <motion.div
-                initial={{ opacity: 0, y: 18 }}
+                initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.32, duration: 0.9 }}
-                className="mt-9 flex flex-wrap items-center gap-4"
+                transition={{ delay: 0.65, duration: 0.9 }}
+                className="flex flex-wrap items-center gap-3"
               >
                 <Magnetic>
-                  <Link
-                    href="/infrastructure"
-                    className="btn btn-solid"
-                    data-cursor-label="Explore"
-                  >
-                    <span>Explore our capabilities</span>
-                    <svg
-                      width="16"
-                      height="10"
-                      viewBox="0 0 16 10"
-                      fill="none"
-                      aria-hidden
-                    >
-                      <path
-                        d="M0 5h13M9 1l4 4-4 4"
-                        stroke="currentColor"
-                        strokeWidth="1.2"
-                      />
+                  <Link href="/infrastructure" className="btn btn-solid" data-cursor-label="Enter">
+                    <span>Explore capabilities</span>
+                    <svg width="15" height="9" viewBox="0 0 15 9" fill="none" aria-hidden>
+                      <path d="M0 4.5h13M9.5 1L13 4.5 9.5 8" stroke="currentColor" strokeWidth="1.1" />
                     </svg>
                   </Link>
                 </Magnetic>
                 <Magnetic>
-                  <Link
-                    href="/contact"
-                    className="btn"
-                    data-cursor-label="Enquire"
-                  >
+                  <Link href="/contact" className="btn" data-cursor-label="Enquire">
                     <span>Discuss a project</span>
                   </Link>
                 </Magnetic>
               </motion.div>
             </div>
+          </div>
 
-            {/* signal stack */}
-            <motion.div
-              initial={{ opacity: 0, x: 24 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1.0, duration: 1 }}
-              className="mb-2 hidden w-[168px] shrink-0 lg:block"
-              aria-hidden
-            >
-              <div className="corner-ticks border border-ink/10 bg-navy-900/60 p-4 backdrop-blur-sm">
-                <p className="label-tight mb-3 text-[8px] text-tech">
-                  Signal S-23 · 4 aspect
-                </p>
-                <div className="mx-auto flex w-[52px] flex-col gap-2 rounded-sm border border-ink/10 bg-navy-900/80 p-2">
-                  <span className="mx-auto h-[18px] w-[18px] rounded-full bg-signal shadow-[0_0_22px_rgba(239,68,68,0.85)]" />
-                  <span className="mx-auto h-[18px] w-[18px] rounded-full bg-ink/[0.07]" />
-                  <span className="mx-auto h-[18px] w-[18px] rounded-full bg-eng/90 shadow-[0_0_18px_rgba(36,199,139,0.55)]" />
-                  <span className="mx-auto h-[12px] w-[12px] rounded-full bg-ink/[0.05]" />
-                </div>
-                <div className="mt-3 space-y-1 font-mono text-[8px] uppercase tracking-[0.16em] text-tech">
-                  <p className="flex justify-between">
-                    <span>Route</span> <span className="text-eng">Set</span>
-                  </p>
-                  <p className="flex justify-between">
-                    <span>Track cct</span>{" "}
-                    <span className="text-eng">Clear</span>
-                  </p>
-                  <p className="flex justify-between">
-                    <span>LC gate</span>{" "}
-                    <span className="text-signal">Closed</span>
-                  </p>
+          {/* photographic frame — the scroll camera pushes into this */}
+          <div className="relative mt-[clamp(1.1rem,2.6vh,2.2rem)] min-h-[26svh] flex-1 pb-6">
+            <div ref={frame} className="absolute inset-x-0 bottom-6 top-0 overflow-hidden bg-navy-800">
+              <motion.div
+                ref={imageRef}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute inset-0 origin-[50%_58%] will-change-transform"
+                style={{ translate: "var(--px, 0) var(--py, 0)" }}
+              >
+                <Image
+                  src="/images/hero-daylight.jpg"
+                  alt="Electrified railway tracks, overhead equipment and a colour-light signal in clear daylight"
+                  fill
+                  priority
+                  sizes="100vw"
+                  className="object-cover object-[center_58%]"
+                />
+              </motion.div>
+
+              {/* a paper scrim only at the very bottom, so annotations stay legible */}
+              <div
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white/45 to-transparent"
+                aria-hidden
+              />
+
+              <div ref={captionRef} className="absolute inset-0">
+                {annotations.map((note) => (
+                  <div
+                    key={note.id}
+                    className={cn(
+                      "absolute hidden items-center gap-3 md:flex",
+                      note.align === "right" && "flex-row-reverse",
+                      note.className,
+                    )}
+                  >
+                    <span className="crosshair shrink-0" aria-hidden />
+                    <span className="plate flex items-center gap-2 px-2.5 py-1.5">
+                      <span className="font-mono text-[8px] tracking-[0.14em] text-signal">{note.id}</span>
+                      <span className="font-mono text-[8px] uppercase tracking-[0.16em] text-eng/85">
+                        {note.label}
+                      </span>
+                    </span>
+                  </div>
+                ))}
+
+                <div className="absolute bottom-0 left-0 right-0 flex items-end justify-between gap-4 px-4 pb-3">
+                  <span className="plate px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.18em] text-eng/80">
+                    Fig. 01 — Section: double line, daylight survey
+                  </span>
+                  <span className="plate hidden px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.18em] text-eng/80 sm:block">
+                    Scale 1:200 · not to scale
+                  </span>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
-        </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 1 }}
-          className="mt-10 flex flex-wrap items-end justify-between gap-6 border-t border-ink/10 pt-5"
-        >
-          <div className="flex items-center gap-3 text-tech">
-            <span className="relative flex h-9 w-5 items-start justify-center overflow-hidden rounded-full border border-ink/20">
-              <motion.span
-                className="mt-1 h-1.5 w-1.5 rounded-full bg-eng"
-                animate={{ y: [0, 16, 0] }}
-                transition={{
-                  duration: 2.4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
+          {/* scroll cue */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.1, duration: 1 }}
+            className="flex items-center justify-between gap-4 border-t border-line py-3.5"
+          >
+            <span className="flex items-center gap-3">
+              <span className="relative flex h-8 w-[14px] items-start justify-center overflow-hidden rounded-full border border-line-strong">
+                <span className="mt-1 h-[3px] w-[3px] animate-scroll-cue rounded-full bg-signal" />
+              </span>
+              <span className="label-tight text-[9px] text-muted">Scroll to advance the section</span>
             </span>
-            <span className="label-tight text-[9px] text-ink/50">
-              Scroll to enter the system
+            <span className="hidden gap-6 font-mono text-[8.5px] uppercase tracking-[0.2em] text-tech sm:flex">
+              <span>EI · LC gates · Axle counters</span>
+              <span className="hidden md:inline">IP-MPLS · SDH · OFC · CCTV</span>
             </span>
-          </div>
-          <div className="flex flex-wrap gap-x-8 gap-y-2 font-mono text-[9px] uppercase tracking-[0.22em] text-ink/40">
-            <span>EI · LC gates · Axle counters</span>
-            <span className="hidden sm:inline">IP-MPLS · SDH · OFC · CCTV</span>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

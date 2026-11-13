@@ -13,7 +13,7 @@ export function LayerAccordion({
   accent?: "signalling" | "telecom";
 }) {
   const [open, setOpen] = useState<string>(layers[1]?.level ?? layers[0].level);
-  const dot = accent === "telecom" ? "bg-eng" : "bg-signal";
+  const dot = accent === "telecom" ? "bg-clear" : "bg-signal";
 
   return (
     <div className="border-t border-line">
@@ -25,19 +25,19 @@ export function LayerAccordion({
               type="button"
               onClick={() => setOpen(isOpen ? "" : layer.level)}
               aria-expanded={isOpen}
-              className="group flex w-full items-center gap-4 py-5 text-left md:gap-6"
+              className="group flex w-full items-center gap-4 py-5 text-left transition-colors md:gap-6"
             >
               <span className="font-mono text-[10px] tracking-[0.18em] text-tech">{layer.level}</span>
               <span
                 className={cn(
                   "h-[5px] w-[5px] rounded-full transition-all duration-300",
-                  isOpen ? `${dot} shadow-[0_0_10px_currentColor]` : "bg-ink/20",
+                  isOpen ? dot : "bg-ink/20",
                 )}
               />
               <span
                 className={cn(
                   "flex-1 font-display text-[clamp(1.15rem,2.4vw,1.9rem)] uppercase leading-tight tracking-[-0.02em] transition-colors",
-                  isOpen ? "text-ink" : "text-ink/70 group-hover:text-ink",
+                  isOpen ? "text-eng" : "text-ink/65 group-hover:text-eng",
                 )}
               >
                 {layer.title}

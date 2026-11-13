@@ -8,6 +8,7 @@ export interface InfraNode {
   purpose: string;
   capability: string;
   tags: string[];
+  /** position and anchor are in plate coordinates, kept for reference */
   position: [number, number, number];
   anchor: [number, number, number];
 }
@@ -143,11 +144,11 @@ export const modeMeta: Record<InfraMode, { title: string; blurb: string; accent:
   signalling: {
     title: "Signalling mode",
     blurb: "Interlocking, signals, detection and protection — the layer that proves it is safe to move.",
-    accent: "#EF4444",
+    accent: "#E44D43",
   },
   telecom: {
     title: "Telecommunication mode",
     blurb: "Fibre, radio, surveillance and monitoring — the layer that keeps operations connected.",
-    accent: "#24C78B",
+    accent: "#43866B",
   },
 };

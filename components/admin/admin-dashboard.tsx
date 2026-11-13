@@ -130,7 +130,7 @@ export function AdminDashboard({
       <div className="flex flex-col gap-6 border-b border-line pb-6 md:flex-row md:items-end md:justify-between">
         <div>
           <div className="flex items-center gap-3">
-            <span className="h-2 w-2 rounded-full bg-eng shadow-[0_0_10px_rgba(36,199,139,0.9)]" />
+            <span className="h-2 w-2 rounded-full bg-eng " />
             <span className="label text-tech">Control room · {driver === "postgresql" ? "PostgreSQL" : "local store"}</span>
           </div>
           <h1 className="mt-3 font-display text-[clamp(1.8rem,3.4vw,2.8rem)] uppercase leading-none tracking-[-0.03em] text-ink">
@@ -165,7 +165,7 @@ export function AdminDashboard({
             aria-pressed={tab === item.id}
             className={cn(
               "px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] transition-colors",
-              tab === item.id ? "bg-ink text-navy-900" : "text-muted hover:text-ink",
+              tab === item.id ? "bg-eng text-white" : "text-muted hover:text-eng",
             )}
           >
             {item.label}
@@ -255,7 +255,7 @@ export function AdminDashboard({
                     value={enquiry.status}
                     disabled={busy}
                     onChange={(event) => updateEnquiry(enquiry.id, event.target.value as Enquiry["status"])}
-                    className="border border-line bg-navy px-2 py-1 font-mono text-[9px] uppercase tracking-[0.1em] text-ink"
+                    className="border border-eng bg-eng px-2 py-1 font-mono text-[9px] uppercase tracking-[0.1em] text-white"
                     aria-label={`Status for ${enquiry.name}`}
                   >
                     {(["new", "read", "responded", "archived"] as const).map((status) => (
@@ -476,7 +476,7 @@ function ProjectForm({
         <Textarea
           label="Images (one path per line)"
           name="images"
-          defaultValue={(project?.images ?? ["/images/hero-railway.jpg"]).join("\n")}
+          defaultValue={(project?.images ?? ["/images/hero-daylight.jpg"]).join("\n")}
           rows={4}
           error={field("images")}
         />
@@ -484,7 +484,7 @@ function ProjectForm({
 
       <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-4">
         <label className="flex items-center gap-3 text-sm text-muted">
-          <input type="checkbox" name="published" defaultChecked={project?.published ?? true} className="h-3.5 w-3.5 accent-[#24C78B]" />
+          <input type="checkbox" name="published" defaultChecked={project?.published ?? true} className="h-3.5 w-3.5 accent-[#183B56]" />
           Published on the website
         </label>
         <div className="flex gap-2">

@@ -1,82 +1,13 @@
-"use client";
-
 /**
- * Inline theme resolution for the plate.
+ * SIG-TEL live-section plate palette — daylight only.
  *
- * The drawing's palette is chosen in CSS, but `stopColor`/`fill` attributes
- * cannot read custom properties inside SVG gradients reliably across browsers,
- * so the plate resolves the tokens it needs from the cascade once, before it
- * paints, and falls back to the night palette if it is rendered somewhere with
- * no document (tests, SSR strings).
+ * The drawing is printed on warm paper, in engineering blue ink, with the
+ * signal lamps as the only saturated colour. Values are literal hexes because
+ * SVG gradient stops cannot reliably read custom properties, so they are
+ * declared once here and shared by every drawing surface.
  */
 
-const NIGHT = {
-  skyTop: "#04090f",
-  skyMid: "#08131f",
-  skyLow: "#0d1f2e",
-  horizon: "#1b3b4a",
-  groundTop: "#0b1826",
-  groundLow: "#050b12",
-  fore: "#03070c",
-  haze: "#16303f",
-  ridge: "#0a1825",
-  ridge2: "#0b1b29",
-  hillGlow: "#F5B84B",
-  ballastBase: "#16222e",
-  ballastSpeck: ["#263744", "#2b3d4c", "#1f2f3c", "#22323f"],
-  sleeperRear: "#1d2c3a",
-  sleeperFront: "#222f3d",
-  railGlow: "#d7e2ec",
-  trough: "#121d28",
-  troughLid: "#1e2d3a",
-  build: "#182b3d",
-  buildDark: "#0e1b27",
-  buildRoof: "#1c2f43",
-  buildPanel: "#0b1824",
-  metal: "#6f8497",
-  rail: "#9fb0c2",
-  railSoft: "#7c8fa2",
-  line: "#345069",
-  lineSoft: "#263947",
-  lineMid: "#3c5364",
-  steel: "#1d3040",
-  pole: "#1b2c3d",
-  copper: "#b7834d",
-  board: "#d3dee8",
-  boardInk: "#7f93a6",
-  road: "#12202c",
-  roadEdge: "#26333f",
-  roadLine: "#2b3a47",
-  deck: "#1d2b39",
-  deckEdge: "#2f4356",
-  deckRib: "#3a4f63",
-  cabinet: "#182634",
-  chip: "#071320",
-  chipActive: "#0c1a26",
-  chipInk: "#8397aa",
-  void: "#0a1621",
-  lens: "#243444",
-  lattice: "#3d566c",
-  antenna: "#243746",
-  sand: "#f5b84b",
-  fog: "#16303f",
-  ballastInk: "#101c27",
-  cessInk: "#0f1b26",
-  sleeperHatch: "#22303d",
-  headLens: "#0b1723",
-  headRim: "#263949",
-  hood: "#1d2c3c",
-  plate: "#0d1a26",
-  wire: "#5c7386",
-  dropper: "#4f6477",
-  mastFill: "#20323f",
-  mastFoot: "#1b2b37",
-  lensGlow: "#7fd6ff",
-  mastBand: "#22364a",
-  lampPole: "#243746",
-};
-
-const LIGHT = {
+const PLATE = {
   skyTop: "#fbf8f2",
   skyMid: "#f6f2e9",
   skyLow: "#efe9dc",
@@ -142,23 +73,11 @@ const LIGHT = {
   lampPole: "#9aa3aa",
 };
 
-export type PlatePalette = typeof NIGHT;
+export type PlatePalette = typeof PLATE;
 
-/**
- * Resolves the palette for the active theme. Called during render; the
- * attribute is already on <html> by then (it is set pre-paint), so this is
- * correct on the first client render as well as after a toggle.
- */
-export function platePalette(theme?: string): PlatePalette {
-  if (theme === "dark") return NIGHT;
-  if (typeof document === "undefined") return LIGHT;
-  const attr = document.documentElement.dataset.theme ?? "light";
-  return attr === "dark" ? NIGHT : LIGHT;
+/** The plate palette. The site has one theme, so this is a constant. */
+export function platePalette(): PlatePalette {
+  return PLATE;
 }
 
-/** Re-render the plate when the theme attribute changes. */
-export function usePlateTheme(theme: "light" | "dark"): PlatePalette {
-  return theme === "dark" ? NIGHT : LIGHT;
-}
-
-export { NIGHT as NIGHT_PALETTE, LIGHT as LIGHT_PALETTE };
+export { PLATE as PLATE_PALETTE, PLATE as LIGHT_PALETTE, PLATE as NIGHT_PALETTE };

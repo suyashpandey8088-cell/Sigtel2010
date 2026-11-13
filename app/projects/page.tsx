@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Projects · SIG-TEL",
     description: "Completed and ongoing works in railway signalling and telecom networks.",
-    images: ["/images/hero-railway.jpg"],
+    images: ["/images/hero-daylight.jpg"],
   },
 };
 
@@ -29,8 +29,8 @@ export default async function ProjectsPage() {
         eyebrow="Project register"
         title={["WORK ON", "THE GROUND."]}
         description="Completed and ongoing works in railway signalling and in telecom networks for railways, pipelines and industry. Filter by discipline or status, then open a case study for scope, approach and documentation."
-        image="/images/hero-railway.jpg"
-        imageAlt="Railway yard at night with signal gantries and multiple tracks"
+        image="/images/hero-daylight.jpg"
+        imageAlt="Electrified railway yard with signal gantries and multiple tracks in daylight"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Projects" }]}
         meta={[
           { label: "Works recorded", value: `${projects.length}` },
@@ -40,7 +40,7 @@ export default async function ProjectsPage() {
         ]}
       />
 
-      <section className="relative border-t border-line bg-navy py-14 md:py-20">
+      <section className="relative border-t border-line bg-navy section-tight">
         <div className="edge">
           <ProjectsShowcase projects={projects} variant="page" />
           <div className="mt-10 flex flex-col gap-4 border-t border-line pt-6 md:flex-row md:items-center md:justify-between">

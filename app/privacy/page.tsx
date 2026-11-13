@@ -77,7 +77,7 @@ const sections = [
 export default function PrivacyPage() {
   return (
     <>
-      <section className="relative border-b border-line bg-navy-900 pb-12 pt-[calc(var(--header-h)+4rem)]">
+      <section className="relative border-b border-line bg-navy pb-12 pt-[calc(var(--header-h)+2.6rem)]">
         <div className="pointer-events-none absolute inset-0 grid-blueprint opacity-25" aria-hidden />
         <div className="edge relative">
           <div className="flex items-center gap-4">
@@ -85,7 +85,7 @@ export default function PrivacyPage() {
             <span className="h-px w-8 bg-line-strong" />
             <span className="label text-tech">Privacy</span>
           </div>
-          <h1 className="mt-6 font-display text-[clamp(2.2rem,5vw,4.4rem)] uppercase leading-[0.94] tracking-[-0.04em] text-ink">
+          <h1 className="mt-6 font-display text-[clamp(2.2rem,5vw,4.4rem)] uppercase leading-[0.94] tracking-[-0.04em] text-eng">
             Privacy policy
           </h1>
           <p className="mt-5 max-w-2xl text-[0.95rem] leading-relaxed text-muted">
@@ -119,7 +119,7 @@ export default function PrivacyPage() {
               <div key={section.title} id={`section-${index + 1}`} className="scroll-mt-24">
                 <div className="flex items-baseline gap-3 border-b border-line pb-3">
                   <span className="font-mono text-[9px] tracking-[0.2em] text-eng">{String(index + 1).padStart(2, "0")}</span>
-                  <h2 className="font-display text-xl uppercase tracking-[-0.01em] text-ink">{section.title}</h2>
+                  <h2 className="font-display text-xl uppercase tracking-[-0.01em] text-eng">{section.title}</h2>
                 </div>
                 <div className="mt-4 space-y-3">
                   {section.body.map((paragraph) => (

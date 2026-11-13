@@ -54,17 +54,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 
       <article>
-        <header className="theme-night relative overflow-hidden border-b border-line bg-navy-900">
-          <Image
-            src={project.images[0]}
-            alt={project.shortTitle}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover opacity-40"
-          />
-          <div className="absolute inset-0 hero-scrim" aria-hidden />
-          <div className="edge relative pb-12 pt-[calc(var(--header-h)+4rem)]">
+        <header className="relative overflow-hidden border-b border-line bg-white">
+          <div className="edge pb-12 pt-[calc(var(--header-h)+2.6rem)]">
             <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2">
               <Link href="/" className="label-tight text-tech hover:text-ink">Home</Link>
               <span className="text-tech/50">/</span>
@@ -88,12 +79,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               ) : null}
             </div>
 
-            <h1 className="mt-6 max-w-5xl font-display text-[clamp(2rem,4.8vw,4.4rem)] uppercase leading-[0.94] tracking-[-0.04em] text-ink">
+            <h1 className="mt-6 max-w-5xl font-display text-[clamp(2rem,4.8vw,4.4rem)] uppercase leading-[0.94] tracking-[-0.04em] text-eng">
               <RevealLines lines={[project.shortTitle]} />
             </h1>
             <p className="mt-6 max-w-2xl text-[0.95rem] leading-relaxed text-muted">{project.summary}</p>
 
-            <dl className="mt-10 grid gap-6 border-t border-ink/15 pt-6 sm:grid-cols-3">
+            <dl className="mt-10 grid gap-6 border-t border-line pt-6 sm:grid-cols-3">
               {[
                 { label: "Client", value: [project.client, project.clientDivision].filter(Boolean).join(" · ") },
                 { label: "Location", value: `${project.location}, ${project.state}` },
@@ -108,6 +99,22 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               ))}
             </dl>
           </div>
+
+          <div className="edge pb-10">
+            <div className="relative aspect-[21/9] w-full overflow-hidden bg-navy-800">
+              <Image
+                src={project.images[0]}
+                alt={`${project.shortTitle} — illustrative image`}
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover"
+              />
+              <span className="plate absolute bottom-4 left-4 px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.16em] text-eng/80">
+                Illustrative of the discipline
+              </span>
+            </div>
+          </div>
         </header>
 
         <div className="edge grid gap-12 py-16 lg:grid-cols-[1fr_320px] lg:gap-20 lg:py-24">
@@ -119,9 +126,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
             <section>
               <SectionLabel index="02" label="Scope of work" />
-              <ul className="mt-5 grid gap-px border border-line bg-line sm:grid-cols-2">
+              <ul className="mt-5 grid border-t border-line sm:grid-cols-2">
                 {project.scope.map((item, index) => (
-                  <li key={item} className="flex items-start gap-3 bg-navy p-4">
+                  <li key={item} className="flex items-start gap-3 border-b border-line py-3.5 pr-4">
                     <span className="mt-[3px] font-mono text-[9px] tracking-[0.16em] text-eng">
                       {String(index + 1).padStart(2, "0")}
                     </span>
@@ -189,16 +196,16 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <section>
               <SectionLabel index="07" label="Project gallery" />
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                {project.images.slice(0, 2).map((image, index) => (
+                {project.images.slice(1, 3).map((image, index) => (
                   <div key={image} className={cn("relative overflow-hidden border border-line", index === 0 ? "aspect-[4/3]" : "aspect-[4/3]")}>
                     <Image
                       src={image}
                       alt={`${project.shortTitle} — illustrative project image ${index + 1}`}
                       fill
                       sizes="(min-width: 640px) 45vw, 100vw"
-                      className="object-cover opacity-85 transition-transform duration-[1400ms] hover:scale-[1.03]"
+                      className="object-cover transition-transform duration-[1400ms] hover:scale-[1.03]"
                     />
-                    <span className="absolute bottom-2 left-2 bg-navy-900/80 px-2 py-1 font-mono text-[8px] uppercase tracking-[0.14em] text-ink/60">
+                    <span className="absolute bottom-2 left-2 bg-white px-2 py-1 font-mono text-[8px] uppercase tracking-[0.14em] text-eng/70">
                       Illustrative
                     </span>
                   </div>
@@ -257,10 +264,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </div>
 
         {related.length ? (
-          <section className="border-t border-line bg-navy-800/40 py-16">
+          <section className="border-t border-line bg-navy py-16">
             <div className="edge">
               <div className="flex items-center justify-between pb-8">
-                <h2 className="font-display text-2xl uppercase tracking-[-0.02em] text-ink">Related work</h2>
+                <h2 className="font-display text-2xl uppercase tracking-[-0.02em] text-eng">Related work</h2>
                 <Link href="/projects" className="label-tight text-eng hover:text-ink">
                   All projects →
                 </Link>

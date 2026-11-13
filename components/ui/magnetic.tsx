@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 export function Magnetic({
   children,
   className,
-  strength = 0.28,
+  strength = 0.22,
 }: {
   children: React.ReactNode;
   className?: string;
@@ -22,7 +22,7 @@ export function Magnetic({
     const rect = el.getBoundingClientRect();
     const x = event.clientX - rect.left - rect.width / 2;
     const y = event.clientY - rect.top - rect.height / 2;
-    el.style.transform = `translate3d(${x * strength}px, ${y * strength}px, 0)`;
+    el.style.transform = `translate3d(${(x * strength).toFixed(2)}px, ${(y * strength).toFixed(2)}px, 0)`;
   };
 
   const onLeave = () => {

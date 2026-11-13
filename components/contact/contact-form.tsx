@@ -57,7 +57,7 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="border border-eng/40 bg-eng/[0.06] p-8">
+      <div className="border-t-2 border-eng bg-navy-800 p-8">
         <span className="flex h-10 w-10 items-center justify-center rounded-full border border-eng/60 text-eng">
           <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden>
             <path d="M1 6l4.5 4.5L15 1.5" stroke="currentColor" strokeWidth="1.5" />
@@ -105,7 +105,7 @@ export function ContactForm() {
         </Field>
 
         <Field label="Enquiry category" required error={errors.category}>
-          <select className="field appearance-none bg-navy" name="category" defaultValue="" aria-invalid={!!errors.category}>
+          <select className="field appearance-none" name="category" defaultValue="" aria-invalid={!!errors.category}>
             <option value="" disabled>
               Select a category
             </option>
@@ -166,12 +166,12 @@ export function ContactForm() {
           <input
             type="checkbox"
             name="consent"
-            className="mt-[3px] h-3.5 w-3.5 shrink-0 accent-[#24C78B]"
+            className="mt-[3px] h-3.5 w-3.5 shrink-0 accent-[#183B56]"
             aria-invalid={!!errors.consent}
           />
           <span>
             I agree that SIG-TEL may use these details to respond to my enquiry, as described in the{" "}
-            <a href="/privacy" className="text-ink underline decoration-line-strong underline-offset-2 hover:text-eng">
+            <a href="/privacy" className="text-eng underline decoration-line-strong underline-offset-2 hover:text-signal">
               privacy policy
             </a>
             .
