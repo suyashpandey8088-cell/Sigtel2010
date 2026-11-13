@@ -720,3 +720,60 @@ html.lenis body {
 .stage-3d canvas {
   display: block;
 }
+
+/* ==========================================================================
+   3D live section (WebGL)
+   The model is lit for daylight, so its chips are white plates with
+   engineering-blue numerals; the accent is the component's own discipline.
+   ========================================================================== */
+
+.ls-chip-3d {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(24, 43, 58, 0.22);
+  background: rgba(255, 255, 255, 0.94);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--eng);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 6px 18px -12px rgba(24, 43, 58, 0.5);
+  transition:
+    transform 0.22s ease,
+    background-color 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    opacity 0.22s ease;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.ls-chip-3d:hover,
+.ls-chip-3d.is-active {
+  transform: scale(1.1);
+  background: #ffffff;
+  border-color: currentColor;
+  box-shadow: 0 10px 22px -12px rgba(24, 43, 58, 0.55);
+}
+
+.ls-chip-3d.is-dim {
+  opacity: 0.42;
+}
+
+.ls-chip-3d:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ls-chip-3d {
+    transition: none;
+  }
+  .ls-chip-3d:hover,
+  .ls-chip-3d.is-active {
+    transform: none;
+  }
+}
