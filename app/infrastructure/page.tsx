@@ -3,7 +3,7 @@ import { getStore } from "@/lib/db";
 import { PageHero } from "@/components/page/page-hero";
 import { CtaBand } from "@/components/page/cta-band";
 import { IndiaMap } from "@/components/home/india-map";
-import { SectionHeading } from "@/components/ui/section-heading";
+import { EditorialHead, LedgerHead } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/ui/reveal";
 import { infrastructure, processStages as process, states } from "@/lib/content/site";
 
@@ -38,8 +38,6 @@ export default async function InfrastructurePage() {
   return (
     <>
       <PageHero
-        index="04"
-        eyebrow="Infrastructure & capabilities"
         title={["PLANT, PROCESS", "AND PROOF."]}
         description="What we physically deliver, how we sequence it, and the evidence we hand over. The three are not separate in our work: a system that cannot be proven is not commissioned."
         image="/images/installation-works.jpg"
@@ -55,26 +53,25 @@ export default async function InfrastructurePage() {
 
       <section className="relative border-t border-line bg-navy section">
         <div className="edge">
-          <SectionHeading
-            index="04.1"
-            label="Capability map"
+          <EditorialHead
+            mark="Capability"
             title={["Six areas of plant", "and capability."]}
-            description="Each area is staffed by our own crews, with site in-charges and technicians on the company's rolls."
+            deck="Each area is staffed by our own crews, with site in-charges and technicians on the company's rolls."
             className="pb-12"
           />
           <div className="grid border-t border-line md:grid-cols-2 lg:grid-cols-3">
             {infrastructure.map((area, index) => (
               <div key={area.title} className="group relative border-b border-line py-6 pr-6 transition-colors">
                 <div className="flex items-center justify-between">
-                  <span className="label-tight text-signal">{area.tag}</span>
-                  <span className="font-mono text-[9px] tracking-[0.16em] text-tech">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="text-[0.8rem] text-signal">{area.tag}</span>
+                  <span className="text-[0.78rem] text-tech tabular">{String(index + 1).padStart(2, "0")}</span>
                 </div>
-                <h3 className="mt-5 font-display text-xl uppercase leading-tight tracking-[-0.02em] text-eng">{area.title}</h3>
-                <p className="mt-3 text-[0.85rem] leading-relaxed text-muted">{area.body}</p>
+                <h3 className="mt-5 text-[1.24rem] leading-snug text-eng">{area.title}</h3>
+                <p className="mt-3 text-[0.88rem] leading-[1.65] text-muted">{area.body}</p>
                 <ul className="mt-5 space-y-1.5 border-t border-line pt-4">
                   {area.items.map((item) => (
                     <li key={item} className="flex items-center gap-2 text-[0.8rem] text-ink/70">
-                      <span className="h-[3px] w-[3px] rounded-full bg-signal/60" />
+                      <span className="h-px w-2 bg-eng/40" />
                       {item}
                     </li>
                   ))}
@@ -88,8 +85,7 @@ export default async function InfrastructurePage() {
       <section className="relative border-t border-line bg-navy-800/60 section">
         <div className="edge grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
           <div>
-            <span className="label text-muted">04.2 — Proof at handover</span>
-            <h2 className="mt-6 font-display text-[clamp(1.9rem,3.6vw,3.2rem)] uppercase leading-[0.96] tracking-[-0.03em] text-eng">
+            <h2 className="text-[clamp(1.9rem,3.6vw,3.2rem)] leading-[1.02] tracking-[-0.016em] text-eng">
               Documentation is part of the system.
             </h2>
             <p className="mt-5 text-[0.95rem] leading-relaxed text-muted">
@@ -97,8 +93,8 @@ export default async function InfrastructurePage() {
               set — not a verbal handover. It is also what makes later maintenance possible without guesswork.
             </p>
             <div className="mt-8 border-t border-line pt-4">
-              <p className="label-tight mb-2 text-signal">Typical handover pack</p>
-              <p className="font-mono text-[10px] uppercase leading-relaxed tracking-[0.12em] text-ink/75">
+              <p className="mb-2 text-[0.8rem] text-signal">Typical handover pack</p>
+              <p className="text-[0.88rem] leading-relaxed text-ink/75">
                 Test reports · OTDR traces · as-builts · earth readings · SPD records · commissioning minutes
               </p>
             </div>
@@ -107,7 +103,7 @@ export default async function InfrastructurePage() {
           <ul className="grid border-t border-line sm:grid-cols-2">
             {proof.map((item, index) => (
               <li key={item} className="border-b border-line py-5 pr-5">
-                <span className="font-mono text-[8.5px] tracking-[0.16em] text-signal">{String(index + 1).padStart(2, "0")}</span>
+                <span className="text-[0.78rem] text-signal tabular">{String(index + 1).padStart(2, "0")}</span>
                 <p className="mt-2 text-[0.85rem] leading-relaxed text-ink/80">{item}</p>
               </li>
             ))}
@@ -117,19 +113,18 @@ export default async function InfrastructurePage() {
 
       <section className="relative border-t border-line bg-navy section">
         <div className="edge">
-          <SectionHeading
-            index="04.3"
-            label="Delivery model"
+          <EditorialHead
+            mark="Delivery"
             title={["Six stages,", "one accountable team."]}
-            description="The same sequence runs a loop-line signalling job and a pipeline telecom network."
+            deck="The same sequence runs a loop-line signalling job and a pipeline telecom network."
             className="pb-12"
           />
           <div className="grid border-t border-line md:grid-cols-3 lg:grid-cols-6">
             {process.map((stage) => (
               <div key={stage.step} className="border-b border-line py-6 pr-4">
-                <span className="font-display text-3xl leading-none text-eng/20">{stage.step}</span>
-                <h3 className="mt-4 font-display text-sm uppercase leading-tight text-eng">{stage.title}</h3>
-                <p className="mt-2 text-[0.76rem] leading-relaxed text-tech">{stage.output}</p>
+                <span className="text-[1.6rem] leading-none text-eng/20 tabular">{stage.step}</span>
+                <h3 className="mt-4 text-[0.98rem] leading-snug text-eng">{stage.title}</h3>
+                <p className="mt-2 text-[0.82rem] leading-relaxed text-tech">{stage.output}</p>
               </div>
             ))}
           </div>
@@ -138,11 +133,10 @@ export default async function InfrastructurePage() {
 
       <section className="relative border-t border-line bg-navy-800/60 section">
         <div className="edge">
-          <SectionHeading
-            index="04.4"
-            label="Presence"
-            title={["Where the plant is deployed."]}
-            description="Works locations by state. Select a marker or state to see the discipline and scope recorded there."
+          <EditorialHead
+            mark="Presence"
+            title={["Where the plant", "is deployed."]}
+            deck="Works locations by state. Select a marker or state to see the discipline and scope recorded there."
             className="pb-10"
           />
           <IndiaMap projects={projects} />
@@ -150,8 +144,8 @@ export default async function InfrastructurePage() {
           <div className="mt-12 grid border-t border-line sm:grid-cols-2 lg:grid-cols-5">
             {states.map((state) => (
               <Reveal key={state.name} className="border-b border-line py-5 pr-5">
-                <p className="font-display text-lg uppercase leading-tight text-eng">{state.name}</p>
-                <p className="mt-2 text-[0.76rem] leading-relaxed text-tech">{state.sites}</p>
+                <p className="text-[1.05rem] leading-tight text-eng">{state.name}</p>
+                <p className="mt-2 text-[0.82rem] leading-relaxed text-tech">{state.sites}</p>
               </Reveal>
             ))}
           </div>
@@ -159,7 +153,6 @@ export default async function InfrastructurePage() {
       </section>
 
       <CtaBand
-        eyebrow="Capability enquiry"
         title="Need a capability statement or pre-qualification pack?"
         body="Tell us which discipline and scope you are qualifying. We'll send the relevant capability summary and comparable works from the register."
       />

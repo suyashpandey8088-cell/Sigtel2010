@@ -57,13 +57,13 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="border-t-2 border-eng bg-navy-800 p-8">
-        <span className="flex h-10 w-10 items-center justify-center rounded-full border border-eng/60 text-eng">
+      <div className="border-t border-line pt-8">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full border border-eng/50 text-eng">
           <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden>
             <path d="M1 6l4.5 4.5L15 1.5" stroke="currentColor" strokeWidth="1.5" />
           </svg>
         </span>
-        <h3 className="mt-5 font-display text-2xl uppercase tracking-[-0.02em] text-ink">Enquiry received.</h3>
+ <h3 className="mt-5 text-2xl tracking-[-0.02em] text-ink">Enquiry received.</h3>
         <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">
           Your details have reached our engineering team. We usually respond the same working day between
           10 am and 7 pm, Monday to Saturday.
@@ -77,7 +77,7 @@ export function ContactForm() {
             setStatus("idle");
             setMessage("");
           }}
-          className="mt-6 label-tight border-b border-line-strong pb-1 text-muted hover:text-ink"
+          className="link-underline mt-6 text-[0.86rem] text-muted hover:text-ink"
         >
           Send another enquiry
         </button>
@@ -133,17 +133,17 @@ export function ContactForm() {
         </div>
 
         <div className="sm:col-span-2">
-          <p className="field-label mb-2">Attachment — optional (PDF, DWG, image · max 5 MB)</p>
-          <label className="flex cursor-pointer items-center justify-between gap-4 border border-dashed border-line-strong px-4 py-4 transition-colors hover:border-eng/60">
+          <p className="field-caption mb-2">Attachment — optional (PDF, DWG, image · max 5 MB)</p>
+          <label className="flex cursor-pointer items-center justify-between gap-4 border-b border-line-strong py-3 transition-colors hover:border-eng">
             <span className="flex items-center gap-3">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
                 <path d="M8 11V2m0 0L4.5 5.5M8 2l3.5 3.5M2 11.5V13a1 1 0 001 1h10a1 1 0 001-1v-1.5" stroke="currentColor" strokeWidth="1.1" className="text-eng" />
               </svg>
-              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+ <span className="text-[0.86rem] text-muted">
                 {fileName || "Attach drawings or a tender PDF"}
               </span>
             </span>
-            <span className="label-tight text-tech">Browse</span>
+            <span className="text-[0.84rem] text-tech">Browse</span>
             <input
               type="file"
               name="attachment"
@@ -196,12 +196,12 @@ export function ContactForm() {
       </div>
 
       <div aria-live="polite" className="mt-4">
-        {errors.consent ? <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-signal">{errors.consent}</p> : null}
+ {errors.consent ? <p className="text-[0.86rem] text-signal">{errors.consent}</p> : null}
         {status === "error" && message ? (
           <p className="border border-signal/40 bg-signal/[0.06] px-4 py-3 text-sm text-signal/90">{message}</p>
         ) : null}
       </div>
-      <p className="mt-4 font-mono text-[8.5px] uppercase leading-relaxed tracking-[0.14em] text-tech">
+ <p className="mt-4 text-[0.78rem] leading-relaxed text-tech">
         Enquiries are stored securely and accessible only to the SIG-TEL team. We do not share your details.
       </p>
     </form>
@@ -221,11 +221,11 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="field-label mb-1 block">
+      <span className="field-caption mb-1 block">
         {label} {required ? <span className="text-signal">*</span> : null}
       </span>
       {children}
-      {error ? <span className="mt-1 block font-mono text-[9px] uppercase tracking-[0.1em] text-signal">{error}</span> : null}
+ {error ? <span className="mt-1 block text-[0.8rem] text-signal">{error}</span> : null}
     </label>
   );
 }

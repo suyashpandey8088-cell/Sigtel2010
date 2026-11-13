@@ -78,8 +78,8 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
                 onClick={() => setFilter(item.id)}
                 aria-pressed={filter === item.id}
                 className={cn(
-                  "px-3 py-2 font-mono text-[9px] uppercase tracking-[0.16em] transition-colors",
-                  filter === item.id ? "bg-eng text-white" : "text-muted hover:text-eng",
+                  "px-2 py-1.5 text-[0.86rem] transition-colors",
+                  filter === item.id ? "text-eng link-underline" : "text-muted hover:text-eng",
                 )}
               >
                 {item.label}
@@ -87,17 +87,16 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
             ))}
           </div>
           <div className="flex items-center gap-5">
-            <span className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
-              <span className="h-[5px] w-[5px] rounded-full bg-signal" /> Signalling
+            <span className="flex items-center gap-2 text-[0.82rem] text-muted">
+              <span className="h-[6px] w-[6px] rounded-full bg-signal" /> Signalling
             </span>
-            <span className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
-              <span className="h-[5px] w-[5px] rounded-full bg-clear" /> Telecom
+            <span className="flex items-center gap-2 text-[0.82rem] text-muted">
+              <span className="h-[6px] w-[6px] rounded-full bg-clear" /> Telecommunications
             </span>
           </div>
         </div>
 
         <div className="relative mt-6 overflow-hidden bg-white">
-          <div className="pointer-events-none absolute inset-0 grid-blueprint-sm opacity-40" aria-hidden />
           <svg
             viewBox="0 0 612 696"
             role="img"
@@ -191,27 +190,25 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
             })}
           </svg>
 
-          <div className="pointer-events-none absolute bottom-2 left-2 flex items-center gap-2 border border-line bg-white/95 px-2.5 py-1.5">
+          <div className="pointer-events-none absolute bottom-2 left-2 hidden items-center gap-2 bg-navy/90 px-2.5 py-1.5 md:flex">
             <span className="h-[5px] w-[5px] rounded-full bg-eng" />
-            <span className="font-mono text-[8px] uppercase tracking-[0.14em] text-eng/80">
-              Head office · Navi Mumbai
-            </span>
+            <span className="text-[0.78rem] text-eng/80">Head office, Navi Mumbai</span>
           </div>
         </div>
-        <p className="mt-3 font-mono text-[9px] uppercase leading-relaxed tracking-[0.14em] text-tech">
-          Boundaries: Census of India 2011 districts · Markers show published works locations
+        <p className="mt-3 text-[0.78rem] leading-relaxed text-tech">
+          Boundaries: Census of India 2011 districts. Markers show published works locations.
         </p>
       </div>
 
-      <div className="flex flex-col border border-line bg-white">
-        <div className="flex items-center justify-between border-b border-line px-5 py-4">
-          <p className="label text-muted">Where we work</p>
-          <p className="font-mono text-[9px] tracking-[0.16em] text-eng">
+      <div className="flex flex-col border-t border-line pt-5">
+        <div className="flex items-center justify-between px-0 pb-4">
+          <p className="text-[0.9rem] text-eng">Where we work</p>
+          <p className="text-[0.8rem] text-tech tabular">
             {String(visible.length).padStart(2, "0")} works
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-1 border-b border-line p-3">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 border-y border-line py-3">
           {Array.from(states.keys()).map((name) => (
             <button
               key={name}
@@ -219,8 +216,8 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
               onClick={() => setState(name)}
               aria-pressed={state === name}
               className={cn(
-                "px-2 py-1.5 font-mono text-[8.5px] uppercase tracking-[0.12em] transition-colors",
-                state === name ? "bg-eng text-white" : "text-muted hover:text-eng",
+                "py-1 text-[0.82rem] transition-colors",
+                state === name ? "text-eng link-underline" : "text-muted hover:text-eng",
               )}
             >
               {name} · {String(states.get(name)?.length ?? 0).padStart(2, "0")}
@@ -228,7 +225,7 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
           ))}
         </div>
 
-        <div className="flex-1 overflow-hidden px-5 py-5">
+        <div className="flex-1 overflow-hidden py-5">
           <AnimatePresence mode="wait">
             <motion.div
               key={active?.id ?? state ?? "empty"}
@@ -239,15 +236,15 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
             >
               {active ? (
                 <div>
-                  <p className="label-tight mb-2 text-signal">{active.client}</p>
-                  <h3 className="font-display text-lg uppercase leading-tight text-eng">{active.shortTitle}</h3>
-                  <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
-                    {active.location} · {active.state}
+                  <p className="mb-2 text-[0.8rem] text-signal">{active.client}</p>
+                  <h3 className="text-[1.2rem] leading-tight text-eng">{active.shortTitle}</h3>
+                  <p className="mt-2 text-[0.8rem] text-muted">
+                    {active.location}, {active.state}
                   </p>
                   <p className="mt-4 text-sm leading-relaxed text-muted">{active.summary}</p>
                   <Link
                     href={`/projects/${active.slug}`}
-                    className="mt-5 inline-flex items-center gap-2 border-b border-eng/30 pb-1 font-mono text-[9px] uppercase tracking-[0.16em] text-eng"
+                    className="link-underline mt-5 inline-flex items-center gap-2 text-[0.86rem] text-eng"
                   >
                     Open case study
                     <svg width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden>
@@ -257,14 +254,14 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
                 </div>
               ) : (
                 <div>
-                  <p className="label-tight mb-2 text-tech">Selected state</p>
-                  <h3 className="font-display text-lg uppercase leading-tight text-eng">{state ?? "India"}</h3>
+                  <p className="mb-2 text-[0.8rem] text-tech">Selected state</p>
+                  <h3 className="text-[1.2rem] leading-tight text-eng">{state ?? "India"}</h3>
                   {selectedProjects.length ? (
                     <ul className="mt-4 divide-y divide-line">
                       {selectedProjects.map((project) => (
                         <li key={project.id}>
                           <Link href={`/projects/${project.slug}`} className="group block py-3">
-                            <p className="flex items-center gap-2 font-mono text-[8.5px] uppercase tracking-[0.14em] text-muted">
+                            <p className="flex items-center gap-2 text-[0.78rem] text-muted">
                               <span
                                 className={cn(
                                   "h-[4px] w-[4px] rounded-full",
@@ -276,7 +273,7 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
                             <p className="mt-1 text-[0.86rem] leading-snug text-ink/85 transition-colors group-hover:text-eng">
                               {project.shortTitle}
                             </p>
-                            <p className="mt-0.5 font-mono text-[8.5px] uppercase tracking-[0.12em] text-tech">
+                            <p className="mt-0.5 text-[0.78rem] text-tech">
                               {project.location}
                             </p>
                           </Link>
@@ -294,9 +291,9 @@ export function IndiaMap({ projects }: { projects: Project[] }) {
           </AnimatePresence>
         </div>
 
-        <div className="border-t border-line px-5 py-4">
-          <p className="font-mono text-[9px] uppercase leading-relaxed tracking-[0.14em] text-tech">
-            States: Maharashtra · Goa · Karnataka · Madhya Pradesh · Uttar Pradesh
+        <div className="border-t border-line py-4">
+          <p className="text-[0.78rem] leading-relaxed text-tech">
+            Maharashtra · Goa · Karnataka · Madhya Pradesh · Uttar Pradesh
           </p>
         </div>
       </div>

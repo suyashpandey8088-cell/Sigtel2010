@@ -57,29 +57,29 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <header className="relative overflow-hidden border-b border-line bg-white">
           <div className="edge pb-12 pt-[calc(var(--header-h)+2.6rem)]">
             <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2">
-              <Link href="/" className="label-tight text-tech hover:text-ink">Home</Link>
+              <Link href="/" className="text-[0.84rem] text-tech hover:text-ink">Home</Link>
               <span className="text-tech/50">/</span>
-              <Link href="/projects" className="label-tight text-tech hover:text-ink">Projects</Link>
+              <Link href="/projects" className="text-[0.84rem] text-tech hover:text-ink">Projects</Link>
               <span className="text-tech/50">/</span>
-              <span className="label-tight text-ink/70">{project.shortTitle}</span>
+              <span className="text-[0.84rem] text-ink/70">{project.shortTitle}</span>
             </nav>
 
             <div className="mt-8 flex flex-wrap items-center gap-2">
-              <span className="border border-ink/20 px-2.5 py-1 font-mono text-[8.5px] uppercase tracking-[0.18em] text-ink/80">
+ <span className="border border-ink/20 px-2.5 py-1 text-[0.78rem] text-ink/80">
                 {project.division === "signalling" ? "Railway signalling" : "Telecommunications"}
               </span>
-              <span className="flex items-center gap-1.5 border border-ink/15 px-2.5 py-1 font-mono text-[8.5px] uppercase tracking-[0.18em] text-ink/70">
+ <span className="flex items-center gap-1.5 border border-ink/15 px-2.5 py-1 text-[0.78rem] text-ink/70">
                 <span className={cn("h-[4px] w-[4px] rounded-full", project.status === "completed" ? "bg-eng" : "bg-signal animate-blink")} />
                 {project.status === "completed" ? "Completed" : "Ongoing"}
               </span>
               {project.year ? (
-                <span className="border border-ink/15 px-2.5 py-1 font-mono text-[8.5px] uppercase tracking-[0.18em] text-ink/60">
+                <span className="border border-line px-2.5 py-1 text-[0.8rem] text-muted">
                   {project.year}
                 </span>
               ) : null}
             </div>
 
-            <h1 className="mt-6 max-w-5xl font-display text-[clamp(2rem,4.8vw,4.4rem)] uppercase leading-[0.94] tracking-[-0.04em] text-eng">
+ <h1 className="mt-6 max-w-5xl font-display text-[clamp(2rem,4.8vw,4.4rem)] leading-[1.0] tracking-[-0.016em] text-eng">
               <RevealLines lines={[project.shortTitle]} />
             </h1>
             <p className="mt-6 max-w-2xl text-[0.95rem] leading-relaxed text-muted">{project.summary}</p>
@@ -91,8 +91,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                 { label: "Scope", value: project.division === "signalling" ? "Signalling & S&T works" : "Telecom network works" },
               ].map((item) => (
                 <div key={item.label}>
-                  <dt className="label-tight text-tech">{item.label}</dt>
-                  <dd className="mt-1.5 font-mono text-[11px] uppercase leading-relaxed tracking-[0.08em] text-ink/85">
+                  <dt className="text-[0.8rem] text-tech">{item.label}</dt>
+ <dd className="mt-1.5 text-[0.9rem] leading-relaxed text-ink/85">
                     {item.value}
                   </dd>
                 </div>
@@ -110,9 +110,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                 sizes="100vw"
                 className="object-cover"
               />
-              <span className="plate absolute bottom-4 left-4 px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.16em] text-eng/80">
+              <p className="absolute bottom-4 left-4 text-[0.8rem] text-white/85">
                 Illustrative of the discipline
-              </span>
+              </p>
             </div>
           </div>
         </header>
@@ -129,7 +129,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               <ul className="mt-5 grid border-t border-line sm:grid-cols-2">
                 {project.scope.map((item, index) => (
                   <li key={item} className="flex items-start gap-3 border-b border-line py-3.5 pr-4">
-                    <span className="mt-[3px] font-mono text-[9px] tracking-[0.16em] text-eng">
+ <span className="mt-[3px] text-[0.8rem] text-eng">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <span className="text-[0.86rem] leading-relaxed text-ink/85">{item}</span>
@@ -143,8 +143,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
                 {project.challenges.map((item) => (
                   <Reveal key={item.title}>
-                    <div className="h-full border border-line bg-navy-800/40 p-5">
-                      <h3 className="font-display text-base uppercase leading-tight text-ink">{item.title}</h3>
+                    <div className="h-full border-t border-line pt-4">
+ <h3 className="text-base leading-tight text-ink">{item.title}</h3>
                       <p className="mt-2 text-[0.84rem] leading-relaxed text-muted">{item.body}</p>
                     </div>
                   </Reveal>
@@ -157,11 +157,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               <ol className="mt-5 space-y-0 border-t border-line">
                 {project.approach.map((item, index) => (
                   <li key={item.title} className="grid gap-3 border-b border-line py-5 sm:grid-cols-[80px_1fr] sm:gap-6">
-                    <span className="font-mono text-[10px] tracking-[0.18em] text-tech">
+ <span className="text-[0.86rem] text-tech">
                       Step {String(index + 1).padStart(2, "0")}
                     </span>
                     <div>
-                      <h3 className="font-display text-lg uppercase leading-tight text-ink">{item.title}</h3>
+ <h3 className="text-lg leading-tight text-ink">{item.title}</h3>
                       <p className="mt-1.5 text-[0.86rem] leading-relaxed text-muted">{item.body}</p>
                     </div>
                   </li>
@@ -174,7 +174,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                 <SectionLabel index="05" label="Equipment & technologies" />
                 <ul className="mt-5 flex flex-wrap gap-2">
                   {project.equipment.map((item) => (
-                    <li key={item} className="border border-line px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.14em] text-ink/75">
+ <li key={item} className="border border-line/70 px-3 py-1.5 text-[0.8rem] text-ink/75">
                       {item}
                     </li>
                   ))}
@@ -205,7 +205,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                       sizes="(min-width: 640px) 45vw, 100vw"
                       className="object-cover transition-transform duration-[1400ms] hover:scale-[1.03]"
                     />
-                    <span className="absolute bottom-2 left-2 bg-white px-2 py-1 font-mono text-[8px] uppercase tracking-[0.14em] text-eng/70">
+ <span className="absolute bottom-2 left-2 bg-white px-2 py-1 text-[0.78rem] text-eng/70">
                       Illustrative
                     </span>
                   </div>
@@ -215,9 +215,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </div>
 
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <div className="border border-line bg-navy-800/50">
+            <div className="border-t border-line pt-5">
               <div className="border-b border-line px-5 py-4">
-                <p className="label text-tech">Project record</p>
+                <p className="text-[0.84rem] text-tech">Project record</p>
               </div>
               <dl className="space-y-4 px-5 py-5">
                 {[
@@ -229,7 +229,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                   ["Status", project.status === "completed" ? "Completed" : "Ongoing"],
                 ].map(([label, value]) => (
                   <div key={label} className="border-b border-line pb-3 last:border-0 last:pb-0">
-                    <dt className="label-tight text-tech">{label}</dt>
+                    <dt className="text-[0.8rem] text-tech">{label}</dt>
                     <dd className="mt-1 text-[0.85rem] text-ink/85">{value}</dd>
                   </div>
                 ))}
@@ -240,14 +240,14 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                     <span>Discuss similar work</span>
                   </Link>
                 </Magnetic>
-                <p className="mt-3 text-center font-mono text-[8.5px] uppercase tracking-[0.14em] text-tech">
+ <p className="mt-3 text-center text-[0.78rem] text-tech">
                   Or call {company.phone.primary}
                 </p>
               </div>
             </div>
 
-            <div className="mt-4 border border-line p-5">
-              <p className="label-tight text-tech">Navigation</p>
+            <div className="mt-8 border-t border-line pt-5">
+              <p className="text-[0.8rem] text-tech">Navigation</p>
               <div className="mt-3 flex flex-col gap-2">
                 <Link href="/projects" className="link-underline self-start text-sm text-muted hover:text-ink">
                   ← Back to register
@@ -267,8 +267,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <section className="border-t border-line bg-navy py-16">
             <div className="edge">
               <div className="flex items-center justify-between pb-8">
-                <h2 className="font-display text-2xl uppercase tracking-[-0.02em] text-eng">Related work</h2>
-                <Link href="/projects" className="label-tight text-eng hover:text-ink">
+ <h2 className="text-2xl tracking-[-0.02em] text-eng">Related work</h2>
+                <Link href="/projects" className="text-[0.84rem] text-eng hover:text-ink">
                   All projects →
                 </Link>
               </div>
@@ -289,9 +289,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
 function SectionLabel({ index, label }: { index: string; label: string }) {
   return (
-    <div className="flex items-center gap-4 border-b border-line pb-3">
-      <span className="font-mono text-[9px] tracking-[0.2em] text-eng">{index}</span>
-      <span className="label text-tech">{label}</span>
+    <div className="flex items-baseline gap-3 border-b border-line pb-3">
+      <span className="text-[0.78rem] text-tech tabular">{index}</span>
+      <h2 className="text-[1.28rem] leading-none text-eng">{label}</h2>
     </div>
   );
 }

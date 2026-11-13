@@ -72,7 +72,6 @@ export function NavOverlay({
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       className="fixed inset-0 z-[95] overflow-y-auto bg-white"
     >
-      <div className="pointer-events-none absolute inset-0 grid-blueprint opacity-70" aria-hidden />
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-[calc(var(--header-h)+1px)] bg-white"
         aria-hidden
@@ -81,10 +80,7 @@ export function NavOverlay({
       <div className="edge relative flex min-h-[100svh] flex-col justify-between pb-10 pt-[calc(var(--header-h)+2.5rem)]">
         <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
           <div>
-            <div className="label mb-8 flex items-center gap-3 text-muted">
-              <span className="h-px w-8 bg-line-strong" />
-              Index
-            </div>
+            <p className="mb-8 text-[0.86rem] text-muted">Sections</p>
             <ul>
               {nav.map((item, i) => {
                 const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -102,17 +98,17 @@ export function NavOverlay({
                       onFocus={() => setHovered(item.href)}
                       className="group flex items-baseline gap-4 border-b border-line py-3.5 sm:gap-8 sm:py-4"
                     >
-                      <span className="label-tight w-6 shrink-0 text-tech">{item.index}</span>
+                      <span className="w-6 shrink-0 text-[0.78rem] text-tech tabular">{item.index}</span>
                       <span
                         className={cn(
-                          "font-display text-[clamp(1.6rem,4.4vw,3.4rem)] leading-[1.04] tracking-[-0.03em] transition-colors duration-300",
+                          "text-[clamp(1.9rem,4.6vw,3.6rem)] leading-[1.04] tracking-[-0.018em] transition-colors duration-300",
                           active ? "text-eng" : "text-ink/80 group-hover:text-eng",
                         )}
                       >
                         {item.label}
                       </span>
                       <span className="ml-auto hidden shrink-0 items-center gap-2 self-center opacity-0 transition-all duration-300 group-hover:opacity-100 sm:flex">
-                        <span className="label-tight text-muted">Open</span>
+                        <span className="text-[0.82rem] text-muted">Open</span>
                         <svg width="18" height="11" viewBox="0 0 18 11" fill="none" aria-hidden>
                           <path d="M0 5.5h15M11.5 1l4.5 4.5-4.5 4.5" stroke="currentColor" strokeWidth="1.1" className="text-signal" />
                         </svg>
@@ -153,19 +149,16 @@ export function NavOverlay({
                 sizes="(min-width: 1024px) 40vw, 100vw"
                 className="object-cover"
               />
-              <span className="plate absolute left-4 top-4 flex items-center gap-2 px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.16em] text-eng">
-                <span className="h-[4px] w-[4px] rounded-full bg-signal" />
-                {preview.ref}
-              </span>
+
             </div>
             <div className="mt-4 flex items-start justify-between gap-6 border-t border-line pt-4">
               <p className="max-w-[16rem] text-sm leading-snug text-ink/80">{preview.caption}</p>
-              <p className="label-tight shrink-0 text-tech">SIG-TEL / Index</p>
+              <p className="shrink-0 text-[0.78rem] text-tech">SIG-TEL</p>
             </div>
 
             <div className="mt-8 grid grid-cols-2 gap-8 border-t border-line pt-6">
               <div>
-                <p className="label-tight mb-2 text-tech">Office</p>
+                <p className="mb-2 text-[0.8rem] text-tech">Office</p>
                 <p className="text-sm leading-relaxed text-muted">
                   Belapur Railway Station Building,
                   <br />
@@ -173,11 +166,11 @@ export function NavOverlay({
                 </p>
               </div>
               <div>
-                <p className="label-tight mb-2 text-tech">Email</p>
+                <p className="mb-2 text-[0.8rem] text-tech">Email</p>
                 <a href={`mailto:${company.email}`} className="link-underline text-sm text-eng">
                   {company.email}
                 </a>
-                <p className="mt-3 label-tight text-tech">Hours</p>
+                <p className="mt-3 text-[0.8rem] text-tech">Hours</p>
                 <p className="text-sm text-muted">{company.hours}</p>
               </div>
             </div>
@@ -185,20 +178,20 @@ export function NavOverlay({
         </div>
 
         <div className="mt-12 flex flex-col gap-4 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="label-tight text-tech">
+          <p className="text-[0.8rem] text-tech">
             SIG-TEL · {company.tagline} · Est. {company.founded}
           </p>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
-            <a href={company.whatsapp} target="_blank" rel="noopener noreferrer" className="label-tight text-muted hover:text-eng">
+            <a href={company.whatsapp} target="_blank" rel="noopener noreferrer" className="text-[0.82rem] text-muted hover:text-eng">
               WhatsApp
             </a>
-            <a href={company.linkedin} target="_blank" rel="noopener noreferrer" className="label-tight text-muted hover:text-eng">
+            <a href={company.linkedin} target="_blank" rel="noopener noreferrer" className="text-[0.82rem] text-muted hover:text-eng">
               LinkedIn
             </a>
-            <Link href="/privacy" onClick={onClose} className="label-tight text-muted hover:text-eng">
+            <Link href="/privacy" onClick={onClose} className="text-[0.82rem] text-muted hover:text-eng">
               Privacy
             </Link>
-            <span className="label-tight text-tech">GSTIN {company.gstin}</span>
+            <span className="text-[0.8rem] text-tech">GSTIN {company.gstin}</span>
           </div>
         </div>
       </div>

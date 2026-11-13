@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { infraNodes, modeMeta, type InfraMode } from "@/lib/content/infrastructure-3d";
 import { LiveSectionStage } from "@/components/home/live-section-stage";
-import { SectionHeading } from "@/components/ui/section-heading";
+import { EditorialHead } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 
@@ -24,14 +24,13 @@ export function PlateSection() {
   );
 
   return (
-    <section id="chapter-02" className="relative overflow-hidden border-t border-line bg-white">
+    <section id="chapter-03" className="relative overflow-hidden border-t border-line bg-white">
       <div className="edge section relative">
-        <SectionHeading
-          index="Chapters 02 – 03"
-          label="Signalling systems · telecommunications"
-          title={["ONE LIVE SECTION.", "BOTH DISCIPLINES."]}
-          description="A double line drawn as an engineering plate: interlocked level crossing, signals, detection, overhead equipment, fibre route, radio and the control room that reads them all. Select a component to see where SIG-TEL fits."
-          className="pb-12"
+        <EditorialHead
+          mark="02 – 03 — One live section"
+          title={["A double line, drawn", "in full."]}
+          deck="Interlocked level crossing, signals, detection, overhead equipment, fibre route, radio mast and the control room that reads them all. Select a component to see where SIG-TEL fits — and what the drawing shows is what gets built."
+          className="pb-14"
         />
 
         {/* mode switch — a measured toggle, not a pill */}
@@ -51,17 +50,11 @@ export function PlateSection() {
                     }}
                     aria-pressed={active}
                     className={cn(
-                      "flex items-center justify-center gap-2 py-3 font-mono text-[9px] uppercase tracking-[0.18em] transition-colors [&:first-child]:border-r [&:first-child]:border-line",
+                      "flex items-center justify-center gap-2 py-3 text-[0.84rem] transition-colors [&:first-child]:border-r [&:first-child]:border-line",
                       active ? "bg-eng text-white" : "text-muted hover:text-eng",
                     )}
                   >
-                    <span
-                      className={cn(
-                        "h-[5px] w-[5px] rounded-full",
-                        key === "signalling" ? "bg-signal" : "bg-clear",
-                      )}
-                    />
-                    {key === "signalling" ? "Signalling mode" : "Telecom mode"}
+                    {key === "signalling" ? "Signalling" : "Telecommunications"}
                   </button>
                 );
               })}
@@ -84,8 +77,8 @@ export function PlateSection() {
 
           <Reveal delay={0.08} y={0} className="flex flex-col border border-line bg-navy">
             <div className="flex items-center justify-between border-b border-line px-4 py-3">
-              <span className="label text-muted">Components</span>
-              <span className="font-mono text-[9px] tracking-[0.16em] text-tech">
+              <span className="text-[0.84rem] text-muted">Components</span>
+              <span className="text-[0.8rem] text-tech tabular">
                 {String(infraNodes.length).padStart(2, "0")}
               </span>
             </div>
@@ -122,20 +115,13 @@ export function PlateSection() {
                       !relevant && "opacity-45",
                     )}
                   >
-                    <span className="font-mono text-[8.5px] tracking-[0.16em] text-tech">
+                    <span className="text-[0.78rem] text-tech tabular">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <span className="flex-1 text-[0.82rem] leading-tight text-ink/85">{node.short}</span>
-                    <span
-                      className={cn(
-                        "h-[4px] w-[4px] rounded-full",
-                        node.division === "telecom"
-                          ? "bg-clear"
-                          : node.division === "signalling"
-                            ? "bg-signal"
-                            : "bg-eng/50",
-                      )}
-                    />
+                    <span className="flex-1 text-[0.86rem] leading-snug text-ink/85">{node.short}</span>
+                    <span className="text-[0.72rem] text-tech">
+                      {node.division === "telecom" ? "T" : node.division === "signalling" ? "S" : "S+T"}
+                    </span>
                   </button>
                 );
               })}
@@ -150,22 +136,20 @@ export function PlateSection() {
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <p className="label-tight mb-2 text-eng/70">
+                  <p className="mb-2 text-[0.76rem] text-tech">
                     {activeNode.division === "both" ? "Both disciplines" : activeNode.division}
                   </p>
-                  <h3 className="font-display text-lg uppercase leading-tight tracking-[-0.01em] text-eng">
-                    {activeNode.label}
-                  </h3>
+                  <h3 className="text-[1.24rem] leading-tight text-eng">{activeNode.label}</h3>
                   <p className="mt-3 text-[0.82rem] leading-relaxed text-muted">{activeNode.purpose}</p>
                   <div className="mt-4 border-t border-line pt-3">
-                    <p className="label-tight mb-1.5 text-tech">SIG-TEL capability</p>
+                    <p className="mb-1.5 text-[0.76rem] text-tech">SIG-TEL capability</p>
                     <p className="text-[0.82rem] leading-relaxed text-ink/80">{activeNode.capability}</p>
                   </div>
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {activeNode.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="border border-line px-2 py-1 font-mono text-[8px] uppercase tracking-[0.14em] text-muted"
+                        className="border border-line px-2 py-1 text-[0.74rem] text-muted"
                       >
                         {tag}
                       </span>
@@ -176,7 +160,7 @@ export function PlateSection() {
             </div>
 
             <div className="border-t border-line px-4 py-3">
-              <p className="font-mono text-[8.5px] uppercase leading-relaxed tracking-[0.14em] text-tech">
+              <p className="text-[0.8rem] leading-relaxed text-tech">
                 {modeMeta[mode].blurb}
               </p>
             </div>
