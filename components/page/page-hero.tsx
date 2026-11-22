@@ -1,15 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
-import { RevealLines } from "@/components/ui/reveal";
+import { RevealLines, Reveal } from "@/components/ui/reveal";
 
 /**
- * Interior page opening. A bright photograph in a wide band, the breadcrumb, a
- * small index, and oversized type on paper — the same editorial grammar as the
- * home page, at a shorter length.
+ * Interior page opening.
+ *
+ * Same grammar as the home page: breadcrumb in the margin, the title set in the
+ * display serif against the wide column, a short deck, then a full-bleed
+ * photograph closing the spread. No index numbers, no rules under the type.
  */
 export function PageHero({
-  index,
-  eyebrow,
   title,
   description,
   image,
@@ -17,8 +17,6 @@ export function PageHero({
   meta,
   breadcrumb,
 }: {
-  index: string;
-  eyebrow: string;
   title: string[];
   description: string;
   image: string;
@@ -27,56 +25,52 @@ export function PageHero({
   breadcrumb: { label: string; href?: string }[];
 }) {
   return (
-    <section className="relative border-b border-line bg-white">
-      <div className="edge pt-[calc(var(--header-h)+2.4rem)]">
-        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2">
+    <section className="bg-navy">
+      <div className="edge pt-[calc(var(--header-h)+2.6rem)]">
+        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-[0.84rem]">
           {breadcrumb.map((item, itemIndex) => (
             <span key={item.label} className="flex items-center gap-2">
               {item.href ? (
-                <Link href={item.href} className="label-tight text-muted transition-colors hover:text-eng">
+                <Link href={item.href} className="link-underline text-muted hover:text-eng">
                   {item.label}
                 </Link>
               ) : (
-                <span className="label-tight text-eng">{item.label}</span>
+                <span className="text-eng">{item.label}</span>
               )}
-              {itemIndex < breadcrumb.length - 1 ? <span className="text-tech/60">/</span> : null}
+              {itemIndex < breadcrumb.length - 1 ? (
+                <span className="text-tech/60">/</span>
+              ) : null}
             </span>
           ))}
         </nav>
 
-        <div className="mt-10 flex items-center gap-4">
-          <span className="label-index">{index}</span>
-          <span className="h-px w-10 bg-line-strong" aria-hidden />
-          <span className="label text-muted">{eyebrow}</span>
-        </div>
-
-        <h1 className="mt-6 max-w-[62rem] font-display text-[clamp(2.5rem,6.2vw,5.9rem)] uppercase leading-[0.94] tracking-[-0.045em] text-eng">
-          <RevealLines lines={title} />
-        </h1>
-
-        <div className="mt-8 grid gap-8 border-t border-line pt-6 lg:grid-cols-[1.4fr_0.6fr] lg:items-start">
-          <p className="max-w-2xl text-[0.98rem] leading-relaxed text-muted">{description}</p>
-          {meta?.length ? (
-            <dl className="grid grid-cols-2 gap-5">
-              {meta.map((item) => (
-                <div key={item.label}>
-                  <dt className="label-tight text-tech">{item.label}</dt>
-                  <dd className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.06em] text-ink/85">{item.value}</dd>
-                </div>
-              ))}
-            </dl>
-          ) : null}
+        <div className="grid-edit mt-10 gap-y-8 md:mt-14">
+          <div className="edit-wide">
+            <h1 className="max-w-[24ch] text-[clamp(2.4rem,6vw,5.6rem)] leading-[0.99] tracking-[-0.02em] text-eng">
+              <RevealLines lines={title} />
+            </h1>
+          </div>
+          <div className="edit-body grid gap-x-12 gap-y-6 lg:grid-cols-[1.35fr_0.65fr]">
+            <p className="max-w-[52ch] text-[1rem] leading-[1.7] text-ink/80">{description}</p>
+            {meta?.length ? (
+              <dl className="grid grid-cols-2 gap-x-6 gap-y-5 self-start">
+                {meta.map((item) => (
+                  <div key={item.label}>
+                    <dt className="text-[0.78rem] text-tech">{item.label}</dt>
+                    <dd className="mt-1 text-[0.9rem] leading-snug text-ink/85">{item.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            ) : null}
+          </div>
         </div>
       </div>
 
-      <div className="edge mt-10 pb-10">
-        <div className="relative aspect-[21/9] w-full overflow-hidden bg-navy-800">
+      <Reveal y={0}>
+        <div className="relative mt-12 aspect-[16/10] w-full overflow-hidden bg-navy-800 md:aspect-[21/9]">
           <Image src={image} alt={imageAlt} fill priority sizes="100vw" className="object-cover" />
-          <span className="plate absolute bottom-4 left-4 px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.16em] text-eng/80">
-            {eyebrow}
-          </span>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

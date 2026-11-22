@@ -27,16 +27,16 @@ export function LayerAccordion({
               aria-expanded={isOpen}
               className="group flex w-full items-center gap-4 py-5 text-left transition-colors md:gap-6"
             >
-              <span className="font-mono text-[10px] tracking-[0.18em] text-tech">{layer.level}</span>
+ <span className="text-[0.86rem] text-tech">{layer.level}</span>
               <span
                 className={cn(
                   "h-[5px] w-[5px] rounded-full transition-all duration-300",
-                  isOpen ? dot : "bg-ink/20",
+                  isOpen ? dot : "bg-ink/15",
                 )}
               />
               <span
                 className={cn(
-                  "flex-1 font-display text-[clamp(1.15rem,2.4vw,1.9rem)] uppercase leading-tight tracking-[-0.02em] transition-colors",
+ "flex-1 text-[clamp(1.5rem,2.4vw,1.95rem)] leading-tight tracking-[-0.014em] transition-colors",
                   isOpen ? "text-eng" : "text-ink/65 group-hover:text-eng",
                 )}
               >
@@ -45,7 +45,7 @@ export function LayerAccordion({
               <span className="hidden max-w-sm text-right text-[0.8rem] leading-relaxed text-tech lg:block">
                 {layer.summary}
               </span>
-              <span className="relative flex h-6 w-6 shrink-0 items-center justify-center border border-line">
+              <span className="relative flex h-6 w-6 shrink-0 items-center justify-center">
                 <span className="absolute h-px w-2.5 bg-ink/70" />
                 <span
                   className={cn(
@@ -67,7 +67,7 @@ export function LayerAccordion({
                 >
                   <div className="grid gap-8 pb-8 pl-0 md:grid-cols-[1fr_1fr_0.8fr] md:pl-10">
                     <div>
-                      <p className="label-tight mb-3 text-tech">What we do</p>
+                      <p className="mb-3 text-[0.84rem] text-tech">What we do</p>
                       <ul className="space-y-2">
                         {layer.what.map((item) => (
                           <li key={item} className="flex gap-2.5 text-[0.86rem] leading-relaxed text-muted">
@@ -78,7 +78,7 @@ export function LayerAccordion({
                       </ul>
                     </div>
                     <div>
-                      <p className="label-tight mb-3 text-tech">How we prove it</p>
+                      <p className="mb-3 text-[0.84rem] text-tech">How we prove it</p>
                       <ul className="space-y-2">
                         {layer.proof.map((item) => (
                           <li key={item} className="flex gap-2.5 text-[0.86rem] leading-relaxed text-muted">
@@ -89,7 +89,7 @@ export function LayerAccordion({
                       </ul>
                     </div>
                     <div className="border-l-0 border-line md:border-l md:pl-6">
-                      <p className="label-tight mb-2 text-tech">Where</p>
+                      <p className="mb-2 text-[0.84rem] text-tech">Where</p>
                       <p className="text-[0.84rem] leading-relaxed text-ink/75">{layer.where}</p>
                     </div>
                   </div>

@@ -58,22 +58,16 @@ export function ChapterProcess() {
     <section id="chapter-04" className="relative border-t border-line bg-white">
       {/* pinned, desktop */}
       <div ref={root} className="relative hidden lg:block">
-        <div className="pointer-events-none absolute inset-0 grid-blueprint opacity-50" aria-hidden />
         <div className="flex h-[100svh] flex-col overflow-hidden">
-          <div className="edge relative flex items-end justify-between gap-8 pb-6 pt-[calc(var(--header-h)+2.5rem)]">
+          <div className="edge relative flex items-end justify-between gap-8 pb-8 pt-[calc(var(--header-h)+2.5rem)]">
             <div>
-              <span className="label-tight flex items-center gap-2.5 text-muted">
-                <span className="h-[5px] w-[5px] rounded-full bg-signal" />
-                Chapter 04 / Engineering solutions
-              </span>
-              <h2 className="mt-4 font-display text-[clamp(2rem,3.6vw,3.4rem)] uppercase leading-[0.98] tracking-[-0.035em] text-eng">
+              <p className="mark">04 — Engineering solutions</p>
+              <h2 className="mt-4 max-w-[24ch] text-[clamp(2rem,3.6vw,3.4rem)] leading-[1.04] tracking-[-0.016em] text-eng">
                 From site survey to a system that&apos;s live
               </h2>
             </div>
-            <p className="max-w-[16rem] pb-2 text-right text-xs leading-relaxed text-muted">
-              Six stages. One accountable team.
-              <br />
-              Scroll to advance through the sequence.
+            <p className="max-w-[15rem] pb-1 text-right text-[0.85rem] leading-relaxed text-muted">
+              Six stages, one accountable team. Scroll to advance.
             </p>
           </div>
 
@@ -85,23 +79,16 @@ export function ChapterProcess() {
                   className="relative flex h-full w-[min(78vw,660px)] shrink-0 flex-col justify-center border-r border-line px-10 xl:px-14"
                 >
                   <div className="relative max-w-xl">
-                    <div className="mb-7 flex items-center gap-3">
-                      <span className="flex h-8 items-center border border-line px-3 font-mono text-[9px] uppercase tracking-[0.2em] text-eng">
-                        Stage {stage.step}
-                      </span>
-                      <span className="label-tight text-signal">{stage.kicker}</span>
-                    </div>
-                    <span className="pointer-events-none absolute -top-24 right-0 select-none font-display text-[clamp(6rem,12vw,10rem)] leading-none tracking-tighter text-eng/[0.05]">
-                      {stage.step}
-                    </span>
-                    <h3 className="max-w-[16ch] font-display text-[clamp(1.7rem,2.9vw,2.7rem)] uppercase leading-[0.98] tracking-[-0.03em] text-eng">
+                    <p className="text-[0.82rem] text-tech tabular">
+                      {stage.step} / 06 · {stage.kicker}
+                    </p>
+                    <h3 className="mt-4 max-w-[18ch] text-[clamp(1.9rem,3vw,2.8rem)] leading-[1.02] tracking-[-0.014em] text-eng">
                       {stage.title}
                     </h3>
-                    <p className="mt-5 max-w-md text-[0.95rem] leading-relaxed text-muted">{stage.body}</p>
-                    <div className="mt-9 border-t border-line pt-4">
-                      <p className="label-tight mb-2 text-tech">Deliverables</p>
-                      <p className="font-mono text-[11px] uppercase tracking-[0.13em] text-ink/75">{stage.output}</p>
-                    </div>
+                    <p className="mt-5 max-w-md text-[0.98rem] leading-[1.65] text-ink/80">{stage.body}</p>
+                    <p className="mt-8 max-w-md border-t border-line pt-4 text-[0.86rem] leading-relaxed text-muted">
+                      {stage.output}
+                    </p>
                   </div>
 
                   {/* rail motif — sleepers, one lit per stage completed */}
@@ -113,7 +100,7 @@ export function ChapterProcess() {
                         key={i}
                         className={cn(
                           "absolute bottom-5 h-5 w-[3px]",
-                          i < ((index + 1) / stages.length) * 26 ? "bg-eng/60" : "bg-ink/10",
+                          i < ((index + 1) / stages.length) * 26 ? "bg-eng/45" : "bg-ink/[0.08]",
                         )}
                         style={{ left: `${(i / 26) * 100}%` }}
                       />
@@ -122,8 +109,8 @@ export function ChapterProcess() {
                 </article>
               ))}
               <div className="flex h-full w-[32vw] shrink-0 items-center px-12">
-                <p className="font-display text-2xl uppercase leading-tight text-tech">
-                  Delivery &amp; support
+                <p className="text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.1] text-tech">
+                  Delivery and support —
                   <br />
                   <span className="text-eng">never the end of the job.</span>
                 </p>
@@ -140,7 +127,7 @@ export function ChapterProcess() {
                 <span
                   key={stage.step}
                   className={cn(
-                    "label-tight text-[8px] transition-colors",
+                    "text-[0.78rem] tabular transition-colors",
                     index === active ? "text-eng" : "text-tech",
                   )}
                 >
@@ -155,25 +142,21 @@ export function ChapterProcess() {
       {/* mobile / reduced motion */}
       <div className="lg:hidden">
         <div className="edge section-tight">
-          <span className="label-tight flex items-center gap-2.5 text-muted">
-            <span className="h-[5px] w-[5px] rounded-full bg-signal" />
-            Chapter 04 / Engineering solutions
-          </span>
-          <h2 className="mt-4 font-display text-[clamp(1.9rem,7vw,2.7rem)] uppercase leading-[1.02] tracking-[-0.03em] text-eng">
+          <p className="mark">04 — Engineering solutions</p>
+          <h2 className="mt-4 text-[clamp(1.9rem,7vw,2.7rem)] leading-[1.04] tracking-[-0.016em] text-eng">
             From site survey to a system that&apos;s live
           </h2>
 
           <ol className="relative mt-10 border-l border-line pl-6">
             {stages.map((stage) => (
               <li key={stage.step} className="relative pb-9 last:pb-0">
-                <span className="absolute -left-[27px] top-1.5 h-[7px] w-[7px] rounded-full border border-signal bg-white" />
-                <div className="flex items-center gap-3">
-                  <span className="label-tight text-eng">Stage {stage.step}</span>
-                  <span className="label-tight text-tech">{stage.kicker}</span>
-                </div>
-                <h3 className="mt-2 font-display text-xl uppercase tracking-[-0.02em] text-eng">{stage.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{stage.body}</p>
-                <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.14em] text-tech">{stage.output}</p>
+                <span className="absolute -left-[27px] top-1.5 h-[7px] w-[7px] rounded-full border border-eng bg-white" />
+                <p className="text-[0.8rem] text-tech tabular">
+                  {stage.step} / 06 · {stage.kicker}
+                </p>
+                <h3 className="mt-2 text-[1.28rem] leading-tight text-eng">{stage.title}</h3>
+                <p className="mt-2 text-[0.92rem] leading-relaxed text-ink/80">{stage.body}</p>
+                <p className="mt-3 text-[0.84rem] leading-relaxed text-muted">{stage.output}</p>
               </li>
             ))}
           </ol>

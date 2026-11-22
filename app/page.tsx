@@ -11,7 +11,7 @@ import { FinalCta } from "@/components/home/final-cta";
 import { ProjectsEditorial } from "@/components/projects/projects-editorial";
 import { RevealPlate } from "@/components/home/chapter-gallery";
 import { Ticker } from "@/components/ui/ticker";
-import { SectionHeading } from "@/components/ui/section-heading";
+import { EditorialHead } from "@/components/ui/section-heading";
 
 export const revalidate = 60;
 
@@ -63,13 +63,11 @@ export default async function HomePage() {
       {/* project register as gallery */}
       <section id="projects" className="relative border-t border-line bg-white">
         <div className="edge section">
-          <SectionHeading
-            index="Chapter 05"
-            label="Works register"
-            title={["WORK ON THE GROUND."]}
-            description="Completed and ongoing works in railway signalling and in telecom networks for railways, pipelines and industry. Filter by discipline or status, then open a case study for scope, approach and documentation."
-            align="left"
-            className="items-start pb-10 text-left"
+          <EditorialHead
+            mark="05 — Works register"
+            title={["Work on the ground."]}
+            deck="Completed and ongoing works in railway signalling and in telecom networks for railways, pipelines and industry. Filter by discipline or status, then open a case study for scope, approach and documentation."
+            className="pb-10"
           />
           <ProjectsEditorial projects={projects} />
         </div>

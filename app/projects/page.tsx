@@ -25,8 +25,6 @@ export default async function ProjectsPage() {
   return (
     <>
       <PageHero
-        index="07"
-        eyebrow="Project register"
         title={["WORK ON", "THE GROUND."]}
         description="Completed and ongoing works in railway signalling and in telecom networks for railways, pipelines and industry. Filter by discipline or status, then open a case study for scope, approach and documentation."
         image="/images/hero-daylight.jpg"
@@ -44,17 +42,16 @@ export default async function ProjectsPage() {
         <div className="edge">
           <ProjectsShowcase projects={projects} variant="page" />
           <div className="mt-10 flex flex-col gap-4 border-t border-line pt-6 md:flex-row md:items-center md:justify-between">
-            <p className="max-w-2xl font-mono text-[9px] uppercase leading-relaxed tracking-[0.14em] text-tech">
-              Register as published by SIG-TEL · Client and division stated only where the work is recorded ·
-              Photography illustrates the discipline and is not a specific site record.
+ <p className="max-w-2xl text-[0.8rem] leading-relaxed text-tech">
+              Register as published by SIG-TEL. Client and division stated only where the work is
+              recorded. Photography illustrates the discipline and is not a specific site record.
             </p>
-            <p className="label-tight text-tech">Status can change — confirm with our team.</p>
+            <p className="text-[0.82rem] text-tech">Status can change. Confirm with our team.</p>
           </div>
         </div>
       </section>
 
       <CtaBand
-        eyebrow="Reference"
         title="Need references for a tender?"
         body="Tell us the type of work and the division. We'll point you to comparable scopes in the register and set up a call with the engineering team."
       />

@@ -40,16 +40,12 @@ export default function AdminLoginPage() {
 
   return (
     <div className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-navy px-4 py-24">
-      <div className="pointer-events-none absolute inset-0 grid-blueprint opacity-40" aria-hidden />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_50%_30%,rgba(24,59,86,0.05),transparent_70%)]" aria-hidden />
 
-      <div className="relative w-full max-w-md border border-line bg-white p-8 shadow-[0_30px_80px_-60px_rgba(24,43,58,0.6)]">
+      <div className="relative w-full max-w-md border border-line bg-navy-800/50 p-8">
         <Logo />
-        <div className="mt-8 flex items-center gap-3">
-          <span className="h-2 w-2 rounded-full bg-clear" />
-          <p className="label text-tech">Control room access</p>
-        </div>
-        <h1 className="mt-4 font-display text-3xl uppercase leading-none tracking-[-0.03em] text-eng">
+        <p className="mt-8 text-[0.84rem] text-tech">Control room access</p>
+        <h1 className="mt-4 text-[1.9rem] leading-[1.05] tracking-[-0.02em] text-eng">
           Admin sign in
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-muted">
@@ -58,7 +54,7 @@ export default function AdminLoginPage() {
 
         <form onSubmit={onSubmit} className="mt-8 space-y-5">
           <label className="block">
-            <span className="field-label mb-1 block">Email</span>
+            <span className="field-caption mb-1 block">Email</span>
             <input
               className="field"
               name="email"
@@ -70,7 +66,7 @@ export default function AdminLoginPage() {
             />
           </label>
           <label className="block">
-            <span className="field-label mb-1 block">Password</span>
+            <span className="field-caption mb-1 block">Password</span>
             <input className="field" name="password" type="password" required autoComplete="current-password" />
           </label>
 
@@ -84,7 +80,7 @@ export default function AdminLoginPage() {
         </form>
 
         <div className="mt-8 border-t border-line pt-5">
-          <p className="font-mono text-[9px] uppercase leading-relaxed tracking-[0.14em] text-tech">
+ <p className="text-[0.8rem] leading-relaxed text-tech">
             Demo credentials are documented in README.md · Set ADMIN_EMAIL / ADMIN_PASSWORD to override.
           </p>
           <Link href="/" className="mt-3 inline-block text-sm text-muted hover:text-ink">

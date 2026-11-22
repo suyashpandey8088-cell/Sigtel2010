@@ -67,14 +67,10 @@ export function ParallaxPlate({
         />
       </div>
       {caption || index ? (
-        <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-4 md:p-6">
-          <span className="plate max-w-[24rem] px-3 py-2 font-mono text-[8.5px] uppercase leading-relaxed tracking-[0.14em] text-eng/80">
-            {caption}
-          </span>
+        <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-[linear-gradient(180deg,transparent_0%,rgba(16,41,61,0.55)_100%)] p-4 md:p-6">
+          <span className="max-w-[30ch] text-[0.78rem] leading-snug text-white/90">{caption}</span>
           {index ? (
-            <span className="plate px-2.5 py-1.5 font-mono text-[8px] tracking-[0.16em] text-signal">
-              {index}
-            </span>
+            <span className="text-[0.78rem] tabular text-white/70">{index}</span>
           ) : null}
         </figcaption>
       ) : null}
@@ -83,8 +79,12 @@ export function ParallaxPlate({
 }
 
 /**
- * A full-bleed photographic composition with a single masked statement over it.
- * The image scales down as it enters, then holds — a slow camera settle.
+ * A photographic band between chapters.
+ *
+ * The statement sits *under* the photograph on paper rather than on top of it
+ * behind a dark scrim: a bright photograph, then a line of large serif type and
+ * a short deck in the margin. The image scales down as it enters and then
+ * holds — a slow camera settle, no overlay.
  */
 export function RevealPlate({
   src,
@@ -108,7 +108,7 @@ export function RevealPlate({
     const ctx = gsap.context(() => {
       gsap.fromTo(
         media.current,
-        { scale: 1.16 },
+        { scale: 1.14 },
         {
           scale: 1,
           ease: "none",
@@ -125,27 +125,25 @@ export function RevealPlate({
   }, []);
 
   return (
-    <div ref={wrap} className={cn("relative isolate overflow-hidden", className)}>
-      <div ref={media} className="absolute inset-0 will-change-transform">
-        <Image src={src} alt={alt} fill sizes="100vw" className="object-cover" />
+    <div ref={wrap} className={cn("bg-navy", className)}>
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-navy-800 md:aspect-[21/9]">
+        <div ref={media} className="absolute inset-0 will-change-transform">
+          <Image src={src} alt={alt} fill sizes="100vw" className="object-cover" />
+        </div>
       </div>
-      <div
-        className="absolute inset-0 bg-[linear-gradient(180deg,rgba(24,43,58,0.28)_0%,rgba(24,43,58,0.12)_38%,rgba(24,43,58,0.62)_100%)]"
-        aria-hidden
-      />
-      <div className="edge relative flex min-h-[74svh] flex-col justify-end pb-12 pt-24">
-        <div className="max-w-4xl">
-          <span className="label-tight mb-4 flex items-center gap-3 text-white/75">
-            <span className="h-[5px] w-[5px] rounded-full bg-signal" />
-            {eyebrow}
-          </span>
-          <p className="font-display text-[clamp(1.8rem,4.4vw,3.9rem)] uppercase leading-[1.02] tracking-[-0.035em] text-white">
-            {lines.map((line, i) => (
-              <span key={line} className="mask-line">
-                <span className="block">{line}</span>
-              </span>
-            ))}
-          </p>
+
+      <div className="edge pb-14 pt-8 md:pb-20 md:pt-10">
+        <div className="grid-edit gap-y-6">
+          <p className="mark lg:pt-2">{eyebrow}</p>
+          <div className="edit-body">
+            <p className="text-[clamp(1.8rem,3.9vw,3.4rem)] leading-[1.06] tracking-[-0.016em] text-eng">
+              {lines.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </p>
+          </div>
         </div>
       </div>
     </div>

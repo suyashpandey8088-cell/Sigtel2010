@@ -74,7 +74,7 @@
   body {
     background-color: var(--navy);
     color: var(--ink);
-    font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+    font-family: "Inter Tight", "Inter", ui-sans-serif, system-ui, sans-serif;
     font-feature-settings: "ss01" 1, "cv05" 1;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -86,8 +86,16 @@
     color: #ffffff;
   }
 
-  h1, h2, h3, h4 {
-    font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  h1, h2 {
+    font-family: "Instrument Serif", Georgia, "Times New Roman", serif;
+    font-weight: 400;
+    letter-spacing: -0.012em;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+
+  h3, h4 {
+    font-family: "Inter Tight", "Inter", ui-sans-serif, system-ui, sans-serif;
     font-weight: 500;
     text-wrap: balance;
     color: var(--ink);
@@ -156,233 +164,19 @@
 
   /* --------------------------------------------------------------- labels */
 
-  .label {
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-size: 0.68rem;
-    font-weight: 400;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .label-tight {
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-  }
-
+  /* One caption style for the whole site: a quiet line of body-face text.
+     There are no letterspaced uppercase kickers any more. */
+  .caption,
+  .label,
+  .label-tight,
   .label-index {
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-size: 0.64rem;
-    letter-spacing: 0.14em;
-    color: var(--eng);
-  }
-
-  /* thin technical rule with a tick at its origin */
-  .rule {
-    height: 1px;
-    background: var(--line);
-  }
-
-  .rule-strong {
-    height: 1px;
-    background: var(--line-strong);
-  }
-
-  /* ------------------------------------------------------- technical grid */
-
-  .grid-blueprint {
-    background-image:
-      linear-gradient(to right, var(--grid) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
-    background-size: 96px 96px;
-  }
-
-  .grid-blueprint-sm {
-    background-image:
-      linear-gradient(to right, var(--grid-soft) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--grid-soft) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
-
-  .grid-lines {
-    background-image:
-      linear-gradient(to right, var(--grid) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
-    background-size: 25% 100%, 100% 25%;
-    background-position: -1px 0, 0 -1px;
-  }
-
-  /* registration corner ticks — pure measurement, no chrome */
-  .corner-ticks {
-    position: relative;
-  }
-  .corner-ticks::before,
-  .corner-ticks::after {
-    content: "";
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border: 1px solid var(--line-strong);
-    pointer-events: none;
-  }
-  .corner-ticks::before {
-    top: 0;
-    left: 0;
-    border-right: 0;
-    border-bottom: 0;
-  }
-  .corner-ticks::after {
-    bottom: 0;
-    right: 0;
-    border-left: 0;
-    border-top: 0;
-  }
-
-  /* a crossline mark used at section origins */
-  .crosshair {
-    position: relative;
-    display: block;
-    width: 13px;
-    height: 13px;
-  }
-  .crosshair::before,
-  .crosshair::after {
-    content: "";
-    position: absolute;
-    background: var(--line-strong);
-  }
-  .crosshair::before {
-    left: 0;
-    right: 0;
-    top: 50%;
-    height: 1px;
-  }
-  .crosshair::after {
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 1px;
-  }
-
-  /* -------------------------------------------------------------- buttons */
-
-  .btn {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.85rem;
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-size: 0.66rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    padding: 1.1rem 1.7rem;
-    border: 1px solid var(--line-strong);
-    color: var(--eng);
-    background: transparent;
-    transition:
-      background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-      color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-      border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform;
-    overflow: hidden;
-  }
-
-  .btn::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: var(--eng);
-    transform: translateY(101%);
-    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 0;
-  }
-
-  .btn > * {
-    position: relative;
-    z-index: 1;
-  }
-
-  .btn:hover::before,
-  .btn:focus-visible::before {
-    transform: translateY(0);
-  }
-
-  .btn:hover,
-  .btn:focus-visible {
-    color: #ffffff;
-    border-color: var(--eng);
-  }
-
-  .btn svg {
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .btn:hover svg {
-    transform: translateX(3px);
-  }
-
-  .btn-solid {
-    background: var(--eng);
-    border-color: var(--eng);
-    color: #ffffff;
-  }
-
-  .btn-solid::before {
-    background: var(--signal);
-  }
-
-  .btn-solid:hover,
-  .btn-solid:focus-visible {
-    border-color: var(--signal);
-    color: #ffffff;
-  }
-
-  /* white plate button — used on photographic panels */
-  .btn-paper {
-    background: #ffffff;
-    border-color: #ffffff;
-    color: var(--eng);
-  }
-
-  .btn-paper::before {
-    background: var(--ink);
-  }
-
-  .btn-ghost {
-    border-color: transparent;
-    padding-inline: 0;
-  }
-
-  .btn-ghost::before {
-    display: none;
-  }
-
-  .link-underline {
-    position: relative;
-    display: inline-block;
-  }
-
-  .link-underline::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -3px;
-    height: 1px;
-    width: 100%;
-    background: currentColor;
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .link-underline:hover::after,
-  .link-underline:focus-visible::after,
-  .link-underline[data-active="true"]::after {
-    transform: scaleX(1);
-    transform-origin: left;
+    font-family: "Inter Tight", "Inter", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.82rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
   }
 
   /* ---------------------------------------------------------------- forms */
@@ -404,12 +198,17 @@
     border-color: var(--eng);
   }
 
-  .field-label {
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+  .field-label,
+  .field-caption {
+    font-family: "Inter Tight", "Inter", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--muted);
+  }
+
+  .field-caption {
+    color: var(--tech);
   }
 
   select.field option {
@@ -436,15 +235,9 @@
 
   /* caption plate that sits on a photograph in the light theme */
   .plate {
-    background: rgba(255, 255, 255, 0.94);
-    color: var(--ink);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    box-shadow: 0 18px 40px -28px rgba(24, 43, 58, 0.45);
-  }
-
-  .plate-line {
-    background: rgba(24, 43, 58, 0.1);
+    background: rgba(247, 247, 244, 0.92);
+    color: var(--eng);
+    backdrop-filter: blur(6px);
   }
 
   /* --------------------------------------------------------------- curves */
@@ -504,11 +297,6 @@
     stroke: var(--ink);
   }
 
-  /* hairline outline type for editorial statements */
-  .text-outline {
-    -webkit-text-stroke: 1px rgba(24, 43, 58, 0.28);
-    color: transparent;
-  }
 }
 
 /* ------------------------------------------------------------ custom cursor
@@ -776,4 +564,58 @@ html.lenis body {
   .ls-chip-3d.is-active {
     transform: none;
   }
+}
+
+/* --------------------------------------------------------------------------
+   Section rhythm
+   The page is set on one asymmetric grid: a narrow label column and a wide
+   text column, with rules used only where they separate real data.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+  .grid-edit {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2vw, 2.25rem);
+  }
+
+  /* below the lg breakpoint every child takes the full width; the column
+     placements below only take over on wide screens */
+  .grid-edit > * {
+    grid-column: 1 / -1;
+  }
+}
+
+@layer components {
+  @media (min-width: 1024px) {
+    .grid-edit > .edit-label {
+      grid-column: 1 / span 3;
+    }
+    .grid-edit > .edit-body {
+      grid-column: 5 / span 8;
+    }
+    .grid-edit > .edit-wide {
+      grid-column: 3 / span 10;
+    }
+    .grid-edit > .edit-full {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+/* a hanging quotation used once, at the turn of the page */
+@layer components {
+.pullquote {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(1.6rem, 3.4vw, 3.1rem);
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  color: var(--eng);
+  text-wrap: balance;
+}
+
+.pullquote em {
+  font-style: italic;
+  color: var(--signal);
+}
 }

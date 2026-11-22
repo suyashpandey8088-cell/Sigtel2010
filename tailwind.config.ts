@@ -44,9 +44,13 @@ const config: Config = {
         "on-eng": "var(--on-eng)",
       },
       fontFamily: {
-        display: ["Space Grotesk", "ui-sans-serif", "system-ui", "sans-serif"],
-        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
-        mono: ["IBM Plex Mono", "ui-monospace", "monospace"],
+        // Instrument Serif is the display face: it carries the editorial voice
+        // and is what stops the page reading as generic product marketing.
+        display: ["Instrument Serif", "Georgia", "Times New Roman", "serif"],
+        serif: ["Instrument Serif", "Georgia", "Times New Roman", "serif"],
+        sans: ["Inter Tight", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        tight: ["Inter Tight", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ["Inter Tight", "Inter", "ui-monospace", "monospace"],
       },
       letterSpacing: {
         tightest: "-0.055em",
@@ -55,20 +59,20 @@ const config: Config = {
       },
       fontSize: {
         "display-hero": [
-          "clamp(2.55rem, 7.1vw, 7.4rem)",
-          { lineHeight: "0.92", letterSpacing: "-0.045em" },
+          "clamp(2.6rem, 7vw, 7.6rem)",
+          { lineHeight: "0.98", letterSpacing: "-0.018em" },
         ],
         "display-xl": [
           "clamp(2.3rem, min(6.4vw, 10.5vh), 6.6rem)",
-          { lineHeight: "0.94", letterSpacing: "-0.042em" },
+          { lineHeight: "0.98", letterSpacing: "-0.016em" },
         ],
         "display-lg": [
-          "clamp(2.1rem, 5.2vw, 5rem)",
-          { lineHeight: "0.96", letterSpacing: "-0.038em" },
+          "clamp(2.3rem, 5.4vw, 5.2rem)",
+          { lineHeight: "1", letterSpacing: "-0.014em" },
         ],
         "display-md": [
-          "clamp(1.85rem, 3.9vw, 3.5rem)",
-          { lineHeight: "1", letterSpacing: "-0.032em" },
+          "clamp(1.7rem, 3.4vw, 3.1rem)",
+          { lineHeight: "1.04", letterSpacing: "-0.012em" },
         ],
       },
       maxWidth: {

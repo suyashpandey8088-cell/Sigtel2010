@@ -24,8 +24,6 @@ const columns = [
 export function SiteFooter() {
   return (
     <footer className="relative overflow-hidden border-t border-line bg-navy-800">
-      <div className="pointer-events-none absolute inset-0 grid-blueprint opacity-50" aria-hidden />
-
       <div className="edge relative">
         <div className="grid gap-12 py-16 lg:grid-cols-[1.3fr_0.6fr_0.6fr_1fr]">
           <div>
@@ -33,7 +31,7 @@ export function SiteFooter() {
             <p className="mt-6 max-w-sm text-sm leading-relaxed text-muted">{company.positioning}</p>
             <div className="mt-6 flex items-center gap-3">
               <span className="h-[6px] w-[6px] rounded-full bg-clear" />
-              <span className="label-tight text-tech">
+              <span className="text-[0.82rem] text-tech">
                 Registered since {company.founded} · GSTIN {company.gstin}
               </span>
             </div>
@@ -41,7 +39,7 @@ export function SiteFooter() {
 
           {columns.map((column) => (
             <div key={column.title}>
-              <p className="label mb-5 text-tech">{column.title}</p>
+              <p className="mb-5 text-[0.86rem] text-tech">{column.title}</p>
               <ul className="space-y-3">
                 {column.links.map((link) => (
                   <li key={link.href}>
@@ -55,7 +53,7 @@ export function SiteFooter() {
           ))}
 
           <div>
-            <p className="label mb-5 text-tech">Contact</p>
+            <p className="mb-5 text-[0.86rem] text-tech">Contact</p>
             <address className="not-italic text-sm leading-relaxed text-muted">
               {company.address.office}
             </address>
@@ -74,20 +72,20 @@ export function SiteFooter() {
         </div>
 
         <div className="flex flex-col gap-4 border-t border-line py-6 md:flex-row md:items-center md:justify-between">
-          <p className="label-tight text-tech">
+          <p className="text-[0.82rem] text-tech">
             © {new Date().getFullYear()} {company.legalName}. All rights reserved.
           </p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <a href={company.linkedin} target="_blank" rel="noopener noreferrer" className="label-tight text-muted hover:text-eng">
+            <a href={company.linkedin} target="_blank" rel="noopener noreferrer" className="text-[0.82rem] text-muted hover:text-eng">
               LinkedIn ↗
             </a>
-            <a href={company.whatsapp} target="_blank" rel="noopener noreferrer" className="label-tight text-muted hover:text-eng">
+            <a href={company.whatsapp} target="_blank" rel="noopener noreferrer" className="text-[0.82rem] text-muted hover:text-eng">
               WhatsApp ↗
             </a>
-            <Link href="/privacy" className="label-tight text-muted hover:text-eng">
+            <Link href="/privacy" className="text-[0.82rem] text-muted hover:text-eng">
               Privacy policy
             </Link>
-            <Link href="/admin" className="label-tight text-tech hover:text-muted">
+            <Link href="/admin" className="text-[0.82rem] text-tech hover:text-muted">
               Admin
             </Link>
           </div>
@@ -95,8 +93,8 @@ export function SiteFooter() {
       </div>
 
       <div className="relative select-none overflow-hidden" aria-hidden>
-        <p className="edge whitespace-nowrap pb-3 font-display text-[clamp(3rem,12.5vw,12rem)] leading-[0.78] tracking-[-0.05em] text-eng/[0.055]">
-          SIGNALS THAT CLEAR
+        <p className="edge whitespace-nowrap pb-4 text-[clamp(3rem,11vw,10.5rem)] leading-[0.82] tracking-[-0.02em] text-eng/[0.07]">
+          Signals that clear
         </p>
       </div>
     </footer>

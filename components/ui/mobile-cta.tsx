@@ -27,8 +27,8 @@ export function MobileCta() {
           className="flex flex-col items-center justify-center gap-1 py-3"
           aria-label={`Call ${company.phone.primary}`}
         >
-          <span className="label-tight text-[8px] text-tech">Call</span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-ink">Now</span>
+          <span className="text-[0.76rem] text-tech">Call</span>
+ <span className="text-[0.86rem] text-ink">Now</span>
         </a>
         <a
           href={company.whatsapp}
@@ -36,11 +36,11 @@ export function MobileCta() {
           rel="noopener noreferrer"
           className="flex flex-col items-center justify-center gap-1 py-3"
         >
-          <span className="label-tight text-[8px] text-tech">WhatsApp</span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-ink">Send</span>
+          <span className="text-[0.76rem] text-tech">WhatsApp</span>
+ <span className="text-[0.86rem] text-ink">Send</span>
         </a>
         <Link href="/contact" className="flex items-center justify-center gap-2 bg-eng py-3 text-white">
-          <span className="font-mono text-[9px] uppercase tracking-[0.16em]">Discuss a project</span>
+ <span className="text-[0.8rem] ">Discuss a project</span>
           <svg width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden>
             <path d="M0 4h10M7 1l3 3-3 3" stroke="currentColor" strokeWidth="1.1" />
           </svg>

@@ -14,14 +14,10 @@ export function CtaBand({
 }) {
   return (
     <section className="relative overflow-hidden border-t border-line bg-white">
-      <div className="pointer-events-none absolute inset-0 grid-blueprint opacity-50" aria-hidden />
-      <div className="edge relative flex flex-col gap-8 py-16 md:flex-row md:items-end md:justify-between md:py-20">
+      <div className="edge relative flex flex-col gap-8 py-16 md:flex-row md:items-end md:justify-between md:py-24">
         <div className="max-w-2xl">
-          <span className="label-tight flex items-center gap-2.5 text-muted">
-            <span className="h-[5px] w-[5px] rounded-full bg-signal" />
-            {eyebrow}
-          </span>
-          <h2 className="mt-4 font-display text-[clamp(1.9rem,4vw,3.3rem)] uppercase leading-[0.98] tracking-[-0.035em] text-eng">
+          <p className="text-[0.86rem] text-muted">{eyebrow}</p>
+          <h2 className="mt-4 text-[clamp(2rem,4.2vw,3.5rem)] leading-[1.03] tracking-[-0.016em] text-eng">
             {title}
           </h2>
           <p className="mt-4 max-w-xl text-[0.94rem] leading-relaxed text-muted">{body}</p>

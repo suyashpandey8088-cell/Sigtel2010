@@ -23,8 +23,6 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
-        index="10"
-        eyebrow="About SIG-TEL"
         title={["SMALL ENOUGH", "TO ANSWER THE", "PHONE."]}
         description="Incorporated in 2010, operating from inside the Belapur Railway Station building in Navi Mumbai. Two disciplines with equal depth, one team accountable for what it builds."
         image="/images/engineering-survey.jpg"
@@ -41,8 +39,8 @@ export default function AboutPage() {
       <section className="relative border-t border-line bg-navy section">
         <div className="edge grid gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
           <div>
-            <span className="label text-muted">The company</span>
-            <h2 className="mt-6 font-display text-[clamp(2rem,4vw,3.6rem)] uppercase leading-[0.94] tracking-[-0.035em] text-eng">
+            <p className="text-[0.86rem] text-muted">The company</p>
+ <h2 className="mt-6 font-display text-[clamp(2rem,4vw,3.6rem)] leading-[1.0] tracking-[-0.016em] text-eng">
               <RevealLines
                 lines={["Built on two", "critical systems", "and one habit:"]}
               />
@@ -78,16 +76,16 @@ export default function AboutPage() {
             <div className="mt-10 grid border-t border-line sm:grid-cols-3">
               {credentials.slice(0, 3).map((item) => (
                 <div key={item.label} className="border-b border-line py-5 pr-4 sm:border-b-0">
-                  <p className="font-display text-3xl leading-none text-eng">{item.value}</p>
-                  <p className="mt-3 label-tight text-tech">{item.label}</p>
-                  <p className="mt-1 text-[0.72rem] leading-relaxed text-tech">{item.detail}</p>
+                  <p className="text-3xl leading-none text-eng">{item.value}</p>
+                  <p className="mt-3 text-[0.82rem] text-tech">{item.label}</p>
+                  <p className="mt-1 text-[0.78rem] leading-relaxed text-tech">{item.detail}</p>
                 </div>
               ))}
             </div>
           </div>
 
           <div className="flex flex-col gap-5">
-            <div className="relative aspect-[4/5] w-full overflow-hidden border border-line bg-navy-800">
+            <div className="relative aspect-[4/5] w-full overflow-hidden bg-navy-800">
               <Image
                 src="/images/control-room.jpg"
                 alt="A bright signalling control room with a track diagram panel and daylight through tall windows"
@@ -97,19 +95,19 @@ export default function AboutPage() {
               />
             </div>
             <div className="border-t border-line pt-5">
-              <p className="label-tight text-signal">Field note</p>
-              <p className="mt-2 font-display text-xl uppercase leading-[1.15] tracking-[-0.02em] text-eng">
+              <p className="text-[0.82rem] text-signal">Field note</p>
+              <p className="mt-2 text-[1.22rem] leading-[1.25] tracking-[-0.012em] text-eng">
                 “A signalling change is only finished when the controller can work the station without
                 thinking about it.”
               </p>
             </div>
 
-            <div className="border border-line bg-white p-6">
-              <p className="label mb-4 text-muted">Office &amp; registered office</p>
-              <p className="text-sm leading-relaxed text-muted">{company.address.office}</p>
-              <p className="mt-4 label-tight text-tech">Regd. office</p>
-              <p className="mt-1 text-sm leading-relaxed text-muted">{company.address.regd}</p>
-              <div className="mt-5 grid gap-2 border-t border-line pt-4 font-mono text-[10px] uppercase tracking-[0.12em] text-ink/75">
+            <div className="border-t border-line pt-5">
+              <p className="mb-4 text-[0.86rem] text-tech">Office &amp; registered office</p>
+              <p className="text-[0.9rem] leading-relaxed text-muted">{company.address.office}</p>
+              <p className="mt-4 text-[0.8rem] text-tech">Regd. office</p>
+              <p className="mt-1 text-[0.9rem] leading-relaxed text-muted">{company.address.regd}</p>
+ <div className="mt-5 grid gap-2 border-t border-line pt-4 text-[0.86rem] text-ink/75">
                 <a href={company.phone.primaryHref} className="hover:text-eng">{company.phone.primary}</a>
                 <a href={company.phone.landlineHref} className="hover:text-eng">{company.phone.landline}</a>
                 <a href={`mailto:${company.email}`} className="hover:text-eng">{company.email}</a>
@@ -124,16 +122,16 @@ export default function AboutPage() {
         <div className="edge">
           <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
             <div>
-              <span className="label text-eng">How we work</span>
-              <h2 className="mt-5 font-display text-[clamp(1.9rem,3.4vw,3rem)] uppercase leading-[0.96] tracking-[-0.03em] text-eng">
+              <p className="text-[0.86rem] text-eng">How we work</p>
+ <h2 className="mt-5 font-display text-[clamp(1.9rem,3.4vw,3rem)] leading-[1.0] tracking-[-0.016em] text-eng">
                 Engineering discipline is the product.
               </h2>
             </div>
             <div className="grid border-t border-line sm:grid-cols-2">
               {whySigtel.map((item, index) => (
                 <Reveal key={item.title} className="border-b border-line py-6 pr-6">
-                  <span className="font-mono text-[9px] tracking-[0.2em] text-signal">{String(index + 1).padStart(2, "0")}</span>
-                  <h3 className="mt-3 font-display text-lg uppercase leading-tight text-eng">{item.title}</h3>
+ <span className="text-[0.8rem] text-signal">{String(index + 1).padStart(2, "0")}</span>
+ <h3 className="mt-3 text-lg leading-tight text-eng">{item.title}</h3>
                   <p className="mt-2 text-[0.85rem] leading-relaxed text-muted">{item.body}</p>
                 </Reveal>
               ))}
@@ -146,8 +144,8 @@ export default function AboutPage() {
         <div className="edge">
           <div className="flex flex-col gap-6 pb-12 md:flex-row md:items-end md:justify-between">
             <div>
-              <span className="label text-eng">Industries we serve</span>
-              <h2 className="mt-5 font-display text-[clamp(1.9rem,3.4vw,3rem)] uppercase leading-[0.96] tracking-[-0.03em] text-eng">
+              <p className="text-[0.86rem] text-eng">Industries we serve</p>
+ <h2 className="mt-5 font-display text-[clamp(1.9rem,3.4vw,3rem)] leading-[1.0] tracking-[-0.016em] text-eng">
                 Where our systems keep things moving.
               </h2>
             </div>
@@ -161,11 +159,11 @@ export default function AboutPage() {
             {clientGroups.map((group) => (
               <div key={group.title} className="group flex flex-col justify-between border-b border-line py-6 pr-5 transition-colors">
                 <div>
-                  <p className="label-tight text-signal">{group.tag}</p>
-                  <h3 className="mt-4 font-display text-lg uppercase leading-tight text-eng">{group.title}</h3>
+                  <p className="text-[0.8rem] text-signal">{group.tag}</p>
+ <h3 className="mt-4 text-lg leading-tight text-eng">{group.title}</h3>
                   <p className="mt-2 text-[0.8rem] leading-relaxed text-muted">{group.body}</p>
                 </div>
-                <p className="mt-6 font-mono text-[9px] uppercase leading-relaxed tracking-[0.12em] text-tech">
+ <p className="mt-6 text-[0.8rem] leading-relaxed text-tech">
                   {group.names}
                 </p>
               </div>
@@ -175,7 +173,7 @@ export default function AboutPage() {
           <div className="mt-10 grid gap-6 border-t border-line pt-8 sm:grid-cols-2 lg:grid-cols-4">
             {states.map((state) => (
               <div key={state.name}>
-                <p className="font-display text-base uppercase text-eng">{state.name}</p>
+ <p className="text-base text-eng">{state.name}</p>
                 <p className="mt-1 text-[0.78rem] leading-relaxed text-tech">{state.sites}</p>
               </div>
             ))}
@@ -186,7 +184,7 @@ export default function AboutPage() {
       <section className="relative border-t border-line bg-navy-800/60 py-16">
         <div className="edge flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div className="max-w-2xl">
-            <p className="label text-tech">A note on this website</p>
+            <p className="text-[0.86rem] text-tech">A note on this website</p>
             <p className="mt-3 text-sm leading-relaxed text-muted">
               Company information, client relationships and the works register published here are drawn from
               SIG-TEL&apos;s own published material. No certifications, approvals, project values or statistics have
